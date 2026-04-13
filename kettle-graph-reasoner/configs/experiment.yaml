@@ -1,0 +1,31 @@
+# Default hyperparameters for the KGR tier-1 experiment.
+# CLI flags on `python -m src.training.train` override these.
+#
+# If the hyperbolic run is unstable (NaN loss or ||h|| saturating toward
+# 1/sqrt(c)), drop hyperbolic.lr to 3e-4 before touching anything else —
+# Poincaré-ball curvature amplifies effective step size near the boundary.
+
+hyperbolic:
+  hidden_dim: 64
+  num_layers: 3
+  lr: 1.0e-3
+  epochs: 20
+  edge_loss_weight: 0.5
+  # Radial regularizer coefficient on mean ||h||^2 of final-layer
+  # embeddings. Counterforce against the Poincaré boundary attractor.
+  # Sweep candidates: 0.001, 0.01, 0.1.
+  radial_reg_weight: 0.1
+  # Auxiliary depth-prediction loss: head sees only ||h|| → predicts
+  # node-layer. Forces radial usage; 0 disables. At 1.0 combined with
+  # radial_reg_weight=0.1 breaks the saturation attractor within ~500
+  # steps and produces per-node radial differentiation (|h|_std ≈ 0.15+).
+  aux_depth_weight: 1.0
+  seed: 0
+
+euclidean:
+  hidden_dim: 64
+  num_layers: 3
+  lr: 1.0e-3
+  epochs: 20
+  edge_loss_weight: 0.5
+  seed: 0
