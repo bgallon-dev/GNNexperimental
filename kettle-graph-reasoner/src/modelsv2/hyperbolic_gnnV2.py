@@ -39,6 +39,74 @@ from .layers.hyp_message_pass import HyperbolicMessagePassing
 from .layers.schema_encoder import SchemaEncoder
 
 
+class _RMSNorm(nn.Module):
+    """RMSNorm with a learned per-dim scale. Used when torch.nn.RMSNorm
+    is unavailable (PyTorch < 2.4)."""
+
+    def __init__(self, dim: int, eps: float = 1e-6) -> None:
+        super().__init__()
+        self.weight = nn.Parameter(torch.ones(dim))
+        self.eps = eps
+
+    def forward(self, x: Tensor) -> Tensor:
+        rms = x.pow(2).mean(dim=-1, keepdim=True).add(self.eps).sqrt()
+        return x / rms * self.weight
+
+
+def _make_rmsnorm(dim: int) -> nn.Module:
+    rms = getattr(nn, "RMSNorm", None)
+    return rms(dim) if rms is not None else _RMSNorm(dim)
+
+
+class DepthAttention(nn.Module):
+    """Per-layer pseudo-query softmax attention over tangent-space
+    snapshots from each MP round.
+
+    Keys are RMSNorm'd (Technique 3) to prevent magnitude-dominant
+    layers. When ``hierarchy_subspace_dim > 0`` the first k dims encode
+    depth-as-magnitude for Task 0 and are passed through un-normalized;
+    RMSNorm only touches the proximity slice ``[:, k:]``. Queries are
+    zero-initialized (Technique 4) so the model starts at uniform
+    averaging. Softmax over depth introduces competition (Technique 5).
+    """
+
+    def __init__(
+        self,
+        num_layers: int,
+        hidden_dim: int,
+        hierarchy_subspace_dim: int = 0,
+    ) -> None:
+        super().__init__()
+        self.num_layers = num_layers
+        self.hidden_dim = hidden_dim
+        self.k = int(hierarchy_subspace_dim)
+        self.depth_queries = nn.ParameterList(
+            nn.Parameter(torch.zeros(hidden_dim)) for _ in range(num_layers)
+        )
+        prox_dim = hidden_dim - self.k if self.k > 0 else hidden_dim
+        self.key_norm_prox = _make_rmsnorm(prox_dim)
+
+    def _norm_keys(self, tangents: Tensor) -> Tensor:
+        if self.k > 0:
+            hier = tangents[..., : self.k]
+            prox = self.key_norm_prox(tangents[..., self.k :])
+            return torch.cat([hier, prox], dim=-1)
+        return self.key_norm_prox(tangents)
+
+    def forward(self, snapshots: List[Tensor], query_idx: int) -> Tensor:
+        """snapshots: list of (N, D) tangent tensors, length L' <= num_layers.
+
+        Returns (N, D): depth-attended tangent mixture using
+        ``depth_queries[query_idx]`` as the pseudo-query.
+        """
+        stack = torch.stack(snapshots, dim=0)  # (L', N, D)
+        keys = self._norm_keys(stack)          # (L', N, D)
+        q = self.depth_queries[query_idx]       # (D,)
+        logits = torch.einsum("d,lnd->ln", q, keys)  # (L', N)
+        alpha = logits.softmax(dim=0)                 # (L', N)
+        return (alpha.unsqueeze(-1) * stack).sum(dim=0)  # (N, D)
+
+
 @dataclass
 class KGROutput:
     node_scores: Tensor  # (N,) — per-node relevance in [0, 1]
@@ -70,19 +138,16 @@ class KettleGraphReasoner(nn.Module):
         activation: str = "relu",
         hierarchy_subspace_dim: int = 0,
         log_depth: bool = False,
-        concat_depth: bool = False,
+        depth_attn: bool = True,
+        depth_attn_intra_stack: bool = False,
     ) -> None:
         super().__init__()
         self.hidden_dim = hidden_dim
         self.num_layers = num_layers
         self.type_dim = type_dim
-        # HMT-style depth concatenation diagnostic: score on
-        # [logmap0(h_1) || logmap0(h_2) || ... || logmap0(h_L)] instead of just
-        # logmap0(h_L). If this lifts multi-hop tasks, depth info is being
-        # collapsed by the final-round-only head; justifies full AttnRes work.
-        self.concat_depth = bool(concat_depth)
-        # Depth concat needs per-round tensors, so force-enable logging.
-        self.log_depth = bool(log_depth) or self.concat_depth
+        self.log_depth = bool(log_depth)
+        self.depth_attn_enabled = bool(depth_attn)
+        self.depth_attn_intra_stack = bool(depth_attn_intra_stack) and bool(depth_attn)
         # Subspace partitioning: when > 0, the first k tangent-at-origin
         # coordinates are reserved for Task 0 (graded hierarchy / 1/d depth),
         # the remaining hidden_dim-k coordinates feed the shared proximity
@@ -170,36 +235,39 @@ class KettleGraphReasoner(nn.Module):
             for _ in range(num_layers)
         )
 
+        self.depth_attention: Optional[DepthAttention] = (
+            DepthAttention(
+                num_layers=num_layers,
+                hidden_dim=hidden_dim,
+                hierarchy_subspace_dim=self.hierarchy_subspace_dim,
+            )
+            if self.depth_attn_enabled
+            else None
+        )
+
         # Scoring heads operate in Euclidean tangent space at the origin so
         # the concatenation with the query vector is a proper inner-product
         # operation (not a coordinate hack on the ball).
         k = self.hierarchy_subspace_dim
-        # Under concat_depth we stop slicing the hierarchy subspace out of the
-        # tangent representation (Option B): both heads see the full
-        # hidden_dim * num_layers feature and learn which coordinates matter
-        # via their own weights. Under the non-concat path we keep the
-        # original slicing so Task 0 gets a protected radial axis.
-        prox_dim = hidden_dim if self.concat_depth else (hidden_dim - k if k > 0 else hidden_dim)
-        hier_dim = hidden_dim if self.concat_depth else k
-        depth_mul = num_layers if self.concat_depth else 1
+        prox_dim = hidden_dim - k if k > 0 else hidden_dim
         self.node_score = nn.Sequential(
-            nn.Linear(prox_dim * depth_mul + hidden_dim, hidden_dim),
+            nn.Linear(prox_dim + hidden_dim, hidden_dim),
             nn.ReLU(),
             nn.Linear(hidden_dim, 1),
         )
         self.edge_score = nn.Sequential(
-            nn.Linear(prox_dim * depth_mul * 2 + type_dim + hidden_dim, hidden_dim),
+            nn.Linear(prox_dim * 2 + type_dim + hidden_dim, hidden_dim),
             nn.ReLU(),
             nn.Linear(hidden_dim, 1),
         )
         if k > 0:
             self.node_score_hier = nn.Sequential(
-                nn.Linear(hier_dim * depth_mul + hidden_dim, hidden_dim),
+                nn.Linear(k + hidden_dim, hidden_dim),
                 nn.ReLU(),
                 nn.Linear(hidden_dim, 1),
             )
             self.edge_score_hier = nn.Sequential(
-                nn.Linear(hier_dim * depth_mul * 2 + type_dim + hidden_dim, hidden_dim),
+                nn.Linear(k * 2 + type_dim + hidden_dim, hidden_dim),
                 nn.ReLU(),
                 nn.Linear(hidden_dim, 1),
             )
@@ -258,21 +326,32 @@ class KettleGraphReasoner(nn.Module):
         # Schema → type embeddings.
         edge_type_emb, _ = self.schema_encoder(edge_descriptor, node_descriptor)
 
-        # Message-passing stack.
+        # Message-passing stack. Always stash tangent-at-origin snapshots
+        # (cheap, and depth attention reads them). Ball-space per-round
+        # embeddings are additionally stashed for diagnostics when log_depth.
         per_round: Optional[List[Tensor]] = [] if self.log_depth else None
-        for attn, mp in zip(self.attn_layers, self.mp_layers):
-            alpha = attn(h, edge_index, edge_type, type_emb_override=edge_type_emb)
-            h = mp(h, edge_index, edge_weight=alpha)
+        tangent_snapshots: List[Tensor] = []
+        for l_idx, (attn, mp) in enumerate(zip(self.attn_layers, self.mp_layers)):
+            if self.depth_attn_intra_stack and l_idx > 0 and self.depth_attention is not None:
+                mixed_tan = self.depth_attention(tangent_snapshots, query_idx=l_idx)
+                h_input = P.expmap0(mixed_tan, c)
+            else:
+                h_input = h
+            alpha = attn(h_input, edge_index, edge_type, type_emb_override=edge_type_emb)
+            h = mp(h_input, edge_index, edge_weight=alpha)
+            tangent_snapshots.append(P.logmap0(h, c))
             if per_round is not None:
                 per_round.append(h)
 
-        # Scoring: return to Euclidean tangent-at-origin view for clean inner
-        # products with the query vector. Under concat_depth, stack tangent
-        # coords from every round so the heads see the full depth trajectory
-        # instead of just the final state (HMT-style diagnostic).
-        if self.concat_depth:
-            assert per_round is not None
-            h_flat = torch.cat([P.logmap0(hr, c) for hr in per_round], dim=-1)
+        # Depth-wise attention over all rounds → attended tangent for the
+        # scoring head. When disabled, fall back to the raw last-round view.
+        if self.depth_attention is not None:
+            h_flat = self.depth_attention(
+                tangent_snapshots, query_idx=self.num_layers - 1
+            )
+            # Keep node_embeddings consistent with what the scoring head sees
+            # so downstream radial reg targets the attended representation.
+            h = P.expmap0(h_flat, c)
         else:
             h_flat = P.logmap0(h, c)  # (N, hidden_dim)
         N = h_flat.size(0)
@@ -280,20 +359,14 @@ class KettleGraphReasoner(nn.Module):
 
         k = self.hierarchy_subspace_dim
         use_hier = k > 0 and task_type == 0
-        if k > 0 and not self.concat_depth:
-            # Non-concat path keeps the explicit subspace routing: Task 0 gets
-            # the first k tangent coords, Tasks 1-4 get the remaining ones.
+        if k > 0:
             h_slice = h_flat[:, :k] if use_hier else h_flat[:, k:]
             node_head = self.node_score_hier if use_hier else self.node_score
             edge_head = self.edge_score_hier if use_hier else self.edge_score
         else:
-            # Option B under concat_depth: no slicing. Both heads receive the
-            # full [logmap0(h_1) || ... || logmap0(h_L)] vector and learn which
-            # coordinates to attend to through their own weights. Gradient
-            # flow reaches every dim from every task.
             h_slice = h_flat
-            node_head = self.node_score_hier if use_hier else self.node_score
-            edge_head = self.edge_score_hier if use_hier else self.edge_score
+            node_head = self.node_score
+            edge_head = self.edge_score
 
         node_logits = node_head(torch.cat([h_slice, q_exp], dim=-1)).squeeze(-1)
         node_scores = torch.sigmoid(node_logits)

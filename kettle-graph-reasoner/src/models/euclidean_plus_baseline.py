@@ -21,7 +21,7 @@ linears so the init-time embedding scale matches the hyperbolic model.
 
 from __future__ import annotations
 
-from typing import Optional
+from typing import List, Optional
 
 import torch
 from torch import Tensor, nn
@@ -89,12 +89,14 @@ class EuclideanPlusBaseline(nn.Module):
         type_dim: int = 8,
         num_edge_types_max: Optional[int] = None,
         node_feat_dim_schema: Optional[int] = None,
+        log_depth: bool = False,
         **_ignored,
     ) -> None:
         super().__init__()
         self.hidden_dim = hidden_dim
         self.num_layers = num_layers
         self.type_dim = type_dim
+        self.log_depth = bool(log_depth)
 
         # Small-gain init on the input projection matches the hyperbolic model,
         # so initial embedding scales are comparable across both.
@@ -149,9 +151,12 @@ class EuclideanPlusBaseline(nn.Module):
 
         edge_type_emb, _ = self.schema_encoder(edge_descriptor, node_descriptor)
 
+        per_round: Optional[List[Tensor]] = [] if self.log_depth else None
         for attn, mp in zip(self.attn_layers, self.mp_layers):
             alpha = attn(h, edge_index, edge_type, type_emb_override=edge_type_emb)
             h = mp(h, edge_index, edge_weight=alpha)
+            if per_round is not None:
+                per_round.append(h)
 
         N = h.size(0)
         q_exp = q.unsqueeze(0).expand(N, -1)
@@ -172,6 +177,7 @@ class EuclideanPlusBaseline(nn.Module):
             edge_scores=edge_scores,
             node_embeddings=h,
             edge_type_embeddings=edge_type_emb,
+            per_round_embeddings=per_round,
         )
 
     def parameter_count(self) -> int:

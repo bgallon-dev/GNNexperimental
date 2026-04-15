@@ -43,7 +43,13 @@
       "Bash(python -c \"import ast; ast.parse\\(open\\('src/training/train.py'\\).read\\(\\)\\); print\\('ok'\\)\")",
       "Bash(py -c \"import ast; ast.parse\\(open\\('src/training/train.py'\\).read\\(\\)\\); print\\('ok'\\)\")",
       "Bash(python -m pytest tests/test_full_model.py -x -q)",
-      "Bash(py -m pytest tests/test_full_model.py -x -q)"
+      "Bash(py -m pytest tests/test_full_model.py -x -q)",
+      "Bash(python -c \"import ast, sys; ast.parse\\(open\\('src/training/train.py'\\).read\\(\\)\\); print\\('syntax ok'\\)\")",
+      "Bash(py -c \"import ast; ast.parse\\(open\\('src/training/train.py'\\).read\\(\\)\\); print\\('syntax ok'\\)\")",
+      "Bash(py -m pytest tests/test_full_model.py tests/test_euclidean_baseline.py -x -q)",
+      "Bash(py -m src.training.train --model hyperbolic --log-depth-diagnostics --epochs 1 --hidden-dim 16 --num-layers 3 --radial-reg-weight 0.1 --radial-reg-weight-end 0.01 --out runs/_smoke_depth3 --no-color --log-every 500)",
+      "Bash(py -m scripts.depth_probe --checkpoint runs/_smoke_depth3/best.pt --corpus src/data/corpus/tier1 --split val --out runs/_smoke_depth3/depth_probe.json)",
+      "Bash(find \"c:\\\\Users\\\\Benjamin\\\\Desktop\\\\GNN Experiment\\\\kettle-graph-reasoner\" -type f -name \"*.py\" -exec grep -l \"RMSNorm\\\\|torch\\\\.nn\\\\.RMSNorm\" {} \\\\;)"
     ]
   }
 }

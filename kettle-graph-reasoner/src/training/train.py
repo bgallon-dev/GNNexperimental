@@ -192,6 +192,8 @@ def build_model(
     hidden_dim: int,
     num_layers: int,
     hierarchy_subspace_dim: int = 0,
+    log_depth: bool = False,
+    concat_depth: bool = False,
 ) -> nn.Module:
     if kind == "hyperbolic":
         return KettleGraphReasoner(
@@ -203,6 +205,8 @@ def build_model(
             num_edge_types_max=dataset.num_edge_types_max,
             node_feat_dim_schema=dataset.node_feat_dim_schema,
             hierarchy_subspace_dim=hierarchy_subspace_dim,
+            log_depth=log_depth,
+            concat_depth=concat_depth,
         )
     if kind == "euclidean_plus":
         return EuclideanPlusBaseline(
@@ -213,6 +217,7 @@ def build_model(
             num_layers=num_layers,
             num_edge_types_max=dataset.num_edge_types_max,
             node_feat_dim_schema=dataset.node_feat_dim_schema,
+            log_depth=log_depth,
         )
     if kind == "euclidean":
         return EuclideanBaseline(
@@ -221,6 +226,7 @@ def build_model(
             query_dim=dataset.query_dim,
             hidden_dim=hidden_dim,
             num_layers=num_layers,
+            log_depth=log_depth,
         )
     raise ValueError(f"unknown model kind: {kind!r}")
 
@@ -317,6 +323,42 @@ def _radial_tangent_grad(node_loss: torch.Tensor, h: torch.Tensor) -> dict:
     }
 
 
+def per_round_norm_stats(per_round, kind: str, c: Optional[torch.Tensor]) -> list:
+    """Per-round analogue of embedding_norm_stats. Returns a list indexed by
+    round, each entry the same dict shape embedding_norm_stats produces."""
+    if per_round is None:
+        return []
+    out = []
+    for h in per_round:
+        h_det = h.detach()
+        norms = h_det.norm(dim=-1)
+        stat = {
+            "mean_norm": float(norms.mean()),
+            "max_norm": float(norms.max()),
+            "min_norm": float(norms.min()),
+            "std_norm": float(norms.std(unbiased=False)) if norms.numel() > 1 else 0.0,
+        }
+        if kind == "hyperbolic" and c is not None:
+            stat["boundary"] = 1.0 / float(c.clamp_min(P.MIN_NORM).sqrt())
+        out.append(stat)
+    return out
+
+
+def _per_round_grad_norms(loss: torch.Tensor, per_round) -> list:
+    """||d loss / d h_r|| for each stashed per-round embedding h_r. Tests
+    whether gradient reaches early rounds or concentrates in the final one —
+    the AttnRes diagnostic signature for depth-wise signal imbalance."""
+    if per_round is None or len(per_round) == 0:
+        return []
+    grads = torch.autograd.grad(
+        loss, list(per_round), retain_graph=True, allow_unused=True
+    )
+    norms = []
+    for g in grads:
+        norms.append(float(g.norm()) if g is not None else 0.0)
+    return norms
+
+
 def _bucket_grad_norms(model: nn.Module) -> dict:
     # manifold: feeds / lives on the Poincaré ball. edge_attn: edge-typed
     # attention + schema encoder. head: Euclidean scoring MLPs + query
@@ -364,6 +406,8 @@ def train(cfg: argparse.Namespace) -> None:
         cfg.hidden_dim,
         cfg.num_layers,
         hierarchy_subspace_dim=cfg.hierarchy_subspace_dim,
+        log_depth=cfg.log_depth_diagnostics,
+        concat_depth=getattr(cfg, "concat_depth", False),
     ).to(device)
     # Always read k back from the constructed model (not from cfg) so any
     # plumbing bug between CLI/config and the constructor surfaces here
@@ -438,6 +482,10 @@ def train(cfg: argparse.Namespace) -> None:
         t0 = time.time()
         train_acc = MetricAccumulator()
         per_task_grad_accum: dict = {}
+        # depth_diag[task] = {"round_norms": [sum over steps of ||h_r||_mean],
+        #                     "round_grads": [sum over steps of ||dL/dh_r||],
+        #                     "n": step count}
+        depth_diag_accum: dict = {}
         # Linear decay of radial reg: full strength early to block boundary
         # saturation while the model is still finding its scale, then fade so
         # later epochs can use more of the ball's volume.
@@ -509,10 +557,36 @@ def train(cfg: argparse.Namespace) -> None:
                 loss = loss + cfg.aux_depth_weight * aux_loss
                 aux_loss_val = float(aux_loss.detach())
 
+            # Per-round diagnostic: compute activation-gradient norms BEFORE
+            # the backward pass consumes the graph. Guarded by flag and by
+            # presence of per_round_embeddings on the model output — no-op if
+            # the model has not been extended to stash per-round h yet.
+            per_round = getattr(out, "per_round_embeddings", None)
+            if cfg.log_depth_diagnostics and per_round:
+                c_val = getattr(model, "c", None) if cfg.model == "hyperbolic" else None
+                round_norm_list = per_round_norm_stats(per_round, cfg.model, c_val)
+                round_grad_list = _per_round_grad_norms(
+                    loss_dict["node_loss"], per_round
+                )
+                tt = sample.task_type
+                bucket = depth_diag_accum.setdefault(
+                    tt,
+                    {
+                        "round_norms": [0.0] * len(round_norm_list),
+                        "round_grads": [0.0] * len(round_grad_list),
+                        "n": 0,
+                    },
+                )
+                for i, s in enumerate(round_norm_list):
+                    bucket["round_norms"][i] += s["mean_norm"]
+                for i, g in enumerate(round_grad_list):
+                    bucket["round_grads"][i] += g
+                bucket["n"] += 1
+
             opt.zero_grad(set_to_none=True)
             loss.backward()
             grad_norms = _bucket_grad_norms(model) if cfg.grad_diag else None
-            torch.nn.utils.clip_grad_norm_(params, max_norm=1.0)
+            torch.nn.utils.clip_grad_norm_(params, max_norm=0.5)
             opt.step()
 
             train_acc.add(
@@ -603,8 +677,33 @@ def train(cfg: argparse.Namespace) -> None:
                 f"gap={_c(f'{gap:+.3f}', _status_gap(gap))}"
             )
 
+        depth_diag_summary: dict = {}
+        if cfg.log_depth_diagnostics and depth_diag_accum:
+            print(f"[depth] epoch={epoch} per-task per-round ||h||_mean and ||dL/dh_r||:")
+            for t in sorted(depth_diag_accum.keys()):
+                b = depth_diag_accum[t]
+                n = max(b["n"], 1)
+                norms_mean = [x / n for x in b["round_norms"]]
+                grads_mean = [x / n for x in b["round_grads"]]
+                depth_diag_summary[str(t)] = {
+                    "n": b["n"],
+                    "round_norms_mean": norms_mean,
+                    "round_grads_mean": grads_mean,
+                }
+                norms_str = " ".join(f"{v:.3f}" for v in norms_mean)
+                grads_str = " ".join(f"{v:.4f}" for v in grads_mean)
+                print(
+                    f"        task_type={t} n={b['n']} "
+                    f"|h|_per_round=[{norms_str}] "
+                    f"|dL/dh|_per_round=[{grads_str}]"
+                )
+
         (out_dir / f"val_epoch_{epoch}.json").write_text(json.dumps(val, indent=2))
         (out_dir / f"train_epoch_{epoch}.json").write_text(json.dumps(train_summary, indent=2))
+        if depth_diag_summary:
+            (out_dir / f"depth_diag_epoch_{epoch}.json").write_text(
+                json.dumps(depth_diag_summary, indent=2)
+            )
         final_train_summary = train_summary
         final_val_summary = val
 
@@ -723,6 +822,21 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Log per-bucket gradient norms (manifold / edge_attn / head) at "
         "every --log-every step. Off by default.",
+    )
+    p.add_argument(
+        "--log-depth-diagnostics",
+        action="store_true",
+        help="Per-round ||h|| and per-task gradient norms across message-passing "
+        "rounds. Requires model to return per_round_embeddings; no-op otherwise. "
+        "AttnRes Phase-1 diagnostic for depth-wise signal dilution.",
+    )
+    p.add_argument(
+        "--concat-depth",
+        action="store_true",
+        help="HMT-style diagnostic: score on [logmap0(h_1) || ... || logmap0(h_L)] "
+        "instead of just the final round. Widens scoring-head inputs by num_layers. "
+        "If multi-hop tasks lift, final-round-only heads were collapsing depth "
+        "signal and full AttnRes is justified.",
     )
     p.add_argument(
         "--no-color",

@@ -21,7 +21,7 @@ data to flow into both.
 
 from __future__ import annotations
 
-from typing import Optional
+from typing import List, Optional
 
 import torch
 from torch import Tensor, nn
@@ -87,11 +87,13 @@ class EuclideanBaseline(nn.Module):
         hidden_dim: int = 32,
         num_layers: int = 3,
         type_dim: int = 8,          # accepted for API parity; unused
+        log_depth: bool = False,
         **_ignored,                 # soak up KGR-only kwargs (c, learnable_c, ...)
     ) -> None:
         super().__init__()
         self.hidden_dim = hidden_dim
         self.num_layers = num_layers
+        self.log_depth = bool(log_depth)
         # Kept so edge-score-head width matches the experimental model exactly
         # (identical parameter budget at matching hidden_dim).
         self.type_dim = type_dim
@@ -133,8 +135,11 @@ class EuclideanBaseline(nn.Module):
         h = self.node_in(node_features)
         q = self.query_in(query.view(-1)) if query.dim() == 1 else self.query_in(query).view(-1)
 
+        per_round: Optional[List[Tensor]] = [] if self.log_depth else None
         for layer in self.gat_layers:
             h = layer(h, edge_index)
+            if per_round is not None:
+                per_round.append(h)
 
         N = h.size(0)
         q_exp = q.unsqueeze(0).expand(N, -1)
@@ -157,6 +162,7 @@ class EuclideanBaseline(nn.Module):
             edge_type_embeddings=torch.zeros(
                 0, self.type_dim, dtype=h.dtype, device=h.device
             ),
+            per_round_embeddings=per_round,
         )
 
     def parameter_count(self) -> int:

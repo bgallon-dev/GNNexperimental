@@ -13,6 +13,10 @@ if _PROJECT_ROOT not in sys.path:
     sys.path.insert(0, _PROJECT_ROOT)
 
 from src.models.hyperbolic_gnn import KettleGraphReasoner  # noqa: E402
+from src.modelsv2.hyperbolic_gnnV2 import (  # noqa: E402
+    KettleGraphReasoner as KGRv2,
+)
+from src.modelsv2.layers import poincare_ops as Pv2  # noqa: E402
 
 
 def _make_batch(N=20, E=60, node_feat=12, edge_feat=6, query=16, T=5, seed=0):
@@ -36,6 +40,26 @@ def _build(**overrides):
     )
     cfg.update(overrides)
     return KettleGraphReasoner(**cfg).double()
+
+
+def test_log_depth_returns_per_round():
+    torch.manual_seed(0)
+    nf, ei, et, ed, q = _make_batch()
+
+    # Default-off: per_round_embeddings should be None.
+    out_off = _build()(nf, ei, et, ed, q)
+    assert out_off.per_round_embeddings is None
+
+    # Flag on: list of length num_layers, each (N, hidden_dim) in-graph.
+    model = _build(log_depth=True, num_layers=4)
+    out_on = model(nf, ei, et, ed, q)
+    assert out_on.per_round_embeddings is not None
+    assert len(out_on.per_round_embeddings) == 4
+    for h_r in out_on.per_round_embeddings:
+        assert h_r.shape == (nf.size(0), model.hidden_dim)
+        assert h_r.requires_grad  # gradient must reach each round
+    # Last round equals node_embeddings (same underlying tensor).
+    assert torch.equal(out_on.per_round_embeddings[-1], out_on.node_embeddings)
 
 
 def test_forward_shapes_and_ranges():
@@ -113,6 +137,74 @@ def test_parameter_count_within_budget():
     assert small.parameter_count() < 500_000
     large = _build(hidden_dim=128, num_layers=4)
     assert large.parameter_count() < 2_000_000
+
+
+def _build_v2(**overrides):
+    cfg = dict(
+        node_feat_dim=12,
+        edge_feat_dim=6,
+        query_dim=16,
+        hidden_dim=32,
+        num_layers=3,
+        type_dim=8,
+    )
+    cfg.update(overrides)
+    return KGRv2(**cfg).double()
+
+
+def test_v2_depth_attn_forward_and_ball_constraint():
+    torch.manual_seed(0)
+    nf, ei, et, ed, q = _make_batch()
+    model = _build_v2(depth_attn=True)
+    out = model(nf, ei, et, ed, q)
+
+    # Ball constraint on attended embedding: ||h|| < 1/sqrt(c).
+    c = float(model.c)
+    max_norm = out.node_embeddings.norm(dim=-1).max().item()
+    assert max_norm < 1.0 / (c**0.5)
+    assert torch.isfinite(out.node_scores).all()
+    assert torch.isfinite(out.edge_scores).all()
+
+
+def test_v2_depth_attn_zero_init_uniform_softmax():
+    """Zero-init pseudo-queries → uniform depth weights at step 0."""
+    torch.manual_seed(0)
+    nf, ei, et, ed, q = _make_batch()
+    model = _build_v2(depth_attn=True)
+
+    # Run forward up to the snapshots, then exercise depth_attention.
+    # Easiest: hand-build three random tangent snapshots and check that
+    # with zero queries the softmax is exactly 1/L.
+    D = model.hidden_dim
+    snaps = [torch.randn(nf.size(0), D, dtype=torch.float64) for _ in range(3)]
+    # Cast the module to double so keys/queries match.
+    da = model.depth_attention.double()
+    stack = torch.stack(snaps, dim=0)
+    keys = da._norm_keys(stack)
+    logits = torch.einsum("d,lnd->ln", da.depth_queries[-1], keys)
+    alpha = logits.softmax(dim=0)
+    assert torch.allclose(
+        alpha, torch.full_like(alpha, 1.0 / len(snaps)), atol=1e-6
+    )
+
+
+def test_v2_depth_attn_parameter_delta():
+    """DepthAttention adds a bounded, small number of params."""
+    base = _build_v2(depth_attn=False)
+    with_attn = _build_v2(depth_attn=True)
+    delta = with_attn.parameter_count() - base.parameter_count()
+    # L*D queries + D RMSNorm scale = (num_layers + 1) * hidden_dim.
+    expected = (with_attn.num_layers + 1) * with_attn.hidden_dim
+    assert delta == expected
+
+
+def test_v2_intra_stack_runs():
+    torch.manual_seed(1)
+    nf, ei, et, ed, q = _make_batch()
+    model = _build_v2(depth_attn=True, depth_attn_intra_stack=True)
+    out = model(nf, ei, et, ed, q)
+    assert torch.isfinite(out.node_scores).all()
+    assert out.node_embeddings.norm(dim=-1).max().item() < 1.0 / (float(model.c) ** 0.5)
 
 
 if __name__ == "__main__":  # pragma: no cover

@@ -20,6 +20,13 @@ hyperbolic:
   # radial_reg_weight=0.1 breaks the saturation attractor within ~500
   # steps and produces per-node radial differentiation (|h|_std ≈ 0.15+).
   aux_depth_weight: 1.0
+  # Depth-wise AttnRes over MP-round tangent snapshots (v2 only). The
+  # scoring head sees a learned softmax mixture of all rounds instead of
+  # just the final (most-damped) round, preserving layer-1 signal under
+  # origin collapse. Intra-stack additionally feeds the attended mixture
+  # back into each MP round as input; off by default (Technique 2).
+  depth_attn: true
+  depth_attn_intra_stack: false
   seed: 0
 
 euclidean:
@@ -29,3 +36,9 @@ euclidean:
   epochs: 20
   edge_loss_weight: 0.5
   seed: 0
+
+diagnostics:
+  # AttnRes Phase-1: stash per-round node embeddings during forward and log
+  # per-task ||h||_r and ||dL/dh_r|| every epoch. Off by default — costs one
+  # extra autograd pass per step when on. Enable via --log-depth-diagnostics.
+  log_depth_diagnostics: false
