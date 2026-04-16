@@ -71,6 +71,7 @@ class KettleGraphReasoner(nn.Module):
         hierarchy_subspace_dim: int = 0,
         log_depth: bool = False,
         concat_depth: bool = False,
+        tangent_scale_init: float = 0.15,
     ) -> None:
         super().__init__()
         self.hidden_dim = hidden_dim
@@ -112,7 +113,7 @@ class KettleGraphReasoner(nn.Module):
         self.node_in = nn.Linear(node_feat_dim, hidden_dim)
         nn.init.xavier_uniform_(self.node_in.weight, gain=0.05)
         nn.init.zeros_(self.node_in.bias)
-        self.tangent_scale = nn.Parameter(torch.tensor(0.1))
+        self.tangent_scale = nn.Parameter(torch.tensor(float(tangent_scale_init)))
         self.query_in = nn.Linear(query_dim, hidden_dim)
 
         print(f"[DEBUG init] tangent_scale        = {self.tangent_scale.item():.4f}")
@@ -179,8 +180,8 @@ class KettleGraphReasoner(nn.Module):
         # hidden_dim * num_layers feature and learn which coordinates matter
         # via their own weights. Under the non-concat path we keep the
         # original slicing so Task 0 gets a protected radial axis.
-        prox_dim = hidden_dim if self.concat_depth else (hidden_dim - k if k > 0 else hidden_dim)
-        hier_dim = hidden_dim if self.concat_depth else k
+        prox_dim = (hidden_dim - k if k > 0 else hidden_dim)
+        hier_dim = k if k > 0 else hidden_dim
         depth_mul = num_layers if self.concat_depth else 1
         self.node_score = nn.Sequential(
             nn.Linear(prox_dim * depth_mul + hidden_dim, hidden_dim),
@@ -280,20 +281,22 @@ class KettleGraphReasoner(nn.Module):
 
         k = self.hierarchy_subspace_dim
         use_hier = k > 0 and task_type == 0
-        if k > 0 and not self.concat_depth:
-            # Non-concat path keeps the explicit subspace routing: Task 0 gets
-            # the first k tangent coords, Tasks 1-4 get the remaining ones.
-            h_slice = h_flat[:, :k] if use_hier else h_flat[:, k:]
-            node_head = self.node_score_hier if use_hier else self.node_score
-            edge_head = self.edge_score_hier if use_hier else self.edge_score
+        if k > 0:
+            if self.concat_depth:
+                # Slice per-layer through the concat: Task 0 sees first k
+                # coords of each layer's tangent vector (k*L total); other
+                # tasks see the remaining coords of each layer.
+                parts = h_flat.split(self.hidden_dim, dim=-1)
+                if use_hier:
+                    h_slice = torch.cat([p[:, :k] for p in parts], dim=-1)
+                else:
+                    h_slice = torch.cat([p[:, k:] for p in parts], dim=-1)
+            else:
+                h_slice = h_flat[:, :k] if use_hier else h_flat[:, k:]
         else:
-            # Option B under concat_depth: no slicing. Both heads receive the
-            # full [logmap0(h_1) || ... || logmap0(h_L)] vector and learn which
-            # coordinates to attend to through their own weights. Gradient
-            # flow reaches every dim from every task.
             h_slice = h_flat
-            node_head = self.node_score_hier if use_hier else self.node_score
-            edge_head = self.edge_score_hier if use_hier else self.edge_score
+        node_head = self.node_score_hier if use_hier else self.node_score
+        edge_head = self.edge_score_hier if use_hier else self.edge_score
 
         node_logits = node_head(torch.cat([h_slice, q_exp], dim=-1)).squeeze(-1)
         node_scores = torch.sigmoid(node_logits)

@@ -1,5 +1,13 @@
-# Default hyperparameters for the KGR tier-1 experiment.
-# CLI flags on `python -m src.training.train` override these.
+# Reference hyperparameters for the KGR tier-1 experiment.
+#
+# NOTE: this file is documentation only — `python -m src.training.train` does
+# NOT load it. The actual defaults live in argparse in src/training/train.py.
+# Keep the two in sync by hand; flags here exist so sweeps/readers have one
+# place to see the canonical config.
+#
+# `depth_attn` and `depth_attn_intra_stack` apply only to the V2 model
+# (src/modelsv2/hyperbolic_gnnV2.py). The V1 model used by train.py ignores
+# them; don't assume setting depth_attn here changes V1 behavior.
 #
 # If the hyperbolic run is unstable (NaN loss or ||h|| saturating toward
 # 1/sqrt(c)), drop hyperbolic.lr to 3e-4 before touching anything else —
@@ -9,8 +17,12 @@ hyperbolic:
   hidden_dim: 64
   num_layers: 3
   lr: 1.0e-3
-  epochs: 20
+  epochs: 30
   edge_loss_weight: 0.5
+  # Initial value of the learnable tangent_scale (scales the Euclidean
+  # tangent vector before the first expmap0). Most sensitive hyperparam in
+  # the system; 0.10 is the known-best tier-1 setting. CLI: --tangent-scale.
+  tangent_scale: 0.10
   # Radial regularizer coefficient on mean ||h||^2 of final-layer
   # embeddings. Counterforce against the Poincaré boundary attractor.
   # Sweep candidates: 0.001, 0.01, 0.1.

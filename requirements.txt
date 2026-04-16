@@ -1,0 +1,17 @@
+# Core runtime dependencies
+torch
+numpy
+networkx
+geoopt
+
+# Optional PyG acceleration deps are intentionally excluded from the default
+# install because this project falls back to pure PyTorch `index_add`, while
+# `torch-scatter` often needs wheels that match the local Torch/CUDA build.
+# Install them manually only if you need PyG features or faster sparse ops:
+# https://pytorch-geometric.readthedocs.io/en/latest/install/installation.html
+
+# Development / testing
+pytest
+
+# Notebook / analysis helpers
+matplotlib

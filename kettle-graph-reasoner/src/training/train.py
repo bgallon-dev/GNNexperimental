@@ -194,6 +194,7 @@ def build_model(
     hierarchy_subspace_dim: int = 0,
     log_depth: bool = False,
     concat_depth: bool = False,
+    tangent_scale_init: float = 0.15,
 ) -> nn.Module:
     if kind == "hyperbolic":
         return KettleGraphReasoner(
@@ -207,6 +208,7 @@ def build_model(
             hierarchy_subspace_dim=hierarchy_subspace_dim,
             log_depth=log_depth,
             concat_depth=concat_depth,
+            tangent_scale_init=tangent_scale_init,
         )
     if kind == "euclidean_plus":
         return EuclideanPlusBaseline(
@@ -406,6 +408,7 @@ def train(cfg: argparse.Namespace) -> None:
         cfg.hidden_dim,
         cfg.num_layers,
         hierarchy_subspace_dim=cfg.hierarchy_subspace_dim,
+        tangent_scale_init=cfg.tangent_scale,
         log_depth=cfg.log_depth_diagnostics,
         concat_depth=getattr(cfg, "concat_depth", False),
     ).to(device)
@@ -448,6 +451,13 @@ def train(cfg: argparse.Namespace) -> None:
         params += list(depth_head.parameters())
     opt = build_optimizer_for_params(params, cfg.model, cfg.lr)
 
+    from torch.optim.lr_scheduler import CosineAnnealingLR, StepLR
+    scheduler = None
+    if cfg.lr_schedule == "cosine":
+        scheduler = CosineAnnealingLR(opt, T_max=cfg.epochs, eta_min=cfg.lr * 0.01)
+    elif cfg.lr_schedule == "step":
+        scheduler = StepLR(opt, step_size=cfg.lr_step_epoch, gamma=0.1)
+
     train_loader = DataLoader(
         train_set,
         batch_size=1,
@@ -470,6 +480,7 @@ def train(cfg: argparse.Namespace) -> None:
     out_dir = Path(cfg.out)
     out_dir.mkdir(parents=True, exist_ok=True)
     best_val = math.inf
+    epochs_without_improvement = 0
 
     step = 0
     log_every = cfg.log_every
@@ -709,6 +720,7 @@ def train(cfg: argparse.Namespace) -> None:
 
         if val["val_loss"] < best_val:
             best_val = val["val_loss"]
+            epochs_without_improvement = 0
             torch.save(
                 {
                     "epoch": epoch,
@@ -719,6 +731,16 @@ def train(cfg: argparse.Namespace) -> None:
                 out_dir / "best.pt",
             )
             print(_c(f"[ckpt]  saved best @ epoch={epoch} val_loss={best_val:.4f}", "good"))
+        else:
+            epochs_without_improvement += 1
+
+        if scheduler is not None:
+            scheduler.step()
+
+        if cfg.early_stop_patience > 0 and epochs_without_improvement >= cfg.early_stop_patience:
+            print(_c(f"[early_stop] no val_loss improvement for "
+                     f"{cfg.early_stop_patience} epochs — stopping at epoch {epoch}.", "warn"))
+            break
 
     train_by_t = final_train_summary.get("by_task_type", {})
     val_by_t = final_val_summary.get("by_task_type", {})
@@ -755,10 +777,30 @@ def parse_args() -> argparse.Namespace:
         required=True,
     )
     p.add_argument("--corpus", type=str, default="src/data/corpus/tier1")
-    p.add_argument("--epochs", type=int, default=20)
+    p.add_argument("--epochs", type=int, default=30)
     p.add_argument("--hidden-dim", type=int, default=64)
     p.add_argument("--num-layers", type=int, default=3)
     p.add_argument("--lr", type=float, default=1e-3)
+    p.add_argument(
+        "--lr-schedule",
+        choices=["none", "cosine", "step"],
+        default="none",
+        help="LR schedule applied after each epoch. 'cosine' anneals to "
+        "lr*0.01 over cfg.epochs. 'step' drops 10x at --lr-step-epoch.",
+    )
+    p.add_argument(
+        "--lr-step-epoch",
+        type=int,
+        default=15,
+        help="Epoch at which StepLR drops LR by 10x (only when --lr-schedule=step).",
+    )
+    p.add_argument(
+        "--early-stop-patience",
+        type=int,
+        default=0,
+        help="Stop training if val_loss does not improve for this many "
+        "consecutive epochs. 0 disables early stopping.",
+    )
     p.add_argument("--edge-loss-weight", type=float, default=0.5)
     p.add_argument(
         "--radial-reg-weight",
@@ -784,6 +826,18 @@ def parse_args() -> argparse.Namespace:
         help="Coefficient on the auxiliary depth-prediction loss (hyperbolic "
         "only). The aux head sees only ||h|| and predicts node-layer; "
         "forces radial differentiation. 0 disables.",
+    )
+    p.add_argument(
+        "--tangent-scale",
+        type=float,
+        default=0.10,
+        help="Initial value of the learnable tangent_scale parameter "
+        "(hyperbolic only). Multiplies the Euclidean tangent vector before "
+        "the first expmap0, setting the effective ||h|| at init. This is the "
+        "most sensitive hyperparameter in the system: 0.10 lands init deep in "
+        "the ball interior (known-best at tier-1); 0.15+ drifts toward the "
+        "boundary attractor within the first epoch. Sweep in {0.05, 0.10, "
+        "0.15}. Ignored for Euclidean baselines.",
     )
     p.add_argument("--seed", type=int, default=0)
     p.add_argument("--log-every", type=int, default=100)
