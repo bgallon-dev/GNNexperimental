@@ -1,0 +1,39 @@
+{
+  "sp_label_hop_mean": 0.7113732962216545,
+  "sp_label_hop_std": 0.20870704226173126,
+  "sp_model_hop_mean": 0.13621476194632057,
+  "sp_model_hop_std": 0.19142619513798553,
+  "D_label_minus_model_mean": 0.5751585342753339,
+  "D_std": 0.23964950377422153,
+  "missed_mass_hop_ge2_mean": 0.7772149782932116,
+  "missed_mass_hop_ge2_std": 0.09746279639088523,
+  "label_r2_hop_branch_mean": 0.7731385159765446,
+  "label_r2_hop_branch_std": 0.06770050907658483,
+  "proxy_true_hop_spearman_median": 0.33982806707901114,
+  "n_with_proxy": 99,
+  "retriever_run": "runs\\sweep_taskdiversity\\task3_seed0",
+  "split": "val",
+  "task": 3,
+  "topc": 50,
+  "n_eval": 99,
+  "n_skipped": 1,
+  "n_anchor0_excluded": 0,
+  "n_anchor_argmax_mismatch": 13,
+  "deg_feature_range": [
+    0.0,
+    3.761200189590454
+  ],
+  "deg_feature_nonneg": true,
+  "gate": {
+    "cond_a_label_hop_signal": true,
+    "cond_b_missed_mass": true,
+    "cond_c_proxy_reliable": false,
+    "phase1_pass": false,
+    "branch": "FAIL (proxy unreliable) -> do NOT build struct; reframe as retriever/query-head lever (task-3 qh1 missed the WS2 bar by 0.145; qh2/qh3 never tried).",
+    "thresholds": {
+      "label_corr": 0.25,
+      "missed_mass": 0.3,
+      "proxy": 0.6
+    }
+  }
+}

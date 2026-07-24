@@ -1,0 +1,47 @@
+{
+  "_description": "Architecture sweep: hidden_dim x num_layers x seed. Run AFTER uniformity sweep completes so the training recipe is finalized. Edit the 'uniformity_reg_weight' and 'uniformity_t' fields based on the outcome of that sweep.",
+
+  "geometry": "hyperbolic",
+  "task": 2,
+  "corpus": "src/data/corpus/tier1",
+  "out_root": "runs/sweep_arch_hyp",
+
+  "grid": {
+    "hidden_dim": [32, 64, 128],
+    "num_layers": [2, 3, 4],
+    "seed": [0, 1, 2]
+  },
+
+  "fixed_hyperparameters": {
+    "contrastive_epochs": 10,
+    "query_epochs": 10,
+    "lr": 0.0003,
+    "anchors_per_step": 64,
+    "log_every": 200,
+    "type_dim": 8,
+    "tangent_scale": 0.1,
+    "radial_reg_weight": 0.01,
+    "radial_reg_weight_end": 0.001,
+    "temperature": 1.0,
+    "positive_mix": 0.5,
+    "neighbor_exclude_k": 1,
+    "margin": 0.5,
+    "stage_b_loss": "pairwise",
+    "curvature": 1.0,
+    "train_graphs_frac": 1.0,
+    "uniformity_reg_weight": 0.0,
+    "uniformity_t": 2.0
+  },
+
+  "eval": {
+    "run_intrinsic": true,
+    "run_collapse": true
+  },
+
+  "_notes": [
+    "radial_reg_weight is NOT scaled with hidden_dim. Larger dims may experience slightly stronger effective boundary pressure because norm^2 has more contributing dimensions. This is a real confound flagged in the analysis report, not a bug to fix.",
+    "uniformity_reg_weight is set to the value chosen from the uniformity sweep outcome. Edit this field before running.",
+    "Tier 1 corpus only. Once the best config is found here, validate at tier 2 separately.",
+    "Expected wall-clock: ~4.5 hours training + ~15 min eval."
+  ]
+}

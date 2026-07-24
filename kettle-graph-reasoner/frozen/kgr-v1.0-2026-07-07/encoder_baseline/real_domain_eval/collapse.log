@@ -1,0 +1,29 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Benjamin\Desktop\GNN Experiment\kettle-graph-reasoner\src\modelsv3\investigate_collapse.py", line 601, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "C:\Users\Benjamin\Desktop\GNN Experiment\kettle-graph-reasoner\src\modelsv3\investigate_collapse.py", line 592, in main
+    evaluate_checkpoint(
+  File "C:\Users\Benjamin\Desktop\GNN Experiment\kettle-graph-reasoner\src\modelsv3\investigate_collapse.py", line 502, in evaluate_checkpoint
+    _print_summary(results)
+  File "C:\Users\Benjamin\Desktop\GNN Experiment\kettle-graph-reasoner\src\modelsv3\investigate_collapse.py", line 524, in _print_summary
+    print(f"    \u03c4={tk:>8}   mean={d['mean']:.4f}   max={d['max']:.4f}")
+  File "C:\Users\Benjamin\AppData\Local\Programs\Python\Python311\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u03c4' in position 4: character maps to <undefined>
+[collapse] dataset: 818 samples, 500 graphs
+
+========================================================================================
+Collapse investigation — 500 graphs
+checkpoint: runs\v3.1-baseline-hyp-h128-l4-seed1\encoder.pt   model: hyperbolic
+========================================================================================
+
+Q1 — raw distance structure (aggregated across graphs)
+  median_dist           mean=1.7138e+00  range=[1.370e+00, 2.957e+00]
+  min_dist              mean=3.9676e-07  range=[1.382e-07, 8.197e-07]
+  min/median ratio      mean=2.418e-07
+
+  Fraction of pairs below threshold (mean / worst graph):

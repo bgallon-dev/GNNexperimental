@@ -1,0 +1,20 @@
+# LEAN env for the graph-diagnostics CLI tooling ONLY (no torch, no model).
+# The full research + serving environment is ../requirements.txt (exact
+# pins); install that one unless you know you only need diagnostics.
+
+# Core
+neo4j>=5.0
+python-dotenv>=1.0
+PyYAML>=6.0
+
+# Topology: one-pull numpy graph cache (stats / exact components / Gromov delta)
+numpy>=1.24
+# networkx: still used by subgraphs/extract.py (the `subgraph` CLI export path)
+networkx>=3.0
+
+# Optional: entity-resolution Jaro-Winkler
+rapidfuzz>=3.0
+
+# Optional: CSV/Parquet export in neo4j_reader, not used by diagnostics directly
+pandas>=2.0
+pyarrow>=14.0

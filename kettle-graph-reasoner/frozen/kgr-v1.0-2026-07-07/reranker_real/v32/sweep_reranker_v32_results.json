@@ -1,0 +1,73 @@
+{
+  "config": "src\\modelsv3\\sweep_config_reranker_real_v32.json",
+  "ws3_bar": {},
+  "cells": {
+    "task2_seed0": {
+      "state": "complete",
+      "task": 2,
+      "seed": 0,
+      "v31_ndcg@10": 0.5575367182658688,
+      "hybrid_ndcg@10": 0.7319792675319674,
+      "oracle_ndcg@10": 0.8456486913200757,
+      "gap_closed_frac": 0.6054678929753401,
+      "regression_vs_retriever": false,
+      "residual_deployed": true,
+      "trained_gap_closed_frac": 0.6054678929753401,
+      "trained_regression": false,
+      "learned_scale": 3.4310097694396973,
+      "deployed_scale": 3.4310097694396973
+    },
+    "task2_seed1": {
+      "state": "complete",
+      "task": 2,
+      "seed": 1,
+      "v31_ndcg@10": 0.5575367182658688,
+      "hybrid_ndcg@10": 0.7317756652114372,
+      "oracle_ndcg@10": 0.8456486913200757,
+      "gap_closed_frac": 0.6047612152265056,
+      "regression_vs_retriever": false,
+      "residual_deployed": true,
+      "trained_gap_closed_frac": 0.6047612152265056,
+      "trained_regression": false,
+      "learned_scale": -3.4150705337524414,
+      "deployed_scale": -3.4150705337524414
+    },
+    "task2_seed2": {
+      "state": "complete",
+      "task": 2,
+      "seed": 2,
+      "v31_ndcg@10": 0.5575367182658688,
+      "hybrid_ndcg@10": 0.7316309570499908,
+      "oracle_ndcg@10": 0.8456486913200757,
+      "gap_closed_frac": 0.6042589516103415,
+      "regression_vs_retriever": false,
+      "residual_deployed": true,
+      "trained_gap_closed_frac": 0.6042589516103415,
+      "trained_regression": false,
+      "learned_scale": -3.3371262550354004,
+      "deployed_scale": -3.3371262550354004
+    }
+  },
+  "gate": {
+    "by_task": {
+      "2": {
+        "n_seeds": 3,
+        "v31_ndcg@10_mean": 0.5575367182658688,
+        "hybrid_ndcg@10_mean": 0.7317952965977984,
+        "hybrid_ndcg@10_std": 0.00017498311764721632,
+        "gap_closed_frac_mean": 0.6048293532707291,
+        "trained_gap_closed_frac_mean": 0.6048293532707291,
+        "n_residual_deployed": 3,
+        "ws3_pertask_gap_closed": null,
+        "beats_ws3": false,
+        "regression": false,
+        "is_geometry_sensitive": false
+      }
+    },
+    "geometry_tasks_beating_ws3": 0,
+    "geometry_tasks_total": 0,
+    "any_regression": false,
+    "acceptance_pass": false
+  },
+  "wall_seconds": 2911.8
+}

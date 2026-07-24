@@ -1,0 +1,19 @@
+{
+  "_comment": "Apply the v3.1.x reranker to the REAL head. Targets the documented +0.29 real oracle gap (real-head retriever ndcg@10 0.558 vs oracle@C50 0.846; PHASE1_FINDINGS 'Real-graph Stage-B head'). Reuses sweep_reranker_v32.py verbatim: it special-cases task 2 to use cfg.v31_baseline as the single fixed retriever for all seeds -> here that is the persisted real-trained head dir (frozen baseline encoder SHA-identical + the real qh1 head). Corpus is the real archival corpus. combine_mode=v32 (the damped residual; the router found v3.2-damped best for the temporal/locality-friendly task family, which is what the real corpus is). ws3_results points at a nonexistent path ON PURPOSE: there is NO WS3 real bar, so beats_ws3 is meaningless here and must not borrow the synthetic bar (apples-to-apples discipline). The numbers that matter are deployed ndcg@10 vs the real-head retriever (0.558), the oracle ceiling, and the do-no-harm validation gate (0 deployed regression by construction). Paired with sweep_config_reranker_real_v33.json (combine_mode=blend) and reranker_router for the per-recipe deployed choice.",
+  "out_root": "runs/sweep_reranker_real_v32",
+  "ws2_root": "runs/sweep_taskdiversity",
+  "v31_baseline": "runs/v3.1-real-head-hyp-h128-l4-seed0",
+  "ws3_results": "runs/_no_real_ws3_bar_DOES_NOT_EXIST.json",
+  "corpus": "src/data/corpus/real_domain_eval_ft",
+  "tasks": [2],
+  "geometry_sensitive": [],
+  "seeds": [0, 1, 2],
+  "epochs": 25,
+  "topc": 50,
+  "lr": 0.001,
+  "temperature": 1.0,
+  "hidden_dim": 96,
+  "num_layers": 3,
+  "type_dim": 8,
+  "combine_mode": "v32"
+}

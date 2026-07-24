@@ -1,0 +1,88 @@
+# ============================================================================
+# KGR serving-layer routing  (per-task head + gated reranker recipe)
+# ============================================================================
+# Two data-driven decisions, both with explicit no-regression gates:
+#
+#   head     -- which trained QueryToBall maps the query into the frozen
+#               v3.1 encoder's ball. Task 2 has a REAL-trained head
+#               (real-val ndcg@10 0.558); tasks 0/4/5 have only the
+#               synthetic baseline head (MVP -- the cheap G1 real-head
+#               follow-on is documented in the plan, gated on beating the
+#               frozen synthetic head on a held-out real split).
+#
+#   reranker -- only a task with a VALIDATED real router cell
+#               (routed_deployed_mean >= retriever_ndcg@10_mean AND
+#               regression == false in runs/reranker_router_real/
+#               router_results.json) may deploy a trained recipe. Every
+#               other task falls back to identity (== v3.1-alone), which
+#               is provably non-regressing vs the retriever. The synthetic
+#               recipe/task map does NOT transfer to real (real-temporal
+#               flipped v3.2->v3.3, PROJECT_HANDOFF sec.2) -- recalibration
+#               is load-bearing, never assume.
+# ----------------------------------------------------------------------------
+version: 2
+
+# [2026-07-11] Serving defaults now point at the FROZEN release
+# (frozen/kgr-v1.0-2026-07-07/, read-only, MANIFEST.sha256-covered) per
+# PROJECT_HANDOFF: frozen/ is the release, runs/ is mutable working state.
+# The frozen run-dir layout is identical to runs/, so every loader accepts
+# these paths unchanged. Exception: the task-4 real head POSTDATES the
+# 2026-07-07 freeze and exists only in runs/ -- it stays pinned by SHA
+# below and is the first candidate for the next freeze snapshot.
+
+# The locked, SHA-asserted frozen v3.1 encoder (all heads were trained
+# against this byte-identical encoder; the engine asserts the SHA).
+baseline_dir: frozen/kgr-v1.0-2026-07-07/encoder_baseline
+
+# Real-data router decision table (source of truth for recipe choice).
+router_results: frozen/kgr-v1.0-2026-07-07/router/real/router_results.json
+
+# Per-task QueryToBall head run dir (loaded via retrieval_ops.load_query_encoder).
+heads:
+  "0": frozen/kgr-v1.0-2026-07-07/encoder_baseline   # synthetic (G1 blocked: see note)
+  "2": frozen/kgr-v1.0-2026-07-07/real_head          # REAL-trained (validated 0.558)
+  "4": runs/v3.1-real-head-task4-hyp-h128-l4         # REAL-trained, POST-FREEZE (G1 PASS: 0.277->0.529, 3sd +-0.005, encoder frozen); SHA-pinned below until next freeze
+  "5": frozen/kgr-v1.0-2026-07-07/encoder_baseline   # synthetic (G1 blocked: see note)
+
+# Integrity pins for the heads (query_encoder.pt sha256). A mismatch is
+# FATAL at load (a wrong head has no non-regressing fallback). This closes
+# the "only the encoder is SHA-asserted" gap: heads can no longer drift or
+# be swapped silently.
+heads_sha256:
+  "0": fe8ddcc1999a8c5d85666a775b4e45a7d3ada0aa11525544bda942a8c5e4845c
+  "2": a4173a5276cc40658ab8f557d26d8917c6a51aa9b96492f24f5fe9a52483a2ea
+  "4": cee31688ecc5f3e1c14a18b1fc8eb7efd2bb55a0390620f1c813fa6c0d90f588
+  "5": fe8ddcc1999a8c5d85666a775b4e45a7d3ada0aa11525544bda942a8c5e4845c
+
+# G1 status (real Stage-B head per task, frozen SHA-identical encoder):
+#   task 2: PASSED earlier (0.242 -> 0.558), runs/v3.1-real-head-hyp-h128-l4-seed0
+#   task 4: PASSED (g1_train_real_head.py; corpus src/data/corpus/real_subgraph_eval):
+#           synthetic 0.2773 -> real 0.5292 +-0.0051 (3 seeds), floor 0.2640,
+#           gate 0.2824, encoder param-checksum identical pre/post.
+#           Artifact: runs/v3.1-real-head-task4-hyp-h128-l4 (g1_report.json).
+#   tasks 0,5: BLOCKED BY DESIGN, not effort. generate_provenance_tasks
+#           needs LAYER_SOURCE/CLAIM nodes + provenance/reference edges; the
+#           `domain_only` scope deliberately excludes the document/extraction
+#           layers and provenance rel-types, so task-0 labels collapse to the
+#           anchor (degenerate) and task-5 (compound) inherits that. Real
+#           heads for 0/5 require exporting from the `end_to_end` 3-layer
+#           scope -- a different encoder operating regime (the v3.1 encoder
+#           was characterized on domain_only-shaped neighborhoods), i.e. a
+#           research-validity expansion, not wiring. Until then 0/5 keep the
+#           synthetic head + identity reranker (provably non-regressing).
+
+# Trained reranker artifacts. A task appears here ONLY if it has a
+# validated real router cell. The engine re-checks the router JSON + the
+# artifact's own hybrid.json gate at load time; hybrid.json is REQUIRED
+# (a reranker.pt without its attestation falls back to identity — fail
+# closed), the artifact's task/combine_mode identity is asserted, and the
+# optional sha256 pin rejects drifted/swapped weights. Any failure ->
+# identity fallback (never silently degrade).
+rerankers:
+  "2":
+    recipe: v3.3-blend
+    artifact: frozen/kgr-v1.0-2026-07-07/reranker_real/v33/task2_seed0   # validated 0.7966
+    sha256: b45757a91cdee28bd73769cb23b35ecae3b0e5c16750e05d863d3df932416a5d
+
+# Tasks 0/4/5 intentionally absent from `rerankers` -> identity fallback
+# (provably-non-regressing) until a real router cell is validated (G2).

@@ -1,0 +1,19 @@
+{
+  "_comment": "V2-chain rebuild: v3.3 blend-recipe reranker sweep against the h32 trunk. Identical to sweep_config_reranker_v32_h32.json except combine_mode=blend (the recipe that won 3/4 geometry tasks on the v1.0 chain). Same judgment rule: absolute ndcg + the v1.0 router table comparison.",
+  "out_root": "runs/sweep_reranker_v33_h32",
+  "ws2_root": "runs/sweep_taskdiversity_h32",
+  "v31_baseline": "runs/v2trunk-h32-locked",
+  "ws3_results": "runs/sweep_v2reranker/sweep_v2reranker_results.json",
+  "corpus": "src/data/corpus/tier1",
+  "tasks": [0, 1, 3, 4, 5, 2],
+  "geometry_sensitive": [0, 3, 4, 5],
+  "seeds": [0, 1, 2],
+  "epochs": 25,
+  "topc": 50,
+  "lr": 0.001,
+  "temperature": 1.0,
+  "hidden_dim": 96,
+  "num_layers": 3,
+  "type_dim": 8,
+  "combine_mode": "blend"
+}

@@ -1,0 +1,40 @@
+{
+  "checkpoint": "runs\\v3.1-baseline-hyp-h128-l4-seed1\\encoder.pt",
+  "model_kind": "hyperbolic",
+  "split": "val",
+  "task": 0,
+  "depth_divisor": 5,
+  "depth_feature_index": 20,
+  "depth_feature_range_observed": [
+    0.0,
+    0.800000011920929
+  ],
+  "depth_feature_in_unit_range": true,
+  "n_eval_samples": 100,
+  "n_skipped": 0,
+  "K_values": [
+    5,
+    10,
+    20
+  ],
+  "summary": {
+    "overall": {
+      "prov_path_recall@5": 0.024,
+      "prov_path_recall@10": 0.017000000000000005,
+      "prov_path_recall@20": 0.021500000000000005,
+      "random_baseline": 0.014581535171797878,
+      "n_prov_path_nodes": 1.75,
+      "n_relevant": 3.54
+    },
+    "by_task_type": {
+      "0": {
+        "prov_path_recall@5": 0.024,
+        "prov_path_recall@10": 0.017000000000000005,
+        "prov_path_recall@20": 0.021500000000000005,
+        "random_baseline": 0.014581535171797878,
+        "n_prov_path_nodes": 1.75,
+        "n_relevant": 3.54
+      }
+    }
+  }
+}

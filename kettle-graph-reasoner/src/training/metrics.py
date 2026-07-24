@@ -40,7 +40,9 @@ def ndcg_at_k(scores: Tensor, labels: Tensor, k: int) -> float:
     if scores.numel() == 0:
         return 0.0
     k = min(k, scores.numel())
-    order = torch.argsort(scores, descending=True)[:k]
+    # Patch 4a — topk is O(N) on GPU vs argsort's O(N log N); identical
+    # indices for the top-k selection regardless of tie order.
+    order = torch.topk(scores, k=k, largest=True).indices
     gains = labels[order]
     discounts = torch.tensor(
         [1.0 / math.log2(i + 2) for i in range(k)],

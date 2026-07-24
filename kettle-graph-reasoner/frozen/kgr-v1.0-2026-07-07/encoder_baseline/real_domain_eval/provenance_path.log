@@ -1,0 +1,8 @@
+[evalE] 818 samples  model=hyperbolic  prov_tasks=(0, 3)
+
+================================================================================
+Eval E - provenance-path recall (0 samples, 0 skipped)
+checkpoint: runs\v3.1-baseline-hyp-h128-l4-seed1\encoder.pt  model: hyperbolic
+depth divisor=5  x[:,20] range=['1.000', '0.000']  in_unit_range=True
+================================================================================
+  (no eligible provenance/multi-hop samples for this task filter; pass --task -1 or --task 0)

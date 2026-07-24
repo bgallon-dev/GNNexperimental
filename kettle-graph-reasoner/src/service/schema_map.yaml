@@ -1,0 +1,85 @@
+# ============================================================================
+# KGR serving-layer schema map  (the de-hardcoded label/rel -> KGR contract)
+# ============================================================================
+# This file externalizes what is hardcoded inside
+# scripts/neo4j_eval_export.py:
+#     _AUX_LABELS / _SOURCE_LABELS / _CLAIM_LABELS (lines 103-110)
+#         -> node_layers.{aux,source,claim}_labels
+#     _node_layer      (line 144)  -> node_layers.* (incl. precedence)
+#     _edge_category   (line 154)  -> edge_categories.{rules, default}
+#
+# CLAUDE.md non-negotiable #3 (schema-portable): the model must NOT carry
+# hardcoded domain type embeddings. The mapping is a descriptor/config, not
+# code. To swap domains, edit THIS file -- never the encoder.
+#
+# The values below are lifted VERBATIM from the hardcoded reference so the
+# de-hardcoding is a provable no-op. `verify.py` gate P0 asserts SchemaMap
+# (from this file) returns bit-identical layer/category to the reference
+# functions for every kettle_config.yaml label + a rel-type sample. If you
+# change a value here, P0 will (correctly) fail until the reference is
+# changed too -- that is the guardrail, not a bug.
+#
+# [2026-07-11] Re-synced to the exporter's 4-way layer mapping (source ->
+# claim -> entity -> auxiliary) and its expanded edge-keyword sets
+# (DURING/NEXT structural; containment/causation provenance). The previous
+# binary entity/auxiliary version encoded 11 labels (Document, Claim,
+# Event, Observation, ...) into the wrong layer for live serving.
+#
+# KGR layer ids (fixed by src/data/corpus_dataset.py / schema_sampler.py):
+#     source = 0   claim = 1   entity = 2   auxiliary = 3
+# KGR edge categories (fixed by feature_encoder.py):
+#     provenance = 0   reference = 1   structural = 2   cooccurrence = 3
+# ----------------------------------------------------------------------------
+version: 2
+
+node_layers:
+  default: 2        # LAYER_ENTITY   -- "everything else" (neo4j_eval_export:151)
+  aux_layer: 3      # LAYER_AUXILIARY
+  source_layer: 0   # LAYER_SOURCE
+  claim_layer: 1    # LAYER_CLAIM
+  # Precedence mirrors _node_layer exactly: aux, then source, then claim,
+  # else default. Primary-label match, exact/case-sensitive.
+  # _AUX_LABELS (neo4j_eval_export:103): temporal scaffolding.
+  aux_labels: [Year, Period]
+  # _SOURCE_LABELS (neo4j_eval_export:104-107): provenance roots.
+  source_labels: [Document, Section, Paragraph, Page, Parcel, ExtractionRun]
+  # _CLAIM_LABELS (neo4j_eval_export:108-110): intermediate assertions.
+  claim_labels: [Claim, Mention, Event, Observation, Measurement]
+
+edge_categories:
+  default: 2        # CAT_STRUCTURAL -- final fallback (neo4j_eval_export:179)
+  # Ordered substring rules over the UPPERCASED rel-type. First rule with
+  # ANY of its `contains` substrings present wins -- this reproduces the
+  # `any(k in r for k in (...))` chain of _edge_category EXACTLY, including
+  # its precedence (structural-temporal keywords are tested BEFORE
+  # provenance, matching neo4j_eval_export:158-179). Documented fidelity
+  # caveat: category only colours the schema descriptor / edge_attr
+  # category dims -- it never affects topology -- so this precedence is a
+  # faithful carry-over, not a semantic choice to revisit here.
+  rules:
+    - category: 2   # CAT_STRUCTURAL (DURING catches OCCURRED_DURING)
+      contains: [YEAR, PERIOD, TEMPORAL, DATE, SUPERSED, CORROBORAT, SCOPE,
+                 DURING, NEXT]
+    - category: 0   # CAT_PROVENANCE (containment chains + evidence/
+                    # derivation + event causation, neo4j_eval_export:162-172)
+      contains: [SOURCE, DERIV, PROVEN, EVIDENC, CONTAINS, HAS_CLAIM,
+                 HAS_PARAGRAPH, HAS_SECTION, HAS_PAGE, PRODUCED, TRIGGERED,
+                 EXTRACT]
+    - category: 1   # CAT_REFERENCE
+      contains: [REFER, MENTION, ABOUT, DESCRIB]
+    - category: 3   # CAT_COOCCURRENCE
+      contains: [CO_, COOCCUR, RELATED, ASSOCIAT, SAME_AS, LINKED, NEAR]
+
+temporal:
+  # Year-derived per-node temporal position (graphcache.ensure_year_reachability
+  # + pull_year_values). Mirrors neo4j_eval_export:283-294 / kettle_config
+  # temporal_max_hops.
+  year_label: Year
+  year_property: year
+  max_hops: 3
+
+identity:
+  # null  => deterministic 8-dim identity = rng(neo4j_id & 0xFFFFFFFF), the
+  #          byte-exact mirror of neo4j_eval_export:480 (task 2 never reads
+  #          it; present so the (N,32) x layout is contract-faithful).
+  seed_property: null

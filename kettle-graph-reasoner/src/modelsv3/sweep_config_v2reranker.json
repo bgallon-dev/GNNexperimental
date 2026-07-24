@@ -1,0 +1,23 @@
+{
+  "_comment": "v3.1.x WS3 fresh-18-dim v2 reranker + hybrid. The old v2 checkpoints are 9-dim-query and unusable; train.py reads dataset.query_dim dynamically so a fresh 18-dim v2 needs ZERO code change. General-first (one v2 over ALL tasks, --include-tasks default = all; v2's internal BCE/MSE routes per task). Grid over small {hidden_dim,num_layers} (tiny-by-design 44k-200k params), single grid seed; the winner is refined over refine_seeds. Per task the existing v2_reranker.py reports v3.1-alone / v3.1+v2 / oracle ndcg@10 over the v3.1 baseline's top-C. Gate: a task whose general-v2 closes < gap_close_threshold of the v3.1->oracle ndcg@10 gap is flagged; with auto_pertask a per-task v2 (--include-tasks that task) is then trained for the winner config and re-measured (the locked gated decision).",
+  "baseline_dir": "runs/v3.1-baseline-hyp-h128-l4-seed1",
+  "v3_run": "runs/v3.1-baseline-hyp-h128-l4-seed1",
+  "corpus": "src/data/corpus/tier1",
+  "model": "hyperbolic",
+  "out_root": "runs/sweep_v2reranker",
+  "v2_root": "runs",
+  "grid_hidden_dims": [64, 96],
+  "grid_num_layers": [3],
+  "epochs": 25,
+  "lr": 0.001,
+  "grid_seed": 0,
+  "refine_seeds": [1, 2],
+  "tasks": [0, 1, 2, 3, 4, 5],
+  "topc": 50,
+  "n_params_min": 30000,
+  "n_params_max": 200000,
+  "gate": {
+    "gap_close_threshold": 0.5,
+    "auto_pertask": true
+  }
+}

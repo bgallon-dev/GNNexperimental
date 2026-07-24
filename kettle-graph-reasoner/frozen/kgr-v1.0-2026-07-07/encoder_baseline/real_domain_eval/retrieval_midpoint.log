@@ -1,0 +1,15 @@
+[2.3b] 818 samples, 500 unique graphs
+
+========================================================================================
+Experiment 2.3b — Geodesic midpoint retrieval (500 graphs)
+checkpoint: runs\v3.1-baseline-hyp-h128-l4-seed1\encoder.pt   model: hyperbolic
+min_pair_distance=3, n_pairs/graph=20, tau_frac=0.0001
+========================================================================================
+  path_hit_rate@1          mean=0.0286  std=0.0472  range=[0.0000, 0.4000]
+  path_hit_rate@3          mean=0.0757  std=0.0757  range=[0.0000, 0.5500]
+  path_hit_rate@5          mean=0.1113  std=0.0926  range=[0.0000, 0.7000]
+  random_baseline          mean=0.0102
+  mean_nn_hop_from_path    mean=1.096  (0 = NN is on path, higher = NN is off-path)
+  bridge_graph_dist_error@1 mean=2.2714  (0 = retrieved a true graph midpoint)
+  bridge_graph_dist_error@3 mean=2.1102  (0 = retrieved a true graph midpoint)
+  bridge_graph_dist_error@5 mean=2.0239  (0 = retrieved a true graph midpoint)

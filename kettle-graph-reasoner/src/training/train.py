@@ -195,6 +195,8 @@ def build_model(
     log_depth: bool = False,
     concat_depth: bool = False,
     tangent_scale_init: float = 0.15,
+    hyp_dist_features: bool = False,
+    init_dist_features: bool = False,
 ) -> nn.Module:
     if kind == "hyperbolic":
         return KettleGraphReasoner(
@@ -209,6 +211,8 @@ def build_model(
             log_depth=log_depth,
             concat_depth=concat_depth,
             tangent_scale_init=tangent_scale_init,
+            hyp_dist_features=hyp_dist_features,
+            init_dist_features=init_dist_features,
         )
     if kind == "euclidean_plus":
         return EuclideanPlusBaseline(
@@ -295,14 +299,14 @@ def embedding_norm_stats(out, kind: str, c: Optional[torch.Tensor]) -> dict:
 
 
 def _parse_task_weights(spec: str) -> dict:
-    """Parse 'w0,w1,w2,w3,w4' or '' -> {0:w0,...}. Missing entries default 1."""
-    weights = {i: 1.0 for i in range(5)}
+    """Parse 'w0,w1,w2,w3,w4[,w5]' or '' -> {0:w0,...}. Missing entries default 1."""
+    weights = {i: 1.0 for i in range(6)}
     spec = (spec or "").strip()
     if not spec:
         return weights
     parts = [p.strip() for p in spec.split(",") if p.strip()]
     for i, p in enumerate(parts):
-        if i >= 5:
+        if i >= 6:
             break
         weights[i] = float(p)
     return weights
@@ -389,8 +393,19 @@ def train(cfg: argparse.Namespace) -> None:
     torch.manual_seed(cfg.seed)
     device = torch.device("cuda" if (cfg.cuda and torch.cuda.is_available()) else "cpu")
 
-    train_set_full = CorpusDataset(cfg.corpus, split="train", split_seed=cfg.seed)
-    val_set = CorpusDataset(cfg.corpus, split="val", split_seed=cfg.seed)
+    include_tasks: set[int] | None = None
+    if cfg.include_tasks:
+        include_tasks = {int(t) for t in cfg.include_tasks.split(",") if t.strip()}
+        print(f"[data] task filter: include only types {sorted(include_tasks)}")
+
+    train_set_full = CorpusDataset(
+        cfg.corpus, split="train", split_seed=cfg.seed,
+        include_tasks=include_tasks,
+    )
+    val_set = CorpusDataset(
+        cfg.corpus, split="val", split_seed=cfg.seed,
+        include_tasks=include_tasks,
+    )
     if cfg.train_frac < 1.0:
         g = torch.Generator().manual_seed(cfg.seed)
         perm = torch.randperm(len(train_set_full), generator=g).tolist()
@@ -411,6 +426,8 @@ def train(cfg: argparse.Namespace) -> None:
         tangent_scale_init=cfg.tangent_scale,
         log_depth=cfg.log_depth_diagnostics,
         concat_depth=getattr(cfg, "concat_depth", False),
+        hyp_dist_features=getattr(cfg, "hyp_dist_features", False),
+        init_dist_features=getattr(cfg, "init_dist_features", False),
     ).to(device)
     # Always read k back from the constructed model (not from cfg) so any
     # plumbing bug between CLI/config and the constructor surfaces here
@@ -893,9 +910,36 @@ def parse_args() -> argparse.Namespace:
         "signal and full AttnRes is justified.",
     )
     p.add_argument(
+        "--hyp-dist-features",
+        action="store_true",
+        help="Append dist(h_i, expmap0(q)) as an extra scalar feature to the "
+        "scoring heads (hyperbolic only). Gives the loss a direct gradient "
+        "pathway through ||h|| — without this, the radial axis of the "
+        "Poincaré ball is invisible to the MSE loss and embeddings collapse "
+        "to the origin. Decisive experiment for the hyperbolic thesis.",
+    )
+    p.add_argument(
+        "--init-dist-features",
+        action="store_true",
+        help="Append dist(h_after_MP, h_init) as a per-node scalar feature to "
+        "the scoring heads (hyperbolic only). h_init is the pre-message-passing "
+        "embedding (expmap0 of node_in(x) * tangent_scale). Because h_init "
+        "differs per node, these distances break symmetry and give the heads a "
+        "per-node radial signal showing how far MP moved each embedding.",
+    )
+    p.add_argument(
         "--no-color",
         action="store_true",
         help="Disable ANSI color coding in terminal output.",
+    )
+    p.add_argument(
+        "--include-tasks",
+        type=str,
+        default="",
+        help="Comma-separated task type IDs to include (e.g. '0,2,4,5'). "
+        "Excluded tasks are filtered from the dataset — they never enter "
+        "the DataLoader, so they can't contaminate the scoring head or "
+        "contribute gradient noise. Empty = all tasks (default).",
     )
     return p.parse_args()
 

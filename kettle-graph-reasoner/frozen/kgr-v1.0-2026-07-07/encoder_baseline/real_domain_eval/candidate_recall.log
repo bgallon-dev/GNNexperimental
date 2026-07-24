@@ -1,0 +1,12 @@
+[evalA] 818 samples  model=hyperbolic  query_head=qh0
+
+================================================================================
+Eval A - candidate recall + oracle rerank (818 samples)
+checkpoint: runs\v3.1-baseline-hyp-h128-l4-seed1\encoder.pt  model: hyperbolic  query_head: qh0
+================================================================================
+recall:    @20=0.0650  @50=0.1717  @100=0.2895
+ndcg:      @5=0.3516  @10=0.3600  @20=0.3742
+oracle nDCG@10 / gap@10 by candidate-set size C:
+  C=20  oracle_ndcg@10=0.5153  gap@10=+0.1553
+  C=50  oracle_ndcg@10=0.6995  gap@10=+0.3395
+  C=100 oracle_ndcg@10=0.7778  gap@10=+0.4178

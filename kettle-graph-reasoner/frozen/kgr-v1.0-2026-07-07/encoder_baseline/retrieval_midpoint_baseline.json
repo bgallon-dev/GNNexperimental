@@ -1,0 +1,7197 @@
+{
+  "checkpoint": "runs\\v3.1-baseline-hyp-h128-l4-seed1\\encoder.pt",
+  "model_kind": "hyperbolic",
+  "task": 2,
+  "min_pair_distance": 3,
+  "n_pairs_per_graph": 20,
+  "tau_frac": 0.0001,
+  "n_graphs": 10,
+  "per_graph": [
+    {
+      "n_pairs_sampled": 20,
+      "per_pair": [
+        {
+          "u": 50,
+          "v": 62,
+          "hop_dist": 7,
+          "n_path_nodes": 6,
+          "top_k_nn": [
+            13,
+            4,
+            19,
+            63,
+            30
+          ],
+          "nn_hops_to_path": [
+            0,
+            0,
+            0,
+            1,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 5.0,
+              "mean": 5.0
+            },
+            "k=3": {
+              "min": 3.0,
+              "mean": 4.333333333333333
+            },
+            "k=5": {
+              "min": 3.0,
+              "mean": 4.4
+            }
+          }
+        },
+        {
+          "u": 12,
+          "v": 68,
+          "hop_dist": 5,
+          "n_path_nodes": 4,
+          "top_k_nn": [
+            45,
+            36,
+            34,
+            35,
+            49
+          ],
+          "nn_hops_to_path": [
+            3,
+            1,
+            2,
+            2,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 5.0,
+              "mean": 5.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 3.3333333333333335
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 3.8
+            }
+          }
+        },
+        {
+          "u": 11,
+          "v": 25,
+          "hop_dist": 3,
+          "n_path_nodes": 2,
+          "top_k_nn": [
+            38,
+            7,
+            2,
+            20,
+            34
+          ],
+          "nn_hops_to_path": [
+            3,
+            2,
+            1,
+            1,
+            0
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 6.0,
+              "mean": 6.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 4.0
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 3.0
+            }
+          }
+        },
+        {
+          "u": 53,
+          "v": 64,
+          "hop_dist": 6,
+          "n_path_nodes": 5,
+          "top_k_nn": [
+            37,
+            42,
+            43,
+            10,
+            44
+          ],
+          "nn_hops_to_path": [
+            1,
+            1,
+            1,
+            2,
+            3
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 2.6666666666666665
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 3.6
+            }
+          }
+        },
+        {
+          "u": 22,
+          "v": 63,
+          "hop_dist": 3,
+          "n_path_nodes": 2,
+          "top_k_nn": [
+            7,
+            21,
+            65,
+            8,
+            20
+          ],
+          "nn_hops_to_path": [
+            2,
+            1,
+            2,
+            0,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 3.3333333333333335
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 2.6
+            }
+          }
+        },
+        {
+          "u": 28,
+          "v": 35,
+          "hop_dist": 3,
+          "n_path_nodes": 2,
+          "top_k_nn": [
+            0,
+            29,
+            3,
+            34,
+            45
+          ],
+          "nn_hops_to_path": [
+            1,
+            1,
+            0,
+            2,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 1.6666666666666667
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 2.2
+            }
+          }
+        },
+        {
+          "u": 25,
+          "v": 55,
+          "hop_dist": 7,
+          "n_path_nodes": 9,
+          "top_k_nn": [
+            38,
+            2,
+            7,
+            34,
+            4
+          ],
+          "nn_hops_to_path": [
+            3,
+            1,
+            2,
+            0,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 5.0,
+              "mean": 5.0
+            },
+            "k=3": {
+              "min": 4.0,
+              "mean": 4.666666666666667
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 3.6
+            }
+          }
+        },
+        {
+          "u": 58,
+          "v": 71,
+          "hop_dist": 7,
+          "n_path_nodes": 6,
+          "top_k_nn": [
+            42,
+            43,
+            32,
+            39,
+            40
+          ],
+          "nn_hops_to_path": [
+            2,
+            2,
+            0,
+            3,
+            3
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 2.3333333333333335
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 3.0
+            }
+          }
+        },
+        {
+          "u": 29,
+          "v": 54,
+          "hop_dist": 8,
+          "n_path_nodes": 12,
+          "top_k_nn": [
+            3,
+            46,
+            47,
+            11,
+            36
+          ],
+          "nn_hops_to_path": [
+            0,
+            1,
+            1,
+            0,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 6.0,
+              "mean": 6.0
+            },
+            "k=3": {
+              "min": 4.0,
+              "mean": 4.666666666666667
+            },
+            "k=5": {
+              "min": 3.0,
+              "mean": 4.2
+            }
+          }
+        },
+        {
+          "u": 30,
+          "v": 47,
+          "hop_dist": 3,
+          "n_path_nodes": 2,
+          "top_k_nn": [
+            35,
+            34,
+            36,
+            46,
+            11
+          ],
+          "nn_hops_to_path": [
+            2,
+            1,
+            5,
+            1,
+            0
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 4.333333333333333
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 3.2
+            }
+          }
+        },
+        {
+          "u": 7,
+          "v": 21,
+          "hop_dist": 3,
+          "n_path_nodes": 3,
+          "top_k_nn": [
+            65,
+            20,
+            8,
+            9,
+            26
+          ],
+          "nn_hops_to_path": [
+            2,
+            0,
+            0,
+            1,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 1.6666666666666667
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 2.2
+            }
+          }
+        },
+        {
+          "u": 41,
+          "v": 57,
+          "hop_dist": 5,
+          "n_path_nodes": 5,
+          "top_k_nn": [
+            34,
+            38,
+            2,
+            42,
+            17
+          ],
+          "nn_hops_to_path": [
+            1,
+            1,
+            0,
+            2,
+            0
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 2.0
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 2.6
+            }
+          }
+        },
+        {
+          "u": 29,
+          "v": 53,
+          "hop_dist": 6,
+          "n_path_nodes": 5,
+          "top_k_nn": [
+            10,
+            44,
+            37,
+            32,
+            3
+          ],
+          "nn_hops_to_path": [
+            1,
+            2,
+            1,
+            1,
+            0
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=3": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 3.6
+            }
+          }
+        },
+        {
+          "u": 0,
+          "v": 43,
+          "hop_dist": 5,
+          "n_path_nodes": 4,
+          "top_k_nn": [
+            42,
+            32,
+            3,
+            29,
+            28
+          ],
+          "nn_hops_to_path": [
+            0,
+            1,
+            0,
+            1,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 1.0,
+              "mean": 1.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 2.3333333333333335
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 2.6
+            }
+          }
+        },
+        {
+          "u": 24,
+          "v": 60,
+          "hop_dist": 5,
+          "n_path_nodes": 5,
+          "top_k_nn": [
+            23,
+            67,
+            7,
+            2,
+            58
+          ],
+          "nn_hops_to_path": [
+            1,
+            2,
+            0,
+            0,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 2.6666666666666665
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 2.6
+            }
+          }
+        },
+        {
+          "u": 3,
+          "v": 4,
+          "hop_dist": 3,
+          "n_path_nodes": 2,
+          "top_k_nn": [
+            35,
+            30,
+            34,
+            45,
+            36
+          ],
+          "nn_hops_to_path": [
+            3,
+            0,
+            3,
+            3,
+            3
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 1.6666666666666667
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 2.2
+            }
+          }
+        },
+        {
+          "u": 44,
+          "v": 50,
+          "hop_dist": 5,
+          "n_path_nodes": 4,
+          "top_k_nn": [
+            35,
+            30,
+            34,
+            45,
+            4
+          ],
+          "nn_hops_to_path": [
+            1,
+            0,
+            2,
+            2,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 2.6666666666666665
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 3.0
+            }
+          }
+        },
+        {
+          "u": 22,
+          "v": 52,
+          "hop_dist": 6,
+          "n_path_nodes": 5,
+          "top_k_nn": [
+            43,
+            42,
+            2,
+            39,
+            40
+          ],
+          "nn_hops_to_path": [
+            3,
+            3,
+            1,
+            1,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=5": {
+              "min": 3.0,
+              "mean": 3.4
+            }
+          }
+        },
+        {
+          "u": 35,
+          "v": 60,
+          "hop_dist": 6,
+          "n_path_nodes": 8,
+          "top_k_nn": [
+            3,
+            42,
+            32,
+            34,
+            41
+          ],
+          "nn_hops_to_path": [
+            1,
+            0,
+            0,
+            1,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 2.6666666666666665
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 2.8
+            }
+          }
+        },
+        {
+          "u": 1,
+          "v": 42,
+          "hop_dist": 4,
+          "n_path_nodes": 6,
+          "top_k_nn": [
+            34,
+            35,
+            30,
+            45,
+            41
+          ],
+          "nn_hops_to_path": [
+            1,
+            0,
+            2,
+            3,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 0.0,
+              "mean": 1.3333333333333333
+            },
+            "k=5": {
+              "min": 0.0,
+              "mean": 2.2
+            }
+          }
+        }
+      ],
+      "path_hit_rate_at_k": {
+        "k=1": 0.15,
+        "k=3": 0.6,
+        "k=5": 0.85
+      },
+      "random_baseline": 0.06928571428571427,
+      "mean_nn_hop_from_path": 1.29,
+      "bridge_graph_dist_error_at_k": {
+        "k=1": {
+          "min_mean": 3.6,
+          "mean_mean": 3.6,
+          "n": 20
+        },
+        "k=3": {
+          "min_mean": 1.85,
+          "mean_mean": 2.9666666666666663,
+          "n": 20
+        },
+        "k=5": {
+          "min_mean": 1.4,
+          "mean_mean": 3.04,
+          "n": 20
+        }
+      },
+      "median_dist": 2.1084704399108887,
+      "n_nodes": 72,
+      "graph_idx": 0
+    },
+    {
+      "n_pairs_sampled": 20,
+      "per_pair": [
+        {
+          "u": 10,
+          "v": 15,
+          "hop_dist": 3,
+          "n_path_nodes": 2,
+          "top_k_nn": [
+            24,
+            27,
+            25,
+            0,
+            39
+          ],
+          "nn_hops_to_path": [
+            2,
+            2,
+            2,
+            3,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 3.0,
+              "mean": 3.6666666666666665
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 3.2
+            }
+          }
+        },
+        {
+          "u": 28,
+          "v": 46,
+          "hop_dist": 4,
+          "n_path_nodes": 3,
+          "top_k_nn": [
+            30,
+            4,
+            26,
+            67,
+            34
+          ],
+          "nn_hops_to_path": [
+            1,
+            1,
+            2,
+            2,
+            3
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 2.6666666666666665
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 3.4
+            }
+          }
+        },
+        {
+          "u": 1,
+          "v": 24,
+          "hop_dist": 3,
+          "n_path_nodes": 2,
+          "top_k_nn": [
+            0,
+            30,
+            25,
+            53,
+            34
+          ],
+          "nn_hops_to_path": [
+            2,
+            3,
+            2,
+            2,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 2.6666666666666665
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 3.0
+            }
+          }
+        },
+        {
+          "u": 10,
+          "v": 68,
+          "hop_dist": 4,
+          "n_path_nodes": 3,
+          "top_k_nn": [
+            58,
+            25,
+            0,
+            35,
+            9
+          ],
+          "nn_hops_to_path": [
+            2,
+            2,
+            2,
+            2,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=3": {
+              "min": 3.0,
+              "mean": 3.6666666666666665
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 3.4
+            }
+          }
+        },
+        {
+          "u": 6,
+          "v": 34,
+          "hop_dist": 4,
+          "n_path_nodes": 3,
+          "top_k_nn": [
+            4,
+            67,
+            26,
+            30,
+            29
+          ],
+          "nn_hops_to_path": [
+            1,
+            2,
+            2,
+            2,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 1.0,
+              "mean": 1.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 2.3333333333333335
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 2.8
+            }
+          }
+        },
+        {
+          "u": 34,
+          "v": 41,
+          "hop_dist": 4,
+          "n_path_nodes": 6,
+          "top_k_nn": [
+            30,
+            1,
+            53,
+            27,
+            43
+          ],
+          "nn_hops_to_path": [
+            3,
+            1,
+            2,
+            1,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 2.6666666666666665
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 2.4
+            }
+          }
+        },
+        {
+          "u": 20,
+          "v": 32,
+          "hop_dist": 4,
+          "n_path_nodes": 3,
+          "top_k_nn": [
+            2,
+            65,
+            21,
+            62,
+            57
+          ],
+          "nn_hops_to_path": [
+            0,
+            2,
+            1,
+            2,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 2.6666666666666665
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 2.6
+            }
+          }
+        },
+        {
+          "u": 50,
+          "v": 70,
+          "hop_dist": 4,
+          "n_path_nodes": 4,
+          "top_k_nn": [
+            44,
+            19,
+            69,
+            52,
+            17
+          ],
+          "nn_hops_to_path": [
+            1,
+            0,
+            1,
+            1,
+            0
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 2.0
+            }
+          }
+        },
+        {
+          "u": 4,
+          "v": 21,
+          "hop_dist": 4,
+          "n_path_nodes": 13,
+          "top_k_nn": [
+            24,
+            5,
+            0,
+            30,
+            1
+          ],
+          "nn_hops_to_path": [
+            0,
+            1,
+            1,
+            2,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 2.3333333333333335
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 2.4
+            }
+          }
+        },
+        {
+          "u": 17,
+          "v": 68,
+          "hop_dist": 3,
+          "n_path_nodes": 3,
+          "top_k_nn": [
+            0,
+            25,
+            5,
+            24,
+            22
+          ],
+          "nn_hops_to_path": [
+            1,
+            2,
+            1,
+            2,
+            0
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 2.6666666666666665
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 2.6
+            }
+          }
+        },
+        {
+          "u": 50,
+          "v": 69,
+          "hop_dist": 4,
+          "n_path_nodes": 4,
+          "top_k_nn": [
+            44,
+            19,
+            70,
+            52,
+            17
+          ],
+          "nn_hops_to_path": [
+            1,
+            0,
+            1,
+            1,
+            0
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 2.0
+            }
+          }
+        },
+        {
+          "u": 21,
+          "v": 64,
+          "hop_dist": 3,
+          "n_path_nodes": 2,
+          "top_k_nn": [
+            24,
+            0,
+            25,
+            41,
+            53
+          ],
+          "nn_hops_to_path": [
+            2,
+            2,
+            2,
+            1,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=3": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 3.6
+            }
+          }
+        },
+        {
+          "u": 42,
+          "v": 64,
+          "hop_dist": 4,
+          "n_path_nodes": 4,
+          "top_k_nn": [
+            40,
+            11,
+            41,
+            12,
+            43
+          ],
+          "nn_hops_to_path": [
+            1,
+            0,
+            0,
+            0,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 0.0,
+              "mean": 1.3333333333333333
+            },
+            "k=5": {
+              "min": 0.0,
+              "mean": 1.6
+            }
+          }
+        },
+        {
+          "u": 38,
+          "v": 62,
+          "hop_dist": 4,
+          "n_path_nodes": 3,
+          "top_k_nn": [
+            0,
+            58,
+            25,
+            57,
+            35
+          ],
+          "nn_hops_to_path": [
+            2,
+            1,
+            3,
+            2,
+            3
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 3.0
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 3.4
+            }
+          }
+        },
+        {
+          "u": 1,
+          "v": 46,
+          "hop_dist": 3,
+          "n_path_nodes": 2,
+          "top_k_nn": [
+            30,
+            60,
+            7,
+            32,
+            34
+          ],
+          "nn_hops_to_path": [
+            3,
+            3,
+            2,
+            3,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 3.0,
+              "mean": 3.3333333333333335
+            },
+            "k=5": {
+              "min": 3.0,
+              "mean": 3.4
+            }
+          }
+        },
+        {
+          "u": 39,
+          "v": 48,
+          "hop_dist": 4,
+          "n_path_nodes": 5,
+          "top_k_nn": [
+            27,
+            44,
+            10,
+            38,
+            37
+          ],
+          "nn_hops_to_path": [
+            2,
+            0,
+            2,
+            3,
+            3
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=3": {
+              "min": 0.0,
+              "mean": 2.3333333333333335
+            },
+            "k=5": {
+              "min": 0.0,
+              "mean": 2.6
+            }
+          }
+        },
+        {
+          "u": 12,
+          "v": 57,
+          "hop_dist": 3,
+          "n_path_nodes": 2,
+          "top_k_nn": [
+            53,
+            24,
+            39,
+            0,
+            58
+          ],
+          "nn_hops_to_path": [
+            2,
+            2,
+            2,
+            3,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 3.3333333333333335
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 3.4
+            }
+          }
+        },
+        {
+          "u": 17,
+          "v": 36,
+          "hop_dist": 4,
+          "n_path_nodes": 3,
+          "top_k_nn": [
+            58,
+            25,
+            0,
+            50,
+            35
+          ],
+          "nn_hops_to_path": [
+            1,
+            2,
+            3,
+            2,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 3.3333333333333335
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 3.2
+            }
+          }
+        },
+        {
+          "u": 10,
+          "v": 30,
+          "hop_dist": 3,
+          "n_path_nodes": 2,
+          "top_k_nn": [
+            53,
+            1,
+            39,
+            44,
+            48
+          ],
+          "nn_hops_to_path": [
+            3,
+            0,
+            2,
+            3,
+            3
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 5.0,
+              "mean": 5.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 3.0
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 3.8
+            }
+          }
+        },
+        {
+          "u": 23,
+          "v": 57,
+          "hop_dist": 3,
+          "n_path_nodes": 2,
+          "top_k_nn": [
+            62,
+            2,
+            21,
+            65,
+            61
+          ],
+          "nn_hops_to_path": [
+            2,
+            0,
+            1,
+            2,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 2.0
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 2.4
+            }
+          }
+        }
+      ],
+      "path_hit_rate_at_k": {
+        "k=1": 0.1,
+        "k=3": 0.4,
+        "k=5": 0.45
+      },
+      "random_baseline": 0.05144927536231884,
+      "mean_nn_hop_from_path": 1.62,
+      "bridge_graph_dist_error_at_k": {
+        "k=1": {
+          "min_mean": 2.9,
+          "mean_mean": 2.9,
+          "n": 20
+        },
+        "k=3": {
+          "min_mean": 1.85,
+          "mean_mean": 2.75,
+          "n": 20
+        },
+        "k=5": {
+          "min_mean": 1.6,
+          "mean_mean": 2.86,
+          "n": 20
+        }
+      },
+      "median_dist": 2.282254219055176,
+      "n_nodes": 71,
+      "graph_idx": 1
+    },
+    {
+      "n_pairs_sampled": 20,
+      "per_pair": [
+        {
+          "u": 13,
+          "v": 67,
+          "hop_dist": 5,
+          "n_path_nodes": 10,
+          "top_k_nn": [
+            1,
+            44,
+            68,
+            14,
+            45
+          ],
+          "nn_hops_to_path": [
+            2,
+            0,
+            1,
+            1,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 5.0,
+              "mean": 5.0
+            },
+            "k=3": {
+              "min": 3.0,
+              "mean": 3.6666666666666665
+            },
+            "k=5": {
+              "min": 3.0,
+              "mean": 3.6
+            }
+          }
+        },
+        {
+          "u": 56,
+          "v": 89,
+          "hop_dist": 4,
+          "n_path_nodes": 3,
+          "top_k_nn": [
+            77,
+            39,
+            47,
+            59,
+            12
+          ],
+          "nn_hops_to_path": [
+            1,
+            1,
+            2,
+            2,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 2.6666666666666665
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 3.2
+            }
+          }
+        },
+        {
+          "u": 14,
+          "v": 47,
+          "hop_dist": 3,
+          "n_path_nodes": 4,
+          "top_k_nn": [
+            59,
+            39,
+            77,
+            44,
+            45
+          ],
+          "nn_hops_to_path": [
+            3,
+            0,
+            3,
+            2,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 6.0,
+              "mean": 6.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 4.333333333333333
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 3.8
+            }
+          }
+        },
+        {
+          "u": 17,
+          "v": 56,
+          "hop_dist": 3,
+          "n_path_nodes": 2,
+          "top_k_nn": [
+            57,
+            20,
+            52,
+            51,
+            53
+          ],
+          "nn_hops_to_path": [
+            1,
+            0,
+            2,
+            2,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 2.0
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 2.4
+            }
+          }
+        },
+        {
+          "u": 19,
+          "v": 69,
+          "hop_dist": 3,
+          "n_path_nodes": 2,
+          "top_k_nn": [
+            59,
+            39,
+            0,
+            47,
+            27
+          ],
+          "nn_hops_to_path": [
+            1,
+            2,
+            4,
+            2,
+            0
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 3.6666666666666665
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 3.0
+            }
+          }
+        },
+        {
+          "u": 83,
+          "v": 88,
+          "hop_dist": 7,
+          "n_path_nodes": 11,
+          "top_k_nn": [
+            9,
+            64,
+            24,
+            63,
+            0
+          ],
+          "nn_hops_to_path": [
+            0,
+            1,
+            0,
+            0,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 5.0,
+              "mean": 5.0
+            },
+            "k=3": {
+              "min": 3.0,
+              "mean": 3.6666666666666665
+            },
+            "k=5": {
+              "min": 3.0,
+              "mean": 4.2
+            }
+          }
+        },
+        {
+          "u": 61,
+          "v": 89,
+          "hop_dist": 4,
+          "n_path_nodes": 3,
+          "top_k_nn": [
+            15,
+            47,
+            86,
+            18,
+            87
+          ],
+          "nn_hops_to_path": [
+            3,
+            2,
+            2,
+            1,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 6.0,
+              "mean": 6.0
+            },
+            "k=3": {
+              "min": 4.0,
+              "mean": 4.666666666666667
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 4.0
+            }
+          }
+        },
+        {
+          "u": 8,
+          "v": 81,
+          "hop_dist": 3,
+          "n_path_nodes": 2,
+          "top_k_nn": [
+            0,
+            39,
+            40,
+            2,
+            59
+          ],
+          "nn_hops_to_path": [
+            2,
+            0,
+            2,
+            1,
+            3
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 2.3333333333333335
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 3.0
+            }
+          }
+        },
+        {
+          "u": 54,
+          "v": 83,
+          "hop_dist": 5,
+          "n_path_nodes": 4,
+          "top_k_nn": [
+            21,
+            58,
+            24,
+            64,
+            63
+          ],
+          "nn_hops_to_path": [
+            1,
+            2,
+            0,
+            1,
+            0
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 2.3333333333333335
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 2.4
+            }
+          }
+        },
+        {
+          "u": 35,
+          "v": 63,
+          "hop_dist": 4,
+          "n_path_nodes": 3,
+          "top_k_nn": [
+            90,
+            36,
+            83,
+            3,
+            33
+          ],
+          "nn_hops_to_path": [
+            2,
+            1,
+            0,
+            0,
+            0
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 2.6666666666666665
+            },
+            "k=5": {
+              "min": 0.0,
+              "mean": 2.0
+            }
+          }
+        },
+        {
+          "u": 18,
+          "v": 46,
+          "hop_dist": 5,
+          "n_path_nodes": 12,
+          "top_k_nn": [
+            86,
+            87,
+            54,
+            77,
+            47
+          ],
+          "nn_hops_to_path": [
+            2,
+            2,
+            2,
+            2,
+            0
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 5.0,
+              "mean": 5.0
+            },
+            "k=3": {
+              "min": 5.0,
+              "mean": 5.0
+            },
+            "k=5": {
+              "min": 3.0,
+              "mean": 4.4
+            }
+          }
+        },
+        {
+          "u": 3,
+          "v": 17,
+          "hop_dist": 4,
+          "n_path_nodes": 3,
+          "top_k_nn": [
+            2,
+            39,
+            0,
+            59,
+            1
+          ],
+          "nn_hops_to_path": [
+            0,
+            2,
+            4,
+            2,
+            4
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 4.666666666666667
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 5.2
+            }
+          }
+        },
+        {
+          "u": 21,
+          "v": 80,
+          "hop_dist": 3,
+          "n_path_nodes": 2,
+          "top_k_nn": [
+            43,
+            12,
+            30,
+            79,
+            89
+          ],
+          "nn_hops_to_path": [
+            4,
+            3,
+            0,
+            1,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 6.0,
+              "mean": 6.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 3.6666666666666665
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 3.0
+            }
+          }
+        },
+        {
+          "u": 38,
+          "v": 42,
+          "hop_dist": 8,
+          "n_path_nodes": 12,
+          "top_k_nn": [
+            39,
+            0,
+            83,
+            2,
+            90
+          ],
+          "nn_hops_to_path": [
+            0,
+            1,
+            2,
+            0,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=3": {
+              "min": 4.0,
+              "mean": 4.666666666666667
+            },
+            "k=5": {
+              "min": 0.0,
+              "mean": 4.0
+            }
+          }
+        },
+        {
+          "u": 42,
+          "v": 57,
+          "hop_dist": 4,
+          "n_path_nodes": 3,
+          "top_k_nn": [
+            56,
+            20,
+            11,
+            59,
+            39
+          ],
+          "nn_hops_to_path": [
+            1,
+            0,
+            0,
+            3,
+            0
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=5": {
+              "min": 0.0,
+              "mean": 2.4
+            }
+          }
+        },
+        {
+          "u": 47,
+          "v": 69,
+          "hop_dist": 4,
+          "n_path_nodes": 4,
+          "top_k_nn": [
+            59,
+            39,
+            77,
+            0,
+            27
+          ],
+          "nn_hops_to_path": [
+            1,
+            1,
+            2,
+            3,
+            0
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 2.6666666666666665
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 3.2
+            }
+          }
+        },
+        {
+          "u": 9,
+          "v": 69,
+          "hop_dist": 5,
+          "n_path_nodes": 9,
+          "top_k_nn": [
+            0,
+            39,
+            40,
+            59,
+            88
+          ],
+          "nn_hops_to_path": [
+            2,
+            0,
+            2,
+            1,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 5.0,
+              "mean": 5.0
+            },
+            "k=3": {
+              "min": 3.0,
+              "mean": 4.0
+            },
+            "k=5": {
+              "min": 3.0,
+              "mean": 4.0
+            }
+          }
+        },
+        {
+          "u": 26,
+          "v": 60,
+          "hop_dist": 3,
+          "n_path_nodes": 2,
+          "top_k_nn": [
+            2,
+            1,
+            39,
+            59,
+            44
+          ],
+          "nn_hops_to_path": [
+            0,
+            4,
+            2,
+            1,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 1.0,
+              "mean": 1.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 4.333333333333333
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 3.8
+            }
+          }
+        },
+        {
+          "u": 54,
+          "v": 84,
+          "hop_dist": 4,
+          "n_path_nodes": 3,
+          "top_k_nn": [
+            77,
+            59,
+            47,
+            39,
+            86
+          ],
+          "nn_hops_to_path": [
+            1,
+            2,
+            1,
+            2,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 2.6666666666666665
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 2.8
+            }
+          }
+        },
+        {
+          "u": 28,
+          "v": 75,
+          "hop_dist": 3,
+          "n_path_nodes": 2,
+          "top_k_nn": [
+            79,
+            30,
+            78,
+            80,
+            89
+          ],
+          "nn_hops_to_path": [
+            2,
+            1,
+            2,
+            2,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 3.3333333333333335
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 3.6
+            }
+          }
+        }
+      ],
+      "path_hit_rate_at_k": {
+        "k=1": 0.2,
+        "k=3": 0.65,
+        "k=5": 0.8
+      },
+      "random_baseline": 0.05333333333333333,
+      "mean_nn_hop_from_path": 1.44,
+      "bridge_graph_dist_error_at_k": {
+        "k=1": {
+          "min_mean": 3.5,
+          "mean_mean": 3.5,
+          "n": 20
+        },
+        "k=3": {
+          "min_mean": 2.2,
+          "mean_mean": 3.45,
+          "n": 20
+        },
+        "k=5": {
+          "min_mean": 1.55,
+          "mean_mean": 3.3999999999999995,
+          "n": 20
+        }
+      },
+      "median_dist": 2.730168581008911,
+      "n_nodes": 92,
+      "graph_idx": 2
+    },
+    {
+      "n_pairs_sampled": 20,
+      "per_pair": [
+        {
+          "u": 106,
+          "v": 117,
+          "hop_dist": 4,
+          "n_path_nodes": 3,
+          "top_k_nn": [
+            87,
+            90,
+            1,
+            75,
+            80
+          ],
+          "nn_hops_to_path": [
+            1,
+            5,
+            3,
+            2,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 1.0,
+              "mean": 1.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 3.3333333333333335
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 2.6
+            }
+          }
+        },
+        {
+          "u": 104,
+          "v": 118,
+          "hop_dist": 4,
+          "n_path_nodes": 3,
+          "top_k_nn": [
+            112,
+            119,
+            76,
+            186,
+            74
+          ],
+          "nn_hops_to_path": [
+            2,
+            1,
+            2,
+            2,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 3.0
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 3.0
+            }
+          }
+        },
+        {
+          "u": 19,
+          "v": 107,
+          "hop_dist": 7,
+          "n_path_nodes": 28,
+          "top_k_nn": [
+            24,
+            100,
+            77,
+            6,
+            12
+          ],
+          "nn_hops_to_path": [
+            1,
+            2,
+            2,
+            0,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 3.0
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 2.8
+            }
+          }
+        },
+        {
+          "u": 48,
+          "v": 118,
+          "hop_dist": 3,
+          "n_path_nodes": 2,
+          "top_k_nn": [
+            110,
+            30,
+            109,
+            146,
+            145
+          ],
+          "nn_hops_to_path": [
+            4,
+            3,
+            4,
+            2,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 5.0,
+              "mean": 5.0
+            },
+            "k=3": {
+              "min": 3.0,
+              "mean": 4.333333333333333
+            },
+            "k=5": {
+              "min": 3.0,
+              "mean": 3.8
+            }
+          }
+        },
+        {
+          "u": 25,
+          "v": 105,
+          "hop_dist": 3,
+          "n_path_nodes": 2,
+          "top_k_nn": [
+            6,
+            71,
+            4,
+            84,
+            87
+          ],
+          "nn_hops_to_path": [
+            1,
+            2,
+            1,
+            2,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 2.3333333333333335
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 2.8
+            }
+          }
+        },
+        {
+          "u": 54,
+          "v": 123,
+          "hop_dist": 3,
+          "n_path_nodes": 2,
+          "top_k_nn": [
+            63,
+            187,
+            183,
+            16,
+            93
+          ],
+          "nn_hops_to_path": [
+            4,
+            5,
+            5,
+            1,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 5.0,
+              "mean": 5.0
+            },
+            "k=3": {
+              "min": 5.0,
+              "mean": 6.333333333333333
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 4.8
+            }
+          }
+        },
+        {
+          "u": 8,
+          "v": 177,
+          "hop_dist": 4,
+          "n_path_nodes": 4,
+          "top_k_nn": [
+            112,
+            77,
+            71,
+            76,
+            186
+          ],
+          "nn_hops_to_path": [
+            2,
+            2,
+            1,
+            3,
+            3
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 2.6666666666666665
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 3.6
+            }
+          }
+        },
+        {
+          "u": 28,
+          "v": 120,
+          "hop_dist": 3,
+          "n_path_nodes": 2,
+          "top_k_nn": [
+            106,
+            35,
+            121,
+            5,
+            90
+          ],
+          "nn_hops_to_path": [
+            2,
+            0,
+            1,
+            1,
+            5
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 2.0
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 3.4
+            }
+          }
+        },
+        {
+          "u": 35,
+          "v": 183,
+          "hop_dist": 6,
+          "n_path_nodes": 7,
+          "top_k_nn": [
+            89,
+            7,
+            72,
+            182,
+            12
+          ],
+          "nn_hops_to_path": [
+            3,
+            2,
+            2,
+            3,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 2.6666666666666665
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 2.8
+            }
+          }
+        },
+        {
+          "u": 73,
+          "v": 178,
+          "hop_dist": 4,
+          "n_path_nodes": 3,
+          "top_k_nn": [
+            112,
+            74,
+            77,
+            176,
+            142
+          ],
+          "nn_hops_to_path": [
+            2,
+            1,
+            2,
+            4,
+            4
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 3.3333333333333335
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 5.2
+            }
+          }
+        },
+        {
+          "u": 84,
+          "v": 170,
+          "hop_dist": 4,
+          "n_path_nodes": 7,
+          "top_k_nn": [
+            16,
+            18,
+            15,
+            6,
+            61
+          ],
+          "nn_hops_to_path": [
+            1,
+            1,
+            0,
+            3,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 1.0,
+              "mean": 1.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 1.3333333333333333
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 2.2
+            }
+          }
+        },
+        {
+          "u": 19,
+          "v": 75,
+          "hop_dist": 3,
+          "n_path_nodes": 4,
+          "top_k_nn": [
+            90,
+            94,
+            2,
+            1,
+            5
+          ],
+          "nn_hops_to_path": [
+            2,
+            2,
+            2,
+            1,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 2.8
+            }
+          }
+        },
+        {
+          "u": 3,
+          "v": 81,
+          "hop_dist": 5,
+          "n_path_nodes": 10,
+          "top_k_nn": [
+            87,
+            80,
+            90,
+            12,
+            6
+          ],
+          "nn_hops_to_path": [
+            1,
+            1,
+            2,
+            1,
+            3
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 2.4
+            }
+          }
+        },
+        {
+          "u": 11,
+          "v": 184,
+          "hop_dist": 3,
+          "n_path_nodes": 3,
+          "top_k_nn": [
+            13,
+            81,
+            82,
+            136,
+            42
+          ],
+          "nn_hops_to_path": [
+            0,
+            1,
+            1,
+            2,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 1.0,
+              "mean": 1.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 1.6666666666666667
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 2.0
+            }
+          }
+        },
+        {
+          "u": 92,
+          "v": 96,
+          "hop_dist": 6,
+          "n_path_nodes": 5,
+          "top_k_nn": [
+            77,
+            112,
+            14,
+            76,
+            186
+          ],
+          "nn_hops_to_path": [
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=3": {
+              "min": 3.0,
+              "mean": 3.3333333333333335
+            },
+            "k=5": {
+              "min": 3.0,
+              "mean": 4.4
+            }
+          }
+        },
+        {
+          "u": 119,
+          "v": 123,
+          "hop_dist": 6,
+          "n_path_nodes": 8,
+          "top_k_nn": [
+            87,
+            75,
+            90,
+            12,
+            1
+          ],
+          "nn_hops_to_path": [
+            0,
+            1,
+            2,
+            0,
+            0
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 1.6666666666666667
+            },
+            "k=5": {
+              "min": 0.0,
+              "mean": 1.4
+            }
+          }
+        },
+        {
+          "u": 4,
+          "v": 12,
+          "hop_dist": 3,
+          "n_path_nodes": 5,
+          "top_k_nn": [
+            6,
+            87,
+            80,
+            71,
+            1
+          ],
+          "nn_hops_to_path": [
+            2,
+            2,
+            0,
+            2,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 2.0
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 2.0
+            }
+          }
+        },
+        {
+          "u": 17,
+          "v": 76,
+          "hop_dist": 5,
+          "n_path_nodes": 4,
+          "top_k_nn": [
+            4,
+            6,
+            3,
+            14,
+            174
+          ],
+          "nn_hops_to_path": [
+            1,
+            0,
+            3,
+            1,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 3.3333333333333335
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 2.8
+            }
+          }
+        },
+        {
+          "u": 68,
+          "v": 98,
+          "hop_dist": 3,
+          "n_path_nodes": 2,
+          "top_k_nn": [
+            114,
+            179,
+            5,
+            22,
+            6
+          ],
+          "nn_hops_to_path": [
+            2,
+            2,
+            1,
+            1,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 3.0
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 2.6
+            }
+          }
+        },
+        {
+          "u": 9,
+          "v": 154,
+          "hop_dist": 3,
+          "n_path_nodes": 2,
+          "top_k_nn": [
+            75,
+            1,
+            80,
+            126,
+            12
+          ],
+          "nn_hops_to_path": [
+            2,
+            2,
+            2,
+            5,
+            3
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 2.3333333333333335
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 3.0
+            }
+          }
+        }
+      ],
+      "path_hit_rate_at_k": {
+        "k=1": 0.1,
+        "k=3": 0.3,
+        "k=5": 0.35
+      },
+      "random_baseline": 0.028494623655913976,
+      "mean_nn_hop_from_path": 1.95,
+      "bridge_graph_dist_error_at_k": {
+        "k=1": {
+          "min_mean": 2.9,
+          "mean_mean": 2.9,
+          "n": 20
+        },
+        "k=3": {
+          "min_mean": 2.0,
+          "mean_mean": 2.8333333333333335,
+          "n": 20
+        },
+        "k=5": {
+          "min_mean": 1.7,
+          "mean_mean": 3.02,
+          "n": 20
+        }
+      },
+      "median_dist": 2.549826145172119,
+      "n_nodes": 188,
+      "graph_idx": 3
+    },
+    {
+      "n_pairs_sampled": 20,
+      "per_pair": [
+        {
+          "u": 236,
+          "v": 338,
+          "hop_dist": 8,
+          "n_path_nodes": 9,
+          "top_k_nn": [
+            300,
+            208,
+            179,
+            244,
+            13
+          ],
+          "nn_hops_to_path": [
+            2,
+            3,
+            2,
+            4,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=3": {
+              "min": 4.0,
+              "mean": 4.666666666666667
+            },
+            "k=5": {
+              "min": 4.0,
+              "mean": 5.4
+            }
+          }
+        },
+        {
+          "u": 18,
+          "v": 109,
+          "hop_dist": 4,
+          "n_path_nodes": 3,
+          "top_k_nn": [
+            6,
+            174,
+            213,
+            212,
+            258
+          ],
+          "nn_hops_to_path": [
+            4,
+            2,
+            6,
+            6,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 4.333333333333333
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 5.0
+            }
+          }
+        },
+        {
+          "u": 203,
+          "v": 361,
+          "hop_dist": 6,
+          "n_path_nodes": 5,
+          "top_k_nn": [
+            188,
+            179,
+            282,
+            71,
+            281
+          ],
+          "nn_hops_to_path": [
+            3,
+            1,
+            4,
+            4,
+            5
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 6.0,
+              "mean": 6.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 4.666666666666667
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 5.6
+            }
+          }
+        },
+        {
+          "u": 278,
+          "v": 379,
+          "hop_dist": 6,
+          "n_path_nodes": 5,
+          "top_k_nn": [
+            39,
+            218,
+            219,
+            170,
+            258
+          ],
+          "nn_hops_to_path": [
+            0,
+            1,
+            0,
+            2,
+            3
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 0.0,
+              "mean": 0.0
+            },
+            "k=3": {
+              "min": 0.0,
+              "mean": 1.3333333333333333
+            },
+            "k=5": {
+              "min": 0.0,
+              "mean": 2.8
+            }
+          }
+        },
+        {
+          "u": 320,
+          "v": 396,
+          "hop_dist": 7,
+          "n_path_nodes": 6,
+          "top_k_nn": [
+            13,
+            52,
+            246,
+            323,
+            93
+          ],
+          "nn_hops_to_path": [
+            4,
+            0,
+            1,
+            1,
+            0
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 6.0,
+              "mean": 6.0
+            },
+            "k=3": {
+              "min": 5.0,
+              "mean": 5.333333333333333
+            },
+            "k=5": {
+              "min": 5.0,
+              "mean": 5.2
+            }
+          }
+        },
+        {
+          "u": 184,
+          "v": 227,
+          "hop_dist": 4,
+          "n_path_nodes": 3,
+          "top_k_nn": [
+            250,
+            251,
+            226,
+            228,
+            43
+          ],
+          "nn_hops_to_path": [
+            3,
+            3,
+            1,
+            1,
+            0
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 3.3333333333333335
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 2.8
+            }
+          }
+        },
+        {
+          "u": 39,
+          "v": 422,
+          "hop_dist": 5,
+          "n_path_nodes": 4,
+          "top_k_nn": [
+            258,
+            174,
+            207,
+            225,
+            183
+          ],
+          "nn_hops_to_path": [
+            2,
+            2,
+            2,
+            4,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=3": {
+              "min": 3.0,
+              "mean": 3.6666666666666665
+            },
+            "k=5": {
+              "min": 3.0,
+              "mean": 4.2
+            }
+          }
+        },
+        {
+          "u": 358,
+          "v": 389,
+          "hop_dist": 8,
+          "n_path_nodes": 7,
+          "top_k_nn": [
+            269,
+            64,
+            268,
+            267,
+            263
+          ],
+          "nn_hops_to_path": [
+            3,
+            2,
+            3,
+            3,
+            0
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 3.3333333333333335
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 3.6
+            }
+          }
+        },
+        {
+          "u": 129,
+          "v": 198,
+          "hop_dist": 7,
+          "n_path_nodes": 7,
+          "top_k_nn": [
+            12,
+            5,
+            14,
+            2,
+            11
+          ],
+          "nn_hops_to_path": [
+            1,
+            0,
+            4,
+            3,
+            4
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 3.0,
+              "mean": 4.0
+            },
+            "k=5": {
+              "min": 3.0,
+              "mean": 4.2
+            }
+          }
+        },
+        {
+          "u": 159,
+          "v": 388,
+          "hop_dist": 8,
+          "n_path_nodes": 18,
+          "top_k_nn": [
+            202,
+            25,
+            9,
+            3,
+            156
+          ],
+          "nn_hops_to_path": [
+            2,
+            1,
+            3,
+            4,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 3.3333333333333335
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 4.6
+            }
+          }
+        },
+        {
+          "u": 166,
+          "v": 314,
+          "hop_dist": 6,
+          "n_path_nodes": 7,
+          "top_k_nn": [
+            12,
+            11,
+            14,
+            186,
+            169
+          ],
+          "nn_hops_to_path": [
+            1,
+            3,
+            1,
+            3,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 3.3333333333333335
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 4.0
+            }
+          }
+        },
+        {
+          "u": 90,
+          "v": 236,
+          "hop_dist": 5,
+          "n_path_nodes": 8,
+          "top_k_nn": [
+            207,
+            314,
+            315,
+            306,
+            199
+          ],
+          "nn_hops_to_path": [
+            3,
+            2,
+            2,
+            4,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=3": {
+              "min": 4.0,
+              "mean": 4.666666666666667
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 4.4
+            }
+          }
+        },
+        {
+          "u": 66,
+          "v": 168,
+          "hop_dist": 5,
+          "n_path_nodes": 4,
+          "top_k_nn": [
+            139,
+            126,
+            21,
+            37,
+            23
+          ],
+          "nn_hops_to_path": [
+            2,
+            4,
+            4,
+            0,
+            3
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=3": {
+              "min": 4.0,
+              "mean": 5.0
+            },
+            "k=5": {
+              "min": 3.0,
+              "mean": 4.4
+            }
+          }
+        },
+        {
+          "u": 50,
+          "v": 326,
+          "hop_dist": 7,
+          "n_path_nodes": 11,
+          "top_k_nn": [
+            228,
+            227,
+            226,
+            43,
+            250
+          ],
+          "nn_hops_to_path": [
+            1,
+            1,
+            1,
+            0,
+            0
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 1.6
+            }
+          }
+        },
+        {
+          "u": 139,
+          "v": 208,
+          "hop_dist": 4,
+          "n_path_nodes": 5,
+          "top_k_nn": [
+            6,
+            21,
+            186,
+            3,
+            213
+          ],
+          "nn_hops_to_path": [
+            2,
+            3,
+            3,
+            2,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=3": {
+              "min": 4.0,
+              "mean": 5.0
+            },
+            "k=5": {
+              "min": 4.0,
+              "mean": 4.6
+            }
+          }
+        },
+        {
+          "u": 151,
+          "v": 190,
+          "hop_dist": 4,
+          "n_path_nodes": 3,
+          "top_k_nn": [
+            186,
+            3,
+            6,
+            213,
+            212
+          ],
+          "nn_hops_to_path": [
+            3,
+            3,
+            3,
+            2,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 6.0,
+              "mean": 6.0
+            },
+            "k=3": {
+              "min": 6.0,
+              "mean": 6.0
+            },
+            "k=5": {
+              "min": 4.0,
+              "mean": 5.2
+            }
+          }
+        },
+        {
+          "u": 111,
+          "v": 402,
+          "hop_dist": 3,
+          "n_path_nodes": 2,
+          "top_k_nn": [
+            306,
+            199,
+            207,
+            263,
+            225
+          ],
+          "nn_hops_to_path": [
+            5,
+            1,
+            2,
+            4,
+            5
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 10.0,
+              "mean": 10.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 5.333333333333333
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 6.8
+            }
+          }
+        },
+        {
+          "u": 322,
+          "v": 422,
+          "hop_dist": 8,
+          "n_path_nodes": 7,
+          "top_k_nn": [
+            6,
+            86,
+            309,
+            417,
+            258
+          ],
+          "nn_hops_to_path": [
+            1,
+            4,
+            5,
+            5,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 3.0,
+              "mean": 5.0
+            },
+            "k=5": {
+              "min": 3.0,
+              "mean": 5.2
+            }
+          }
+        },
+        {
+          "u": 272,
+          "v": 418,
+          "hop_dist": 7,
+          "n_path_nodes": 13,
+          "top_k_nn": [
+            39,
+            218,
+            258,
+            263,
+            219
+          ],
+          "nn_hops_to_path": [
+            3,
+            4,
+            4,
+            2,
+            4
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=3": {
+              "min": 4.0,
+              "mean": 4.666666666666667
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 3.8
+            }
+          }
+        },
+        {
+          "u": 350,
+          "v": 409,
+          "hop_dist": 8,
+          "n_path_nodes": 7,
+          "top_k_nn": [
+            124,
+            383,
+            184,
+            225,
+            250
+          ],
+          "nn_hops_to_path": [
+            3,
+            4,
+            2,
+            3,
+            4
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 2.6666666666666665
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 3.2
+            }
+          }
+        }
+      ],
+      "path_hit_rate_at_k": {
+        "k=1": 0.05,
+        "k=3": 0.15,
+        "k=5": 0.35
+      },
+      "random_baseline": 0.015876777251184835,
+      "mean_nn_hop_from_path": 2.45,
+      "bridge_graph_dist_error_at_k": {
+        "k=1": {
+          "min_mean": 3.9,
+          "mean_mean": 3.9,
+          "n": 20
+        },
+        "k=3": {
+          "min_mean": 2.85,
+          "mean_mean": 4.083333333333334,
+          "n": 20
+        },
+        "k=5": {
+          "min_mean": 2.4,
+          "mean_mean": 4.33,
+          "n": 20
+        }
+      },
+      "median_dist": 2.5744593143463135,
+      "n_nodes": 424,
+      "graph_idx": 4
+    },
+    {
+      "n_pairs_sampled": 20,
+      "per_pair": [
+        {
+          "u": 46,
+          "v": 51,
+          "hop_dist": 8,
+          "n_path_nodes": 7,
+          "top_k_nn": [
+            25,
+            15,
+            42,
+            49,
+            47
+          ],
+          "nn_hops_to_path": [
+            1,
+            2,
+            3,
+            3,
+            3
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 4.0
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 4.8
+            }
+          }
+        },
+        {
+          "u": 30,
+          "v": 54,
+          "hop_dist": 4,
+          "n_path_nodes": 5,
+          "top_k_nn": [
+            26,
+            43,
+            45,
+            16,
+            44
+          ],
+          "nn_hops_to_path": [
+            2,
+            1,
+            1,
+            0,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 2.6666666666666665
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 2.4
+            }
+          }
+        },
+        {
+          "u": 17,
+          "v": 43,
+          "hop_dist": 7,
+          "n_path_nodes": 13,
+          "top_k_nn": [
+            25,
+            48,
+            47,
+            18,
+            49
+          ],
+          "nn_hops_to_path": [
+            1,
+            4,
+            4,
+            3,
+            4
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 5.333333333333333
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 6.0
+            }
+          }
+        },
+        {
+          "u": 1,
+          "v": 36,
+          "hop_dist": 6,
+          "n_path_nodes": 6,
+          "top_k_nn": [
+            26,
+            25,
+            30,
+            23,
+            24
+          ],
+          "nn_hops_to_path": [
+            0,
+            1,
+            2,
+            1,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 2.6666666666666665
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 2.4
+            }
+          }
+        },
+        {
+          "u": 4,
+          "v": 26,
+          "hop_dist": 7,
+          "n_path_nodes": 6,
+          "top_k_nn": [
+            0,
+            27,
+            2,
+            29,
+            8
+          ],
+          "nn_hops_to_path": [
+            0,
+            1,
+            3,
+            2,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 3.0
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 3.2
+            }
+          }
+        },
+        {
+          "u": 1,
+          "v": 42,
+          "hop_dist": 6,
+          "n_path_nodes": 5,
+          "top_k_nn": [
+            15,
+            51,
+            40,
+            13,
+            2
+          ],
+          "nn_hops_to_path": [
+            0,
+            1,
+            1,
+            0,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=3": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=5": {
+              "min": 4.0,
+              "mean": 4.0
+            }
+          }
+        },
+        {
+          "u": 12,
+          "v": 53,
+          "hop_dist": 3,
+          "n_path_nodes": 3,
+          "top_k_nn": [
+            36,
+            7,
+            52,
+            28,
+            35
+          ],
+          "nn_hops_to_path": [
+            0,
+            1,
+            2,
+            2,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 1.0,
+              "mean": 1.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 2.3333333333333335
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 2.6
+            }
+          }
+        },
+        {
+          "u": 24,
+          "v": 28,
+          "hop_dist": 4,
+          "n_path_nodes": 5,
+          "top_k_nn": [
+            5,
+            36,
+            23,
+            52,
+            7
+          ],
+          "nn_hops_to_path": [
+            0,
+            2,
+            0,
+            1,
+            0
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 0.0,
+              "mean": 2.0
+            },
+            "k=5": {
+              "min": 0.0,
+              "mean": 2.0
+            }
+          }
+        },
+        {
+          "u": 9,
+          "v": 22,
+          "hop_dist": 7,
+          "n_path_nodes": 7,
+          "top_k_nn": [
+            0,
+            27,
+            25,
+            8,
+            29
+          ],
+          "nn_hops_to_path": [
+            0,
+            1,
+            2,
+            1,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 5.0,
+              "mean": 5.0
+            },
+            "k=3": {
+              "min": 3.0,
+              "mean": 5.0
+            },
+            "k=5": {
+              "min": 3.0,
+              "mean": 5.0
+            }
+          }
+        },
+        {
+          "u": 9,
+          "v": 35,
+          "hop_dist": 3,
+          "n_path_nodes": 2,
+          "top_k_nn": [
+            24,
+            36,
+            11,
+            33,
+            34
+          ],
+          "nn_hops_to_path": [
+            2,
+            1,
+            0,
+            1,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 2.0
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 2.0
+            }
+          }
+        },
+        {
+          "u": 1,
+          "v": 48,
+          "hop_dist": 10,
+          "n_path_nodes": 9,
+          "top_k_nn": [
+            26,
+            25,
+            40,
+            51,
+            13
+          ],
+          "nn_hops_to_path": [
+            0,
+            1,
+            1,
+            1,
+            0
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 6.0,
+              "mean": 6.0
+            },
+            "k=3": {
+              "min": 4.0,
+              "mean": 6.0
+            },
+            "k=5": {
+              "min": 4.0,
+              "mean": 6.8
+            }
+          }
+        },
+        {
+          "u": 1,
+          "v": 4,
+          "hop_dist": 9,
+          "n_path_nodes": 8,
+          "top_k_nn": [
+            2,
+            0,
+            15,
+            42,
+            30
+          ],
+          "nn_hops_to_path": [
+            3,
+            0,
+            2,
+            3,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 3.0
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 3.4
+            }
+          }
+        },
+        {
+          "u": 4,
+          "v": 50,
+          "hop_dist": 3,
+          "n_path_nodes": 2,
+          "top_k_nn": [
+            22,
+            20,
+            3,
+            19,
+            21
+          ],
+          "nn_hops_to_path": [
+            2,
+            0,
+            0,
+            1,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 1.6666666666666667
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 2.0
+            }
+          }
+        },
+        {
+          "u": 0,
+          "v": 2,
+          "hop_dist": 4,
+          "n_path_nodes": 11,
+          "top_k_nn": [
+            27,
+            30,
+            25,
+            15,
+            42
+          ],
+          "nn_hops_to_path": [
+            1,
+            0,
+            0,
+            0,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 0.0,
+              "mean": 0.6666666666666666
+            },
+            "k=5": {
+              "min": 0.0,
+              "mean": 1.2
+            }
+          }
+        },
+        {
+          "u": 22,
+          "v": 28,
+          "hop_dist": 8,
+          "n_path_nodes": 7,
+          "top_k_nn": [
+            0,
+            20,
+            50,
+            27,
+            29
+          ],
+          "nn_hops_to_path": [
+            0,
+            1,
+            2,
+            1,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=3": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 3.6
+            }
+          }
+        },
+        {
+          "u": 15,
+          "v": 49,
+          "hop_dist": 9,
+          "n_path_nodes": 12,
+          "top_k_nn": [
+            25,
+            42,
+            48,
+            18,
+            47
+          ],
+          "nn_hops_to_path": [
+            0,
+            2,
+            1,
+            0,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 7.0,
+              "mean": 7.0
+            },
+            "k=3": {
+              "min": 7.0,
+              "mean": 7.666666666666667
+            },
+            "k=5": {
+              "min": 7.0,
+              "mean": 7.4
+            }
+          }
+        },
+        {
+          "u": 53,
+          "v": 55,
+          "hop_dist": 4,
+          "n_path_nodes": 3,
+          "top_k_nn": [
+            24,
+            36,
+            35,
+            11,
+            33
+          ],
+          "nn_hops_to_path": [
+            1,
+            1,
+            1,
+            0,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 2.0
+            }
+          }
+        },
+        {
+          "u": 13,
+          "v": 47,
+          "hop_dist": 9,
+          "n_path_nodes": 8,
+          "top_k_nn": [
+            26,
+            25,
+            51,
+            40,
+            1
+          ],
+          "nn_hops_to_path": [
+            0,
+            1,
+            2,
+            2,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 7.0,
+              "mean": 7.0
+            },
+            "k=3": {
+              "min": 5.0,
+              "mean": 7.0
+            },
+            "k=5": {
+              "min": 5.0,
+              "mean": 7.8
+            }
+          }
+        },
+        {
+          "u": 19,
+          "v": 54,
+          "hop_dist": 9,
+          "n_path_nodes": 15,
+          "top_k_nn": [
+            0,
+            2,
+            30,
+            25,
+            27
+          ],
+          "nn_hops_to_path": [
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 1.0,
+              "mean": 1.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 2.3333333333333335
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 2.2
+            }
+          }
+        },
+        {
+          "u": 31,
+          "v": 38,
+          "hop_dist": 4,
+          "n_path_nodes": 3,
+          "top_k_nn": [
+            36,
+            52,
+            7,
+            28,
+            5
+          ],
+          "nn_hops_to_path": [
+            1,
+            2,
+            1,
+            2,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 1.0,
+              "mean": 1.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 2.3333333333333335
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 2.6
+            }
+          }
+        }
+      ],
+      "path_hit_rate_at_k": {
+        "k=1": 0.55,
+        "k=3": 0.75,
+        "k=5": 0.85
+      },
+      "random_baseline": 0.12685185185185183,
+      "mean_nn_hop_from_path": 1.16,
+      "bridge_graph_dist_error_at_k": {
+        "k=1": {
+          "min_mean": 3.25,
+          "mean_mean": 3.25,
+          "n": 20
+        },
+        "k=3": {
+          "min_mean": 2.25,
+          "mean_mean": 3.483333333333333,
+          "n": 20
+        },
+        "k=5": {
+          "min_mean": 2.15,
+          "mean_mean": 3.6700000000000004,
+          "n": 20
+        }
+      },
+      "median_dist": 2.0578322410583496,
+      "n_nodes": 56,
+      "graph_idx": 5
+    },
+    {
+      "n_pairs_sampled": 20,
+      "per_pair": [
+        {
+          "u": 155,
+          "v": 344,
+          "hop_dist": 5,
+          "n_path_nodes": 5,
+          "top_k_nn": [
+            1,
+            146,
+            147,
+            343,
+            179
+          ],
+          "nn_hops_to_path": [
+            1,
+            3,
+            3,
+            3,
+            3
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 3.0,
+              "mean": 3.6666666666666665
+            },
+            "k=5": {
+              "min": 3.0,
+              "mean": 4.0
+            }
+          }
+        },
+        {
+          "u": 285,
+          "v": 308,
+          "hop_dist": 7,
+          "n_path_nodes": 6,
+          "top_k_nn": [
+            15,
+            124,
+            356,
+            361,
+            5
+          ],
+          "nn_hops_to_path": [
+            0,
+            5,
+            6,
+            6,
+            3
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 3.0,
+              "mean": 5.666666666666667
+            },
+            "k=5": {
+              "min": 3.0,
+              "mean": 5.6
+            }
+          }
+        },
+        {
+          "u": 72,
+          "v": 168,
+          "hop_dist": 5,
+          "n_path_nodes": 7,
+          "top_k_nn": [
+            267,
+            274,
+            148,
+            144,
+            68
+          ],
+          "nn_hops_to_path": [
+            1,
+            3,
+            2,
+            0,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 1.0,
+              "mean": 1.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 3.0
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 2.8
+            }
+          }
+        },
+        {
+          "u": 115,
+          "v": 231,
+          "hop_dist": 6,
+          "n_path_nodes": 5,
+          "top_k_nn": [
+            112,
+            360,
+            36,
+            34,
+            135
+          ],
+          "nn_hops_to_path": [
+            3,
+            4,
+            1,
+            1,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 4.0
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 3.6
+            }
+          }
+        },
+        {
+          "u": 78,
+          "v": 163,
+          "hop_dist": 6,
+          "n_path_nodes": 6,
+          "top_k_nn": [
+            12,
+            156,
+            145,
+            238,
+            177
+          ],
+          "nn_hops_to_path": [
+            0,
+            0,
+            1,
+            3,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 3.3333333333333335
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 3.4
+            }
+          }
+        },
+        {
+          "u": 97,
+          "v": 317,
+          "hop_dist": 5,
+          "n_path_nodes": 4,
+          "top_k_nn": [
+            17,
+            3,
+            21,
+            209,
+            333
+          ],
+          "nn_hops_to_path": [
+            1,
+            0,
+            1,
+            3,
+            3
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 1.6666666666666667
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 3.4
+            }
+          }
+        },
+        {
+          "u": 160,
+          "v": 275,
+          "hop_dist": 6,
+          "n_path_nodes": 5,
+          "top_k_nn": [
+            156,
+            2,
+            142,
+            219,
+            145
+          ],
+          "nn_hops_to_path": [
+            2,
+            2,
+            0,
+            3,
+            4
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 2.3333333333333335
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 3.4
+            }
+          }
+        },
+        {
+          "u": 120,
+          "v": 344,
+          "hop_dist": 8,
+          "n_path_nodes": 7,
+          "top_k_nn": [
+            207,
+            206,
+            357,
+            347,
+            32
+          ],
+          "nn_hops_to_path": [
+            1,
+            1,
+            1,
+            2,
+            0
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 6.0,
+              "mean": 6.0
+            },
+            "k=3": {
+              "min": 6.0,
+              "mean": 6.0
+            },
+            "k=5": {
+              "min": 6.0,
+              "mean": 6.4
+            }
+          }
+        },
+        {
+          "u": 37,
+          "v": 358,
+          "hop_dist": 7,
+          "n_path_nodes": 10,
+          "top_k_nn": [
+            14,
+            82,
+            298,
+            299,
+            19
+          ],
+          "nn_hops_to_path": [
+            3,
+            4,
+            5,
+            5,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=3": {
+              "min": 4.0,
+              "mean": 6.0
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 5.6
+            }
+          }
+        },
+        {
+          "u": 148,
+          "v": 196,
+          "hop_dist": 6,
+          "n_path_nodes": 5,
+          "top_k_nn": [
+            164,
+            175,
+            176,
+            173,
+            340
+          ],
+          "nn_hops_to_path": [
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 3.0,
+              "mean": 4.333333333333333
+            },
+            "k=5": {
+              "min": 3.0,
+              "mean": 4.6
+            }
+          }
+        },
+        {
+          "u": 329,
+          "v": 337,
+          "hop_dist": 7,
+          "n_path_nodes": 8,
+          "top_k_nn": [
+            205,
+            168,
+            226,
+            20,
+            6
+          ],
+          "nn_hops_to_path": [
+            3,
+            2,
+            1,
+            0,
+            0
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 5.0,
+              "mean": 5.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 4.0
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 3.6
+            }
+          }
+        },
+        {
+          "u": 79,
+          "v": 241,
+          "hop_dist": 7,
+          "n_path_nodes": 20,
+          "top_k_nn": [
+            174,
+            155,
+            163,
+            12,
+            234
+          ],
+          "nn_hops_to_path": [
+            0,
+            2,
+            2,
+            0,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 2.6666666666666665
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 3.4
+            }
+          }
+        },
+        {
+          "u": 24,
+          "v": 342,
+          "hop_dist": 5,
+          "n_path_nodes": 4,
+          "top_k_nn": [
+            360,
+            112,
+            11,
+            5,
+            4
+          ],
+          "nn_hops_to_path": [
+            3,
+            2,
+            3,
+            4,
+            0
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 6.0,
+              "mean": 6.0
+            },
+            "k=3": {
+              "min": 4.0,
+              "mean": 5.333333333333333
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 4.8
+            }
+          }
+        },
+        {
+          "u": 163,
+          "v": 165,
+          "hop_dist": 4,
+          "n_path_nodes": 4,
+          "top_k_nn": [
+            336,
+            198,
+            164,
+            162,
+            160
+          ],
+          "nn_hops_to_path": [
+            1,
+            2,
+            1,
+            1,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 2.3333333333333335
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 2.6
+            }
+          }
+        },
+        {
+          "u": 98,
+          "v": 195,
+          "hop_dist": 4,
+          "n_path_nodes": 3,
+          "top_k_nn": [
+            3,
+            21,
+            162,
+            18,
+            164
+          ],
+          "nn_hops_to_path": [
+            0,
+            1,
+            2,
+            1,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 0.0,
+              "mean": 0.0
+            },
+            "k=3": {
+              "min": 0.0,
+              "mean": 1.6666666666666667
+            },
+            "k=5": {
+              "min": 0.0,
+              "mean": 2.2
+            }
+          }
+        },
+        {
+          "u": 161,
+          "v": 200,
+          "hop_dist": 4,
+          "n_path_nodes": 3,
+          "top_k_nn": [
+            226,
+            183,
+            21,
+            18,
+            17
+          ],
+          "nn_hops_to_path": [
+            3,
+            2,
+            1,
+            1,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 6.0,
+              "mean": 6.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 4.0
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 3.2
+            }
+          }
+        },
+        {
+          "u": 189,
+          "v": 248,
+          "hop_dist": 6,
+          "n_path_nodes": 13,
+          "top_k_nn": [
+            1,
+            190,
+            250,
+            249,
+            55
+          ],
+          "nn_hops_to_path": [
+            4,
+            0,
+            1,
+            1,
+            0
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 7.0,
+              "mean": 7.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 4.333333333333333
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 4.2
+            }
+          }
+        },
+        {
+          "u": 69,
+          "v": 145,
+          "hop_dist": 4,
+          "n_path_nodes": 4,
+          "top_k_nn": [
+            142,
+            80,
+            276,
+            277,
+            278
+          ],
+          "nn_hops_to_path": [
+            1,
+            2,
+            2,
+            2,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 3.0
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 3.4
+            }
+          }
+        },
+        {
+          "u": 96,
+          "v": 256,
+          "hop_dist": 6,
+          "n_path_nodes": 5,
+          "top_k_nn": [
+            85,
+            305,
+            229,
+            44,
+            217
+          ],
+          "nn_hops_to_path": [
+            2,
+            3,
+            4,
+            3,
+            4
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 3.0,
+              "mean": 4.666666666666667
+            },
+            "k=5": {
+              "min": 3.0,
+              "mean": 4.8
+            }
+          }
+        },
+        {
+          "u": 92,
+          "v": 129,
+          "hop_dist": 6,
+          "n_path_nodes": 7,
+          "top_k_nn": [
+            205,
+            19,
+            20,
+            5,
+            15
+          ],
+          "nn_hops_to_path": [
+            3,
+            1,
+            1,
+            1,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 2.3333333333333335
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 2.4
+            }
+          }
+        }
+      ],
+      "path_hit_rate_at_k": {
+        "k=1": 0.2,
+        "k=3": 0.35,
+        "k=5": 0.55
+      },
+      "random_baseline": 0.01775067750677507,
+      "mean_nn_hop_from_path": 1.98,
+      "bridge_graph_dist_error_at_k": {
+        "k=1": {
+          "min_mean": 3.5,
+          "mean_mean": 3.5,
+          "n": 20
+        },
+        "k=3": {
+          "min_mean": 2.4,
+          "mean_mean": 3.7166666666666663,
+          "n": 20
+        },
+        "k=5": {
+          "min_mean": 2.15,
+          "mean_mean": 3.87,
+          "n": 20
+        }
+      },
+      "median_dist": 2.2508811950683594,
+      "n_nodes": 371,
+      "graph_idx": 6
+    },
+    {
+      "n_pairs_sampled": 20,
+      "per_pair": [
+        {
+          "u": 80,
+          "v": 412,
+          "hop_dist": 5,
+          "n_path_nodes": 11,
+          "top_k_nn": [
+            212,
+            365,
+            324,
+            325,
+            413
+          ],
+          "nn_hops_to_path": [
+            2,
+            2,
+            2,
+            2,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 3.0,
+              "mean": 3.6666666666666665
+            },
+            "k=5": {
+              "min": 3.0,
+              "mean": 3.8
+            }
+          }
+        },
+        {
+          "u": 366,
+          "v": 390,
+          "hop_dist": 6,
+          "n_path_nodes": 11,
+          "top_k_nn": [
+            300,
+            119,
+            189,
+            295,
+            298
+          ],
+          "nn_hops_to_path": [
+            3,
+            2,
+            2,
+            3,
+            3
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 5.0,
+              "mean": 5.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 3.6666666666666665
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 4.2
+            }
+          }
+        },
+        {
+          "u": 188,
+          "v": 385,
+          "hop_dist": 5,
+          "n_path_nodes": 4,
+          "top_k_nn": [
+            119,
+            189,
+            187,
+            386,
+            113
+          ],
+          "nn_hops_to_path": [
+            2,
+            2,
+            1,
+            1,
+            0
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=3": {
+              "min": 3.0,
+              "mean": 3.6666666666666665
+            },
+            "k=5": {
+              "min": 3.0,
+              "mean": 3.4
+            }
+          }
+        },
+        {
+          "u": 212,
+          "v": 346,
+          "hop_dist": 5,
+          "n_path_nodes": 5,
+          "top_k_nn": [
+            93,
+            261,
+            243,
+            213,
+            4
+          ],
+          "nn_hops_to_path": [
+            0,
+            1,
+            3,
+            1,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 3.0,
+              "mean": 3.6666666666666665
+            },
+            "k=5": {
+              "min": 3.0,
+              "mean": 3.6
+            }
+          }
+        },
+        {
+          "u": 143,
+          "v": 291,
+          "hop_dist": 6,
+          "n_path_nodes": 5,
+          "top_k_nn": [
+            249,
+            40,
+            0,
+            177,
+            25
+          ],
+          "nn_hops_to_path": [
+            4,
+            3,
+            1,
+            2,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 8.0,
+              "mean": 8.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 5.333333333333333
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 4.4
+            }
+          }
+        },
+        {
+          "u": 59,
+          "v": 324,
+          "hop_dist": 5,
+          "n_path_nodes": 4,
+          "top_k_nn": [
+            194,
+            349,
+            104,
+            366,
+            367
+          ],
+          "nn_hops_to_path": [
+            2,
+            3,
+            2,
+            3,
+            3
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 3.0,
+              "mean": 3.6666666666666665
+            },
+            "k=5": {
+              "min": 3.0,
+              "mean": 4.2
+            }
+          }
+        },
+        {
+          "u": 265,
+          "v": 268,
+          "hop_dist": 5,
+          "n_path_nodes": 4,
+          "top_k_nn": [
+            408,
+            251,
+            255,
+            11,
+            54
+          ],
+          "nn_hops_to_path": [
+            2,
+            4,
+            3,
+            2,
+            3
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 3.0,
+              "mean": 4.0
+            },
+            "k=5": {
+              "min": 3.0,
+              "mean": 4.0
+            }
+          }
+        },
+        {
+          "u": 14,
+          "v": 276,
+          "hop_dist": 4,
+          "n_path_nodes": 3,
+          "top_k_nn": [
+            371,
+            175,
+            193,
+            255,
+            22
+          ],
+          "nn_hops_to_path": [
+            3,
+            1,
+            2,
+            3,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 6.0,
+              "mean": 6.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 3.6666666666666665
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 3.2
+            }
+          }
+        },
+        {
+          "u": 132,
+          "v": 378,
+          "hop_dist": 5,
+          "n_path_nodes": 11,
+          "top_k_nn": [
+            1,
+            428,
+            426,
+            430,
+            14
+          ],
+          "nn_hops_to_path": [
+            0,
+            0,
+            2,
+            2,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 1.0,
+              "mean": 1.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 1.6666666666666667
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 2.2
+            }
+          }
+        },
+        {
+          "u": 76,
+          "v": 281,
+          "hop_dist": 4,
+          "n_path_nodes": 3,
+          "top_k_nn": [
+            350,
+            96,
+            326,
+            81,
+            319
+          ],
+          "nn_hops_to_path": [
+            2,
+            1,
+            3,
+            2,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 3.0
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 2.8
+            }
+          }
+        },
+        {
+          "u": 278,
+          "v": 285,
+          "hop_dist": 6,
+          "n_path_nodes": 7,
+          "top_k_nn": [
+            295,
+            298,
+            65,
+            296,
+            13
+          ],
+          "nn_hops_to_path": [
+            3,
+            3,
+            2,
+            3,
+            0
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 2.3333333333333335
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 2.4
+            }
+          }
+        },
+        {
+          "u": 337,
+          "v": 448,
+          "hop_dist": 7,
+          "n_path_nodes": 11,
+          "top_k_nn": [
+            131,
+            467,
+            25,
+            193,
+            329
+          ],
+          "nn_hops_to_path": [
+            1,
+            2,
+            1,
+            2,
+            0
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 2.6666666666666665
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 2.8
+            }
+          }
+        },
+        {
+          "u": 31,
+          "v": 286,
+          "hop_dist": 5,
+          "n_path_nodes": 9,
+          "top_k_nn": [
+            1,
+            430,
+            428,
+            426,
+            438
+          ],
+          "nn_hops_to_path": [
+            0,
+            1,
+            1,
+            2,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 1.0,
+              "mean": 1.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 1.6666666666666667
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 2.2
+            }
+          }
+        },
+        {
+          "u": 1,
+          "v": 327,
+          "hop_dist": 3,
+          "n_path_nodes": 2,
+          "top_k_nn": [
+            26,
+            425,
+            16,
+            20,
+            202
+          ],
+          "nn_hops_to_path": [
+            2,
+            3,
+            2,
+            2,
+            3
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 3.0,
+              "mean": 3.3333333333333335
+            },
+            "k=5": {
+              "min": 3.0,
+              "mean": 3.4
+            }
+          }
+        },
+        {
+          "u": 325,
+          "v": 482,
+          "hop_dist": 6,
+          "n_path_nodes": 8,
+          "top_k_nn": [
+            177,
+            190,
+            26,
+            215,
+            25
+          ],
+          "nn_hops_to_path": [
+            0,
+            2,
+            1,
+            2,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 2.6666666666666665
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 2.8
+            }
+          }
+        },
+        {
+          "u": 309,
+          "v": 408,
+          "hop_dist": 5,
+          "n_path_nodes": 7,
+          "top_k_nn": [
+            371,
+            255,
+            11,
+            13,
+            193
+          ],
+          "nn_hops_to_path": [
+            3,
+            1,
+            2,
+            2,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 5.0,
+              "mean": 5.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 3.3333333333333335
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 3.0
+            }
+          }
+        },
+        {
+          "u": 170,
+          "v": 475,
+          "hop_dist": 6,
+          "n_path_nodes": 5,
+          "top_k_nn": [
+            145,
+            150,
+            159,
+            171,
+            444
+          ],
+          "nn_hops_to_path": [
+            3,
+            3,
+            0,
+            1,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=3": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=5": {
+              "min": 4.0,
+              "mean": 4.0
+            }
+          }
+        },
+        {
+          "u": 284,
+          "v": 484,
+          "hop_dist": 5,
+          "n_path_nodes": 7,
+          "top_k_nn": [
+            189,
+            119,
+            211,
+            476,
+            185
+          ],
+          "nn_hops_to_path": [
+            2,
+            0,
+            2,
+            2,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 2.6666666666666665
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 3.2
+            }
+          }
+        },
+        {
+          "u": 254,
+          "v": 279,
+          "hop_dist": 6,
+          "n_path_nodes": 5,
+          "top_k_nn": [
+            396,
+            458,
+            117,
+            271,
+            369
+          ],
+          "nn_hops_to_path": [
+            4,
+            4,
+            3,
+            4,
+            3
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 7.0,
+              "mean": 7.0
+            },
+            "k=3": {
+              "min": 5.0,
+              "mean": 6.333333333333333
+            },
+            "k=5": {
+              "min": 5.0,
+              "mean": 5.8
+            }
+          }
+        },
+        {
+          "u": 34,
+          "v": 364,
+          "hop_dist": 5,
+          "n_path_nodes": 11,
+          "top_k_nn": [
+            437,
+            430,
+            5,
+            1,
+            0
+          ],
+          "nn_hops_to_path": [
+            3,
+            1,
+            2,
+            0,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 5.0,
+              "mean": 5.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 3.3333333333333335
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 2.6
+            }
+          }
+        }
+      ],
+      "path_hit_rate_at_k": {
+        "k=1": 0.2,
+        "k=3": 0.3,
+        "k=5": 0.5
+      },
+      "random_baseline": 0.013739669421487605,
+      "mean_nn_hop_from_path": 1.91,
+      "bridge_graph_dist_error_at_k": {
+        "k=1": {
+          "min_mean": 3.8,
+          "mean_mean": 3.8,
+          "n": 20
+        },
+        "k=3": {
+          "min_mean": 2.3,
+          "mean_mean": 3.4166666666666665,
+          "n": 20
+        },
+        "k=5": {
+          "min_mean": 2.15,
+          "mean_mean": 3.4,
+          "n": 20
+        }
+      },
+      "median_dist": 2.255037784576416,
+      "n_nodes": 486,
+      "graph_idx": 7
+    },
+    {
+      "n_pairs_sampled": 20,
+      "per_pair": [
+        {
+          "u": 1,
+          "v": 48,
+          "hop_dist": 4,
+          "n_path_nodes": 3,
+          "top_k_nn": [
+            27,
+            37,
+            26,
+            5,
+            34
+          ],
+          "nn_hops_to_path": [
+            2,
+            2,
+            1,
+            0,
+            3
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 3.0
+            },
+            "k=5": {
+              "min": 0.0,
+              "mean": 2.6
+            }
+          }
+        },
+        {
+          "u": 34,
+          "v": 54,
+          "hop_dist": 5,
+          "n_path_nodes": 4,
+          "top_k_nn": [
+            7,
+            27,
+            33,
+            32,
+            18
+          ],
+          "nn_hops_to_path": [
+            0,
+            1,
+            1,
+            1,
+            0
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 1.0,
+              "mean": 1.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 2.0
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 2.2
+            }
+          }
+        },
+        {
+          "u": 40,
+          "v": 56,
+          "hop_dist": 6,
+          "n_path_nodes": 5,
+          "top_k_nn": [
+            4,
+            39,
+            55,
+            10,
+            41
+          ],
+          "nn_hops_to_path": [
+            0,
+            1,
+            1,
+            0,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 3.0
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 3.4
+            }
+          }
+        },
+        {
+          "u": 26,
+          "v": 59,
+          "hop_dist": 5,
+          "n_path_nodes": 5,
+          "top_k_nn": [
+            4,
+            1,
+            31,
+            27,
+            34
+          ],
+          "nn_hops_to_path": [
+            0,
+            0,
+            2,
+            1,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 2.3333333333333335
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 2.6
+            }
+          }
+        },
+        {
+          "u": 17,
+          "v": 53,
+          "hop_dist": 3,
+          "n_path_nodes": 2,
+          "top_k_nn": [
+            7,
+            36,
+            9,
+            35,
+            38
+          ],
+          "nn_hops_to_path": [
+            0,
+            4,
+            3,
+            4,
+            4
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 1.0,
+              "mean": 1.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 5.0
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 6.2
+            }
+          }
+        },
+        {
+          "u": 23,
+          "v": 52,
+          "hop_dist": 5,
+          "n_path_nodes": 4,
+          "top_k_nn": [
+            21,
+            58,
+            0,
+            20,
+            8
+          ],
+          "nn_hops_to_path": [
+            1,
+            2,
+            1,
+            1,
+            0
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 3.0
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 3.0
+            }
+          }
+        },
+        {
+          "u": 13,
+          "v": 24,
+          "hop_dist": 3,
+          "n_path_nodes": 2,
+          "top_k_nn": [
+            45,
+            61,
+            43,
+            44,
+            26
+          ],
+          "nn_hops_to_path": [
+            2,
+            2,
+            2,
+            2,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 2.8
+            }
+          }
+        },
+        {
+          "u": 30,
+          "v": 50,
+          "hop_dist": 5,
+          "n_path_nodes": 4,
+          "top_k_nn": [
+            32,
+            1,
+            4,
+            39,
+            16
+          ],
+          "nn_hops_to_path": [
+            1,
+            0,
+            2,
+            3,
+            0
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 2.0
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 2.8
+            }
+          }
+        },
+        {
+          "u": 53,
+          "v": 61,
+          "hop_dist": 7,
+          "n_path_nodes": 8,
+          "top_k_nn": [
+            24,
+            27,
+            42,
+            33,
+            34
+          ],
+          "nn_hops_to_path": [
+            0,
+            1,
+            1,
+            2,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 1.0,
+              "mean": 1.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 1.3333333333333333
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 2.4
+            }
+          }
+        },
+        {
+          "u": 15,
+          "v": 52,
+          "hop_dist": 6,
+          "n_path_nodes": 7,
+          "top_k_nn": [
+            37,
+            47,
+            14,
+            46,
+            26
+          ],
+          "nn_hops_to_path": [
+            2,
+            2,
+            1,
+            2,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 3.0,
+              "mean": 3.6666666666666665
+            },
+            "k=5": {
+              "min": 3.0,
+              "mean": 3.6
+            }
+          }
+        },
+        {
+          "u": 26,
+          "v": 54,
+          "hop_dist": 5,
+          "n_path_nodes": 4,
+          "top_k_nn": [
+            7,
+            27,
+            5,
+            24,
+            33
+          ],
+          "nn_hops_to_path": [
+            0,
+            0,
+            2,
+            1,
+            3
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 1.0,
+              "mean": 1.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 2.0
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 2.4
+            }
+          }
+        },
+        {
+          "u": 1,
+          "v": 62,
+          "hop_dist": 4,
+          "n_path_nodes": 3,
+          "top_k_nn": [
+            4,
+            39,
+            57,
+            12,
+            34
+          ],
+          "nn_hops_to_path": [
+            1,
+            1,
+            1,
+            0,
+            3
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 1.0,
+              "mean": 1.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 1.6666666666666667
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 2.2
+            }
+          }
+        },
+        {
+          "u": 15,
+          "v": 47,
+          "hop_dist": 3,
+          "n_path_nodes": 2,
+          "top_k_nn": [
+            48,
+            49,
+            5,
+            46,
+            14
+          ],
+          "nn_hops_to_path": [
+            2,
+            2,
+            0,
+            1,
+            0
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 2.3333333333333335
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 2.0
+            }
+          }
+        },
+        {
+          "u": 12,
+          "v": 58,
+          "hop_dist": 6,
+          "n_path_nodes": 5,
+          "top_k_nn": [
+            4,
+            34,
+            33,
+            37,
+            0
+          ],
+          "nn_hops_to_path": [
+            1,
+            1,
+            1,
+            2,
+            0
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 2.3333333333333335
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 2.6
+            }
+          }
+        },
+        {
+          "u": 4,
+          "v": 61,
+          "hop_dist": 4,
+          "n_path_nodes": 4,
+          "top_k_nn": [
+            39,
+            34,
+            33,
+            45,
+            43
+          ],
+          "nn_hops_to_path": [
+            2,
+            3,
+            3,
+            1,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 4.666666666666667
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 3.6
+            }
+          }
+        },
+        {
+          "u": 9,
+          "v": 49,
+          "hop_dist": 5,
+          "n_path_nodes": 7,
+          "top_k_nn": [
+            37,
+            14,
+            47,
+            46,
+            5
+          ],
+          "nn_hops_to_path": [
+            0,
+            0,
+            1,
+            1,
+            0
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 2.0
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 1.8
+            }
+          }
+        },
+        {
+          "u": 22,
+          "v": 42,
+          "hop_dist": 5,
+          "n_path_nodes": 4,
+          "top_k_nn": [
+            7,
+            8,
+            0,
+            32,
+            33
+          ],
+          "nn_hops_to_path": [
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 1.0,
+              "mean": 1.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 1.6666666666666667
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 2.0
+            }
+          }
+        },
+        {
+          "u": 15,
+          "v": 19,
+          "hop_dist": 5,
+          "n_path_nodes": 4,
+          "top_k_nn": [
+            7,
+            8,
+            2,
+            18,
+            53
+          ],
+          "nn_hops_to_path": [
+            1,
+            0,
+            -1,
+            2,
+            3
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 2.5
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 3.75
+            }
+          }
+        },
+        {
+          "u": 7,
+          "v": 38,
+          "hop_dist": 4,
+          "n_path_nodes": 3,
+          "top_k_nn": [
+            27,
+            36,
+            35,
+            9,
+            31
+          ],
+          "nn_hops_to_path": [
+            0,
+            1,
+            1,
+            0,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 2.4
+            }
+          }
+        },
+        {
+          "u": 19,
+          "v": 49,
+          "hop_dist": 6,
+          "n_path_nodes": 5,
+          "top_k_nn": [
+            7,
+            8,
+            2,
+            18,
+            53
+          ],
+          "nn_hops_to_path": [
+            1,
+            0,
+            -1,
+            2,
+            3
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 3.0
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 4.0
+            }
+          }
+        }
+      ],
+      "path_hit_rate_at_k": {
+        "k=1": 0.45,
+        "k=3": 0.65,
+        "k=5": 0.85
+      },
+      "random_baseline": 0.06967213114754099,
+      "mean_nn_hop_from_path": 1.24,
+      "bridge_graph_dist_error_at_k": {
+        "k=1": {
+          "min_mean": 2.1,
+          "mean_mean": 2.1,
+          "n": 20
+        },
+        "k=3": {
+          "min_mean": 1.6,
+          "mean_mean": 2.625,
+          "n": 20
+        },
+        "k=5": {
+          "min_mean": 1.45,
+          "mean_mean": 2.9175,
+          "n": 20
+        }
+      },
+      "median_dist": 2.608398675918579,
+      "n_nodes": 63,
+      "graph_idx": 8
+    },
+    {
+      "n_pairs_sampled": 20,
+      "per_pair": [
+        {
+          "u": 81,
+          "v": 87,
+          "hop_dist": 5,
+          "n_path_nodes": 4,
+          "top_k_nn": [
+            67,
+            128,
+            70,
+            83,
+            11
+          ],
+          "nn_hops_to_path": [
+            0,
+            3,
+            2,
+            2,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 1.0,
+              "mean": 1.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 2.6666666666666665
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 3.0
+            }
+          }
+        },
+        {
+          "u": 3,
+          "v": 104,
+          "hop_dist": 3,
+          "n_path_nodes": 2,
+          "top_k_nn": [
+            70,
+            67,
+            94,
+            6,
+            128
+          ],
+          "nn_hops_to_path": [
+            3,
+            2,
+            2,
+            1,
+            3
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 5.0,
+              "mean": 5.0
+            },
+            "k=3": {
+              "min": 3.0,
+              "mean": 4.0
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 3.6
+            }
+          }
+        },
+        {
+          "u": 50,
+          "v": 145,
+          "hop_dist": 4,
+          "n_path_nodes": 3,
+          "top_k_nn": [
+            17,
+            4,
+            162,
+            6,
+            11
+          ],
+          "nn_hops_to_path": [
+            0,
+            2,
+            1,
+            1,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 0.0,
+              "mean": 0.0
+            },
+            "k=3": {
+              "min": 0.0,
+              "mean": 1.6666666666666667
+            },
+            "k=5": {
+              "min": 0.0,
+              "mean": 2.0
+            }
+          }
+        },
+        {
+          "u": 13,
+          "v": 168,
+          "hop_dist": 3,
+          "n_path_nodes": 2,
+          "top_k_nn": [
+            4,
+            87,
+            83,
+            11,
+            1
+          ],
+          "nn_hops_to_path": [
+            1,
+            2,
+            2,
+            1,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 3.0
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 2.6
+            }
+          }
+        },
+        {
+          "u": 101,
+          "v": 144,
+          "hop_dist": 5,
+          "n_path_nodes": 5,
+          "top_k_nn": [
+            94,
+            67,
+            128,
+            96,
+            95
+          ],
+          "nn_hops_to_path": [
+            1,
+            1,
+            2,
+            1,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 2.3333333333333335
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 2.2
+            }
+          }
+        },
+        {
+          "u": 70,
+          "v": 142,
+          "hop_dist": 4,
+          "n_path_nodes": 6,
+          "top_k_nn": [
+            67,
+            94,
+            128,
+            143,
+            16
+          ],
+          "nn_hops_to_path": [
+            0,
+            2,
+            2,
+            1,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 0.0,
+              "mean": 0.0
+            },
+            "k=3": {
+              "min": 0.0,
+              "mean": 2.3333333333333335
+            },
+            "k=5": {
+              "min": 0.0,
+              "mean": 2.2
+            }
+          }
+        },
+        {
+          "u": 116,
+          "v": 152,
+          "hop_dist": 4,
+          "n_path_nodes": 4,
+          "top_k_nn": [
+            87,
+            11,
+            83,
+            84,
+            126
+          ],
+          "nn_hops_to_path": [
+            2,
+            1,
+            2,
+            2,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 3.0
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 3.2
+            }
+          }
+        },
+        {
+          "u": 75,
+          "v": 162,
+          "hop_dist": 3,
+          "n_path_nodes": 3,
+          "top_k_nn": [
+            6,
+            78,
+            1,
+            77,
+            89
+          ],
+          "nn_hops_to_path": [
+            2,
+            3,
+            2,
+            3,
+            4
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 3.0
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 3.6
+            }
+          }
+        },
+        {
+          "u": 97,
+          "v": 176,
+          "hop_dist": 5,
+          "n_path_nodes": 15,
+          "top_k_nn": [
+            11,
+            120,
+            90,
+            83,
+            94
+          ],
+          "nn_hops_to_path": [
+            1,
+            2,
+            2,
+            2,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 3.0
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 3.2
+            }
+          }
+        },
+        {
+          "u": 129,
+          "v": 177,
+          "hop_dist": 4,
+          "n_path_nodes": 3,
+          "top_k_nn": [
+            116,
+            67,
+            128,
+            118,
+            119
+          ],
+          "nn_hops_to_path": [
+            1,
+            2,
+            1,
+            2,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 1.0,
+              "mean": 1.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 2.3333333333333335
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 2.6
+            }
+          }
+        },
+        {
+          "u": 133,
+          "v": 135,
+          "hop_dist": 5,
+          "n_path_nodes": 4,
+          "top_k_nn": [
+            131,
+            132,
+            14,
+            32,
+            134
+          ],
+          "nn_hops_to_path": [
+            1,
+            1,
+            1,
+            0,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 2.6666666666666665
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 2.8
+            }
+          }
+        },
+        {
+          "u": 33,
+          "v": 99,
+          "hop_dist": 4,
+          "n_path_nodes": 17,
+          "top_k_nn": [
+            102,
+            92,
+            171,
+            91,
+            15
+          ],
+          "nn_hops_to_path": [
+            2,
+            1,
+            1,
+            1,
+            0
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 2.3333333333333335
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 2.2
+            }
+          }
+        },
+        {
+          "u": 130,
+          "v": 170,
+          "hop_dist": 3,
+          "n_path_nodes": 2,
+          "top_k_nn": [
+            84,
+            126,
+            101,
+            6,
+            102
+          ],
+          "nn_hops_to_path": [
+            1,
+            1,
+            5,
+            3,
+            3
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 1.0,
+              "mean": 1.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 4.0
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 4.6
+            }
+          }
+        },
+        {
+          "u": 144,
+          "v": 167,
+          "hop_dist": 4,
+          "n_path_nodes": 3,
+          "top_k_nn": [
+            67,
+            116,
+            94,
+            128,
+            143
+          ],
+          "nn_hops_to_path": [
+            1,
+            1,
+            2,
+            2,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 2.3333333333333335
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 2.6
+            }
+          }
+        },
+        {
+          "u": 48,
+          "v": 181,
+          "hop_dist": 3,
+          "n_path_nodes": 2,
+          "top_k_nn": [
+            162,
+            17,
+            4,
+            54,
+            22
+          ],
+          "nn_hops_to_path": [
+            3,
+            1,
+            2,
+            4,
+            3
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 5.0,
+              "mean": 5.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 3.6666666666666665
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 4.4
+            }
+          }
+        },
+        {
+          "u": 129,
+          "v": 175,
+          "hop_dist": 4,
+          "n_path_nodes": 3,
+          "top_k_nn": [
+            83,
+            87,
+            11,
+            116,
+            67
+          ],
+          "nn_hops_to_path": [
+            2,
+            2,
+            1,
+            1,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 4.0,
+              "mean": 4.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 3.0
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 3.0
+            }
+          }
+        },
+        {
+          "u": 118,
+          "v": 153,
+          "hop_dist": 4,
+          "n_path_nodes": 3,
+          "top_k_nn": [
+            11,
+            84,
+            83,
+            102,
+            15
+          ],
+          "nn_hops_to_path": [
+            1,
+            2,
+            2,
+            2,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 1.0,
+              "mean": 1.0
+            },
+            "k=3": {
+              "min": 1.0,
+              "mean": 2.6666666666666665
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 3.2
+            }
+          }
+        },
+        {
+          "u": 1,
+          "v": 73,
+          "hop_dist": 5,
+          "n_path_nodes": 4,
+          "top_k_nn": [
+            181,
+            72,
+            78,
+            77,
+            6
+          ],
+          "nn_hops_to_path": [
+            1,
+            1,
+            2,
+            2,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 3.0,
+              "mean": 3.3333333333333335
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 3.2
+            }
+          }
+        },
+        {
+          "u": 88,
+          "v": 91,
+          "hop_dist": 5,
+          "n_path_nodes": 6,
+          "top_k_nn": [
+            87,
+            11,
+            83,
+            67,
+            70
+          ],
+          "nn_hops_to_path": [
+            1,
+            1,
+            2,
+            2,
+            2
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 3.0,
+              "mean": 3.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 3.0
+            },
+            "k=5": {
+              "min": 2.0,
+              "mean": 3.0
+            }
+          }
+        },
+        {
+          "u": 88,
+          "v": 167,
+          "hop_dist": 4,
+          "n_path_nodes": 3,
+          "top_k_nn": [
+            87,
+            83,
+            116,
+            67,
+            11
+          ],
+          "nn_hops_to_path": [
+            1,
+            2,
+            1,
+            2,
+            1
+          ],
+          "bridge_graph_dist_error": {
+            "k=1": {
+              "min": 2.0,
+              "mean": 2.0
+            },
+            "k=3": {
+              "min": 2.0,
+              "mean": 2.6666666666666665
+            },
+            "k=5": {
+              "min": 1.0,
+              "mean": 2.6
+            }
+          }
+        }
+      ],
+      "path_hit_rate_at_k": {
+        "k=1": 0.15,
+        "k=3": 0.15,
+        "k=5": 0.25
+      },
+      "random_baseline": 0.025683060109289623,
+      "mean_nn_hop_from_path": 1.66,
+      "bridge_graph_dist_error_at_k": {
+        "k=1": {
+          "min_mean": 2.3,
+          "mean_mean": 2.3,
+          "n": 20
+        },
+        "k=3": {
+          "min_mean": 1.6,
+          "mean_mean": 2.8499999999999996,
+          "n": 20
+        },
+        "k=5": {
+          "min_mean": 1.4,
+          "mean_mean": 2.99,
+          "n": 20
+        }
+      },
+      "median_dist": 2.534794807434082,
+      "n_nodes": 185,
+      "graph_idx": 9
+    }
+  ],
+  "summary": {
+    "path_hit_rate@1": {
+      "mean": 0.215,
+      "std": 0.15994790818680105,
+      "median": 0.175,
+      "min": 0.05,
+      "max": 0.55,
+      "n": 10
+    },
+    "path_hit_rate@3": {
+      "mean": 0.43,
+      "std": 0.21756225162774295,
+      "median": 0.375,
+      "min": 0.15,
+      "max": 0.75,
+      "n": 10
+    },
+    "path_hit_rate@5": {
+      "mean": 0.58,
+      "std": 0.23711225658371654,
+      "median": 0.525,
+      "min": 0.25,
+      "max": 0.85,
+      "n": 10
+    },
+    "mean_nn_hop_from_path": {
+      "mean": 1.67,
+      "std": 0.40625662387762307,
+      "median": 1.6400000000000001,
+      "min": 1.16,
+      "max": 2.45,
+      "n": 10
+    },
+    "random_baseline": {
+      "mean": 0.04721371139254103,
+      "std": 0.03523529733354687,
+      "median": 0.03997194950911641,
+      "min": 0.013739669421487605,
+      "max": 0.12685185185185183,
+      "n": 10
+    },
+    "bridge_graph_dist_error@1": {
+      "mean": 3.175,
+      "std": 0.6133922073192648,
+      "median": 3.375,
+      "min": 2.1,
+      "max": 3.9,
+      "n": 10
+    },
+    "bridge_graph_dist_error@3": {
+      "mean": 2.09,
+      "std": 0.3885871845545089,
+      "median": 2.1,
+      "min": 1.6,
+      "max": 2.85,
+      "n": 10
+    },
+    "bridge_graph_dist_error@5": {
+      "mean": 1.795,
+      "std": 0.3774549274048786,
+      "median": 1.65,
+      "min": 1.4,
+      "max": 2.4,
+      "n": 10
+    }
+  }
+}

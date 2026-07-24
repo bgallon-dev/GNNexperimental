@@ -95,6 +95,8 @@ class HyperbolicMessagePassing(nn.Module):
         learnable_c: bool = False,
         activation: str = "relu",
         use_bias: bool = True,
+        agg_scale_init: Optional[float] = None,
+        out_tan_clamp: Optional[float] = None,
     ) -> None:
         super().__init__()
         self.in_dim = in_dim
@@ -120,6 +122,53 @@ class HyperbolicMessagePassing(nn.Module):
         if activation not in _ACTIVATIONS:
             raise ValueError(f"unknown activation: {activation}")
         self._activation = _ACTIVATIONS[activation]
+
+        # Opt-in per-layer brake on the (unbounded) aggregated tangent vector
+        # before the step-4 expmap. The scatter-sum at step 3 grows with
+        # degree / attention mass; with no per-layer brake the deep layers
+        # saturate against the ball boundary within one epoch (see
+        # CLAUDE.md Known-Issues + the geom_stability long-horizon probe).
+        # DEFAULT None => no parameter is registered and forward is
+        # byte-identical => the locked v3.1 encoder.pt still loads
+        # strict=True and the ws1 bit-exact guard still passes. A scale is
+        # created ONLY when a float init is explicitly requested.
+        if agg_scale_init is None:
+            self.agg_scale = None
+        else:
+            # FIXED (non-learnable) brake on the aggregated tangent. It must
+            # NOT be trained: InfoNCE rewards spreading embeddings, so any
+            # task-trained per-layer agg scalar is exploited as a degenerate
+            # spread-maximizing shortcut and slams every layer to the
+            # boundary (observed in smoke, both unbounded and sigmoid-bounded
+            # learnable variants). A constant is a structural hyperparameter
+            # like tangent_scale_init — it damps and cannot be gamed. Stored
+            # as a buffer => not in .parameters(); only registered when
+            # explicitly requested, so the default model's state_dict is
+            # unchanged and the locked encoder.pt still loads strict.
+            if not 0.0 < float(agg_scale_init) <= 1.0:
+                raise ValueError("agg_scale_init must be in (0, 1]")
+            self.register_buffer(
+                "agg_scale", torch.tensor(float(agg_scale_init))
+            )
+
+        # Opt-in FIXED clamp on the step-7 output tangent norm (the
+        # principled "clamp norms" fix, CLAUDE.md Known-Issues). expmap0
+        # output radius = tanh(sqrt(c)*||h_tan||)/sqrt(c), so capping
+        # ||h_tan|| <= tau caps the per-layer ball radius at
+        # tanh(sqrt(c)*tau)/sqrt(c) < 1/sqrt(c) — strictly interior. It is a
+        # per-node CLAMP, not a rescale: nodes with ||h_tan|| <= tau are
+        # untouched, so interior radial variance is preserved (unlike the
+        # uniform rescale the step-7 comment warns about). Untrained =>
+        # InfoNCE cannot game it. Buffer, only registered when requested =>
+        # default state_dict unchanged, locked encoder.pt still loads strict.
+        if out_tan_clamp is None:
+            self.out_tan_clamp = None
+        else:
+            if float(out_tan_clamp) <= 0.0:
+                raise ValueError("out_tan_clamp must be > 0")
+            self.register_buffer(
+                "out_tan_clamp", torch.tensor(float(out_tan_clamp))
+            )
 
     @property
     def c(self) -> Tensor:
@@ -160,6 +209,10 @@ class HyperbolicMessagePassing(nn.Module):
         # 3. sum in tangent space at each receiver
         agg = _scatter_add(msg, dst, dim_size=N)  # (N, in_dim)
 
+        # 3b. opt-in FIXED per-layer brake (default-off; see __init__).
+        if self.agg_scale is not None:
+            agg = agg * self.agg_scale
+
         # 4. back to the ball at each node's basepoint (zero agg → exp at x = x)
         u = P.expmap(agg, x, c)
 
@@ -179,6 +232,13 @@ class HyperbolicMessagePassing(nn.Module):
         # factors per layer and erasing radial variance across nodes.
         h_tan = P.logmap0(h, c)
         h_tan = self._activation(h_tan)
+        # 7b. opt-in FIXED per-node tangent-norm clamp (default-off). Only
+        # rows exceeding tau are pulled back to the tau-sphere; the rest are
+        # untouched (radial variance preserved). Caps the layer's ball
+        # radius and defuses the logmap0->expmap0 boundary attractor.
+        if self.out_tan_clamp is not None:
+            tn = h_tan.norm(dim=-1, keepdim=True, p=2).clamp_min(P.MIN_NORM)
+            h_tan = h_tan * (self.out_tan_clamp / tn).clamp(max=1.0)
         h = P.expmap0(h_tan, c)
 
         # 8. final project

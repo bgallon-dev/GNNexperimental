@@ -1,0 +1,311 @@
+# ============================================================================
+# graph_diagnostics configuration -- Kettle / Spokane corpus + refuge data
+# ============================================================================
+# This config is project-specific: it encodes the three-layer schema revealed
+# by the database (document / extraction / domain). Edit this file as the
+# schema evolves; the diagnostic suite is otherwise generic.
+#
+# Layer key:
+#   L1 (document): Document, Page, Section, Paragraph
+#   L2 (extraction): Mention, Annotation, Claim, ExtractionRun
+#   L3 (domain): Entity, Person, Place, Organization, Refuge, Species,
+#                Habitat, Parcel, Event, Activity, Observation, Measurement,
+#                Period, Year, Concept, SurveyMethod
+# ============================================================================
+
+# --- scope ------------------------------------------------------------------
+# Empty = auto-discover. We keep it empty so new labels from schema drift
+# are noticed rather than silently ignored.
+node_labels: []
+relationship_types: []
+
+# --- structural -------------------------------------------------------------
+allow_self_loops: false
+# NEXT relationships on Paragraph are allowed to multi-edge ONLY if your
+# reading-order construction permits it; we disallow globally and let the
+# layer_invariants check police the NEXT chain separately.
+allow_multi_edges: false
+
+# --- schema -----------------------------------------------------------------
+# Required properties per label. These are the MINIMUM; additional props are
+# fine. Rule of thumb: anything that participates in identity, provenance,
+# or the NER/extraction audit trail goes here.
+required_properties:
+  # --- L1: document ---
+  Document:      [doc_id, file_hash]
+  Page:          [page_id, page_number]
+  Section:       [section_id]
+  Paragraph:     [paragraph_id, paragraph_index]
+
+  # --- L2: extraction ---
+  Mention:       [mention_id, ner_model, extraction_confidence]
+  Annotation:    [annotation_id]
+  Claim:         [claim_id, claim_type, epistemic_status]
+  ExtractionRun: [run_id, run_timestamp]
+
+  # --- L3: domain ---
+  Entity:        [entity_id]
+  Person:        [entity_id, name]
+  Place:         [entity_id, name]
+  Organization:  [entity_id, name]
+  Refuge:        [refuge_id, name]
+  Species:       [entity_id, name, taxon_group]
+  Habitat:       [habitat_type]
+  Parcel:        [parcel_id]
+  Observation:   [observation_id]
+  Measurement:   [measurement_id]
+  Period:        [period_id]
+  Year:          [year_id, year]
+  Event:         [event_id, event_type]
+  Activity:      [activity_type]
+  Concept:       [concept_id]
+  SurveyMethod:  [method_class]
+
+# Per-label unique keys. The schema has BOTH a generic `id` and typed
+# `<label>_id` on most labels -- we treat the typed ids as authoritative
+# because they're stable across the pipeline.
+unique_keys:
+  Document:     doc_id
+  Page:         page_id
+  Section:      section_id
+  Paragraph:    paragraph_id
+  Mention:      mention_id
+  Annotation:   annotation_id
+  Claim:        claim_id
+  ExtractionRun: run_id
+  Entity:       entity_id
+  Person:       entity_id
+  Place:        entity_id
+  Organization: entity_id
+  Refuge:       refuge_id
+  Species:      entity_id
+  Parcel:       parcel_id
+  Observation:  observation_id
+  Measurement:  measurement_id
+  Period:       period_id
+  Year:         year_id
+  Event:        event_id
+  Concept:      concept_id
+
+# --- entity resolution ------------------------------------------------------
+# These rules run against the *entity* layer (L3) -- the goal is to surface
+# near-duplicate Entity / Person / Place / Organization nodes that should
+# probably be merged before they become training targets.
+#
+# The separate ER task (POSSIBLY_REFERS_TO -> REFERS_TO) is evaluated in the
+# `splits` module; these rules are about *dirty entities*, not Mention-Entity
+# supervision.
+entity_res_rules:
+  Person:
+    - {key: name, method: normalized}
+    - {key: name, method: jaro, block_on: tenure_start}
+
+  Place:
+    - {key: name, method: normalized}
+    # county is a decent block for disambiguation (Spokane-WA vs Spokane-KS etc).
+    - {key: name, method: jaro, block_on: county}
+
+  Organization:
+    - {key: name, method: normalized}
+    - {key: name, method: jaro, block_on: org_type}
+
+  Species:
+    # Species names are domain-controlled; exact case-fold is appropriate.
+    - {key: name, method: normalized}
+    # Do NOT run Jaro on Species -- two genus names that differ by a letter
+    # may be legitimately different taxa.
+
+  Refuge:
+    - {key: name, method: normalized}
+
+entity_res_jaro_threshold: 0.92
+
+# --- topology ---------------------------------------------------------------
+# The topology check pulls the lifecycle-clean graph ONCE into a numpy cache
+# and derives every per-scope metric from masks over it. Stats and connected
+# components are EXACT (computed over the full pulled graph). Gromov delta is
+# a sampled, advisory 3-bucket verdict:
+#   - gromov_max_nodes: if a giant component exceeds this, delta is measured
+#     on a connected snowball SUB-SAMPLE (it is no longer a skip gate; every
+#     scope, including end_to_end, now gets a delta).
+#   - gromov_sample_max_nodes: node cap for that snowball sub-sample.
+#   - gromov_landmarks: # of BFS source nodes; all pairwise distances among
+#     them feed the 4-tuple sampling (Borassi-style scalable estimator).
+#   - temporal_max_hops: radius for the one-shot Year-reachability precompute
+#     that replaces the old per-edge [*1..3] expansion in the temporal splits.
+gromov_sample_size: 2000
+gromov_max_nodes: 50000
+gromov_sample_max_nodes: 8000
+gromov_landmarks: 200
+gromov_timeout_sec: 300
+temporal_max_hops: 3
+degree_histogram_bins: 40
+min_component_size_of_interest: 2
+
+# --- splits -----------------------------------------------------------------
+# "er_mention_entity" is the Kettle-specific task: confirmed REFERS_TO edges
+# are positives; POSSIBLY_REFERS_TO are unlabeled candidates (the promotion
+# target). Leakage rule: no Mention may appear in both train and test; no
+# Entity cluster may be split across train/test.
+split_task: er_mention_entity
+split_ratios: [0.8, 0.1, 0.1]
+split_seed: 42
+
+# --- lifecycle / quarantine -------------------------------------------------
+# Nodes matching any of these conditions are EXCLUDED from training.
+# The lifecycle check reports counts per layer; the subgraph extractor
+# honors these filters when materializing training targets.
+lifecycle:
+  exclude_if_deleted: true
+  deleted_property: deleted_at
+  exclude_if_quarantined: true
+  quarantine_property: quarantine_status
+  quarantine_excluded_values: [quarantined, rejected, on_hold]
+  # If access_level is restricted, we probably shouldn't train on it either.
+  exclude_restricted_access: true
+  access_property: access_level
+  access_excluded_values: [restricted, donor_restricted, embargoed]
+
+# --- layer invariants -------------------------------------------------------
+# Each invariant is a (description, cypher-predicate) that must hold for all
+# nodes of the given label. Violations are HIGH findings.
+layer_invariants:
+  Paragraph_has_Section:
+    label: Paragraph
+    must_satisfy: "EXISTS { MATCH (s:Section)-[:HAS_PARAGRAPH]->(n) }"
+    severity: high
+  Section_has_Page:
+    label: Section
+    must_satisfy: "EXISTS { MATCH (p:Page)-[:HAS_SECTION]->(n) }"
+    severity: high
+  Page_has_Document:
+    label: Page
+    must_satisfy: "EXISTS { MATCH (d:Document)-[:HAS_PAGE]->(n) }"
+    severity: high
+  Mention_in_Paragraph:
+    label: Mention
+    must_satisfy: "EXISTS { MATCH (p:Paragraph)-[:CONTAINS_MENTION]->(n) }"
+    severity: high
+  Mention_from_ExtractionRun:
+    label: Mention
+    must_satisfy: "EXISTS { MATCH (r:ExtractionRun)-[:PROCESSED_BY|PRODUCED]->(n) } OR n.run_id IS NOT NULL"
+    severity: medium
+  Claim_has_evidence:
+    label: Claim
+    must_satisfy: "EXISTS { MATCH (n)-[:EVIDENCED_BY]->(:Mention) } OR EXISTS { MATCH (n)-[:SUPPORTS]->() }"
+    severity: medium
+  Observation_at_Place:
+    label: Observation
+    must_satisfy: "EXISTS { MATCH (n)-[:OCCURRED_AT|AT_PLACE|AT_REFUGE]->() }"
+    severity: medium
+  Measurement_has_unit:
+    label: Measurement
+    must_satisfy: "n.unit IS NOT NULL AND (n.numeric_value IS NOT NULL OR n.raw_value IS NOT NULL)"
+    severity: medium
+
+# --- provenance (per-layer conventions) -------------------------------------
+# Different layers have different provenance conventions. The provenance
+# check reads `provenance_property_keys_per_label` if present, falling back
+# to `provenance_property_keys` for anything not listed.
+#
+# L1 nodes: OCR/ingest provenance (file_hash, ocr_engine, ocr_version).
+# L2 nodes: model/run provenance (ner_model, run_id, extraction_confidence).
+# L3 nodes: weaker -- mostly inherited via SOURCED_FROM edges rather than props.
+
+provenance_property_keys: [file_hash]  # fallback; rarely used
+provenance_property_keys_per_label:
+  Document:      [file_hash, archive_ref]
+  Page:          [ocr_engine, ocr_version, ocr_confidence]
+  Paragraph:     [ocr_confidence]
+  Mention:       [ner_model, extraction_confidence, run_id]
+  Annotation:    [ner_model, detection_confidence]
+  Claim:         [extraction_confidence, epistemic_status, run_id]
+  ExtractionRun: [run_id, run_timestamp, config_fingerprint]
+
+provenance_required_labels:
+  - Document
+  - Page
+  - Mention
+  - Claim
+  - ExtractionRun
+
+# --- subgraph extractions for training targets ------------------------------
+# Four named subgraphs corresponding to the four KGR staging targets.
+# The topology module runs Gromov delta on each; the subgraph extractor
+# can materialize any of them to disk (JSONL edge list) for the GNN loader.
+subgraphs:
+  mention_entity_bipartite:
+    description: "Stage 1: Mention <-> Entity, ER supervision signal"
+    include_labels: [Mention, Entity, Person, Place, Organization, Species, Refuge]
+    include_rel_types: [REFERS_TO, POSSIBLY_REFERS_TO]
+    require_lifecycle_clean: true
+
+  domain_only:
+    description: "Stage 2: L3 domain entities and their relations"
+    include_labels:
+      [Entity, Person, Place, Organization, Refuge, Species, Habitat, Parcel,
+       Event, Activity, Observation, Measurement, Period, Year, Concept,
+       SurveyMethod]
+    exclude_rel_types: [CONTAINS_MENTION, POSSIBLY_REFERS_TO, REFERS_TO,
+                        HAS_PAGE, HAS_SECTION, HAS_PARAGRAPH, HAS_CLAIM,
+                        PROCESSED_BY, SOURCED_FROM, EVIDENCED_BY, NEXT]
+    require_lifecycle_clean: true
+
+  containment_tree:
+    description: "Positive control: pure document containment skeleton (HAS_*
+      / CONTAINS_MENTION). Should read as a near-tree -- strongly hyperbolic,
+      and de-hub should detach subtrees, NOT shatter into singletons. If this
+      fails the probe/metric is broken, not the corpus."
+    include_labels: []  # rel-type filter defines the subgraph
+    include_rel_types: [HAS_PAGE, HAS_SECTION, HAS_PARAGRAPH, CONTAINS_MENTION]
+    require_lifecycle_clean: true
+
+  provenance_chain:
+    description: "Research target: provenance / evidence DAG (claims sourced
+      and evidenced from documents). The layer the framework predicts
+      hyperbolic should earn its keep on. Tests genuine-hierarchy vs
+      hub-and-spoke, the question domain_only could not answer (it excludes
+      these edges by spec)."
+    include_labels: []  # rel-type filter defines the subgraph
+    include_rel_types: [HAS_CLAIM, SOURCED_FROM, EVIDENCED_BY, PROCESSED_BY]
+    require_lifecycle_clean: true
+
+  end_to_end:
+    description: "Stage 3: all three layers as one training graph"
+    include_labels: []  # empty = all
+    include_rel_types: []  # empty = all
+    require_lifecycle_clean: true
+
+  temporal_pre_1935:
+    description: "Stage 4a: temporal holdout -- train subgraph (pre-1935)"
+    include_labels: []
+    include_rel_types: []
+    require_lifecycle_clean: true
+    temporal_filter:
+      property: year
+      label: Year
+      cutoff: 1935
+      comparison: "<"
+
+  temporal_post_1935:
+    description: "Stage 4b: temporal holdout -- test subgraph (>= 1935)"
+    include_labels: []
+    include_rel_types: []
+    require_lifecycle_clean: true
+    temporal_filter:
+      property: year
+      label: Year
+      cutoff: 1935
+      comparison: ">="
+
+# --- general ----------------------------------------------------------------
+sample_limit: 25
+enabled_checks:
+  - lifecycle           # NEW -- run first, subsequent checks respect it
+  - structural
+  - schema
+  - layer_invariants    # NEW
+  - entity_res
+  - topology
+  - splits
+  - provenance

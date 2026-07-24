@@ -111,7 +111,7 @@ class HyperbolicMessagePassing(nn.Module):
         # saturates tanh in mobius_matvec and pins points to the boundary.
         # See CLAUDE.md "Known Issues: Poincaré ball saturation".
         self.weight = nn.Parameter(torch.empty(out_dim, in_dim))
-        nn.init.xavier_uniform_(self.weight, gain=0.05)
+        nn.init.xavier_uniform_(self.weight, gain=0.5)  # per-layer contraction ~0.35
         if use_bias:
             self.bias = nn.Parameter(torch.zeros(out_dim))
         else:

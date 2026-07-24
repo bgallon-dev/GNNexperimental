@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KGR · Neo4j Explorer</title>
+<style>
+  :root{
+    --bg:#0a0e15; --bg2:#10161f; --bg3:#151d28; --line:#232e3d;
+    --ink:#e9eff5; --muted:#8593a4; --faint:#5b6879;
+    --accent:#3ad6c5; --accent-2:#f0a86a; --good:#63d69b; --bad:#e26d6d;
+    --glow:rgba(58,214,197,.4);
+    --mono:ui-monospace,"SF Mono","JetBrains Mono","Cascadia Code",Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sans-serif;
+  }
+  @media (prefers-color-scheme:light){:root{
+    --bg:#eef2f3; --bg2:#fff; --bg3:#e7eef0; --line:#d3dde1;
+    --ink:#0d1720; --muted:#54636f; --faint:#8496a1;
+    --accent:#0d9488; --accent-2:#c2681f; --good:#1a9e63; --bad:#c0392b;
+    --glow:rgba(13,148,136,.2);
+  }}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+    font-size:14px;line-height:1.5}
+  a{color:var(--accent)}
+  .mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+  header{display:flex;align-items:center;gap:14px;padding:12px 20px;
+    border-bottom:1px solid var(--line);background:var(--bg2);position:sticky;top:0;z-index:5}
+  header .brand{font-family:var(--mono);font-weight:600}
+  header .brand b{color:var(--accent)}
+  header .stat{font-family:var(--mono);font-size:12px;color:var(--muted);margin-left:auto}
+  .pill{font-family:var(--mono);font-size:11px;padding:3px 9px;border-radius:999px;
+    border:1px solid var(--line);color:var(--muted)}
+  .pill.ok{color:var(--good);border-color:color-mix(in srgb,var(--good) 40%,var(--line))}
+  .pill.no{color:var(--bad);border-color:color-mix(in srgb,var(--bad) 40%,var(--line))}
+  main{display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:calc(100vh - 51px)}
+  @media(max-width:900px){main{grid-template-columns:1fr}}
+  .panel{padding:20px;border-right:1px solid var(--line);min-width:0}
+  .panel:last-child{border-right:none}
+  h2{font-family:var(--mono);font-size:13px;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--accent);margin:0 0 4px}
+  .sub{color:var(--muted);font-size:12.5px;margin:0 0 14px}
+  textarea,input{width:100%;background:var(--bg2);color:var(--ink);border:1px solid var(--line);
+    border-radius:8px;font-family:var(--mono);font-size:13px;padding:10px}
+  textarea{min-height:78px;resize:vertical}
+  textarea:focus,input:focus{outline:none;border-color:var(--accent)}
+  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px}
+  button{font-family:var(--mono);font-size:13px;background:var(--accent);color:#04140f;
+    border:none;border-radius:8px;padding:9px 15px;cursor:pointer;font-weight:600}
+  button.ghost{background:var(--bg3);color:var(--ink);border:1px solid var(--line)}
+  button:disabled{opacity:.5;cursor:default}
+  label.ctl{font-family:var(--mono);font-size:12px;color:var(--muted);display:flex;
+    align-items:center;gap:6px}
+  label.ctl input{width:66px;padding:5px 7px}
+  .out{margin-top:16px}
+  table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12.5px;
+    font-variant-numeric:tabular-nums}
+  .scroll{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+  th{text-align:left;color:var(--faint);font-weight:500;padding:7px 10px;
+    border-bottom:1px solid var(--line);white-space:nowrap;font-size:11px;
+    letter-spacing:.04em;text-transform:uppercase}
+  td{padding:6px 10px;border-bottom:1px solid color-mix(in srgb,var(--line) 55%,transparent);
+    white-space:nowrap;vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  .node-list{max-height:200px;overflow:auto;border:1px solid var(--line);border-radius:8px;
+    padding:6px;margin-top:12px;display:flex;flex-wrap:wrap;gap:6px}
+  .chip{font-family:var(--mono);font-size:11.5px;padding:4px 9px;border-radius:6px;
+    border:1px solid var(--line);background:var(--bg2);color:var(--muted);cursor:pointer;
+    user-select:none}
+  .chip:hover{border-color:var(--accent);color:var(--ink)}
+  .chip.anchor{background:var(--accent);color:#04140f;border-color:var(--accent);font-weight:600}
+  .lbl{color:var(--accent)}
+  .rk{color:var(--accent);font-weight:600}
+  .rank-card{display:grid;grid-template-columns:34px 1fr auto;gap:12px;align-items:baseline;
+    padding:9px 12px;border:1px solid var(--line);border-radius:8px;margin-top:8px;
+    background:var(--bg2)}
+  .rank-card .nm{font-weight:600;color:var(--ink)}
+  .rank-card .meta{font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-top:2px}
+  .rank-card .sc{font-family:var(--mono);color:var(--accent);text-align:right}
+  .rank-card .sc small{color:var(--faint);display:block}
+  .note{font-size:12px;color:var(--faint);margin-top:12px;line-height:1.5}
+  .err{color:var(--bad);font-family:var(--mono);font-size:12.5px;margin-top:12px;
+    white-space:pre-wrap}
+  .spin{display:inline-block;width:12px;height:12px;border:2px solid var(--line);
+    border-top-color:var(--accent);border-radius:50%;animation:sp .7s linear infinite;
+    vertical-align:middle}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  @media(prefers-reduced-motion:reduce){.spin{animation:none}}
+</style>
+</head>
+<body>
+<header>
+  <span class="brand"><b>KGR</b> · neo4j explorer</span>
+  <span class="pill" id="hModel">model …</span>
+  <span class="pill" id="hDb">neo4j …</span>
+  <span class="stat" id="hStat"></span>
+</header>
+<main>
+  <!-- ============ Cypher panel ============ -->
+  <section class="panel">
+    <h2>Cypher browser · read-only</h2>
+    <p class="sub">Run a read query against the live graph. Writes are blocked.</p>
+    <textarea id="cy" spellcheck="false">MATCH (n:Claim)-[:EVIDENCED_BY]->(p)
+RETURN n, p LIMIT 10</textarea>
+    <div class="row">
+      <button id="runCy">Run query</button>
+      <button class="ghost" id="exCy1">claims</button>
+      <button class="ghost" id="exCy2">labels</button>
+      <button class="ghost" id="exCy3">sample</button>
+    </div>
+    <div class="out" id="cyOut"></div>
+  </section>
+
+  <!-- ============ KGR context panel ============ -->
+  <section class="panel">
+    <h2>KGR context · rank a live neighborhood</h2>
+    <p class="sub">Search an entity to centre the model on it — or sample a random
+      neighborhood. Then click nodes to set anchor(s); the model re-ranks instantly.</p>
+    <div class="row" style="margin-top:0">
+      <input id="qNode" placeholder="search an entity — e.g. 'labor', 'Place', or a node id"
+        spellcheck="false" style="flex:1;min-width:170px">
+      <button id="doSearch">Search</button>
+    </div>
+    <div id="searchResults"></div>
+    <div class="row">
+      <button id="loadNb" class="ghost">Random neighborhood</button>
+      <label class="ctl">seed <input id="seed" type="number" value="42"></label>
+      <label class="ctl">nodes <input id="maxn" type="number" value="250"></label>
+      <label class="ctl">top-k <input id="topk" type="number" value="12"></label>
+    </div>
+    <div id="anchorHint" style="display:none">
+      <div class="note" style="margin:12px 0 5px">anchor(s) — the model ranks by
+        the nearest of these (click a tile below to remove; add from the pool):</div>
+      <div id="anchorRow" class="node-list" style="margin-top:0"></div>
+      <input id="nodeFilter" placeholder="filter the neighborhood — label · name · #id"
+        style="margin-top:12px" spellcheck="false">
+      <div id="nodeList" class="node-list"></div>
+    </div>
+    <div class="out" id="ctxOut"></div>
+
+    <div id="askBox" style="display:none;margin-top:18px;border-top:1px solid var(--line);padding-top:16px">
+      <h2 style="margin-bottom:4px">Ask a local LLM over the context</h2>
+      <p class="sub">The downstream half of KGR: the model reads the ranked subgraph
+        and answers. <span id="llmModel" class="mono" style="color:var(--faint)"></span></p>
+      <textarea id="question" spellcheck="false"></textarea>
+      <div id="exQ" class="node-list" style="margin-top:10px"></div>
+      <div class="row">
+        <button id="askBtn">Ask · KGR context</button>
+        <button id="cmpBtn" class="ghost">Compare KGR vs BFS</button>
+        <label class="ctl">ctx-k <input id="askk" type="number" value="10"></label>
+      </div>
+      <div id="askOut" class="out"></div>
+    </div>
+  </section>
+</main>
+
+<script>
+"use strict";
+const $=s=>document.querySelector(s);
+async function api(path,body){
+  const r=await fetch(path,{method:body?"POST":"GET",
+    headers:{"content-type":"application/json"},
+    body:body?JSON.stringify(body):undefined});
+  const txt=await r.text();
+  try{return JSON.parse(txt);}
+  catch(e){return {error:"server "+r.status+": "+txt.replace(/<[^>]+>/g,"").trim().slice(0,160)};}
+}
+function esc(s){return String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));}
+
+/* ---- health ---- */
+(async()=>{
+  const h=await api("/api/health");
+  $("#hModel").className="pill "+(h.model?"ok":"no");
+  $("#hModel").textContent=h.model?"model ✓":"model ✗";
+  $("#hDb").className="pill "+(h.neo4j?"ok":"no");
+  $("#hDb").textContent=h.neo4j?"neo4j ✓":"neo4j ✗";
+  if(h.db&&h.db.nodes)$("#hStat").textContent=
+    h.db.nodes.toLocaleString()+" nodes · "+h.db.rels.toLocaleString()+" rels";
+  else if(h.error)$("#hStat").textContent=h.error;
+})();
+
+/* ---- cypher ---- */
+async function runCypher(){
+  $("#cyOut").innerHTML='<span class="spin"></span>';
+  const r=await api("/api/cypher",{cypher:$("#cy").value});
+  if(r.error){$("#cyOut").innerHTML='<div class="err">'+esc(r.error)+'</div>';return;}
+  if(!r.rows.length){$("#cyOut").innerHTML='<div class="note">0 rows.</div>';return;}
+  const looksNode=r.rows.some(row=>Object.values(row).some(v=>v&&v._node));
+  let html='<div class="scroll"><table><thead><tr>'+
+    r.columns.map(c=>'<th>'+esc(c)+'</th>').join('')+'</tr></thead><tbody>';
+  for(const row of r.rows){
+    html+='<tr>'+r.columns.map(c=>{
+      const v=row[c];
+      if(v&&v._node){
+        const props=Object.entries(v.props).slice(0,3)
+          .map(([k,x])=>k+'='+esc(x)).join(' · ');
+        return '<td><span class="lbl">'+esc(v.labels.join(':'))+'</span> #'+v.id+
+               '<div style="color:var(--muted)">'+props+'</div></td>';
+      }
+      return '<td>'+esc(v===null?'∅':v)+'</td>';
+    }).join('')+'</tr>';
+  }
+  html+='</tbody></table></div>';
+  if(r.truncated)html+='<div class="note">showing first 200 rows.</div>';
+  $("#cyOut").innerHTML=html;
+}
+$("#runCy").onclick=runCypher;
+$("#exCy1").onclick=()=>{$("#cy").value="MATCH (n:Claim)-[:EVIDENCED_BY]->(p)\nRETURN n, p LIMIT 10";};
+$("#exCy2").onclick=()=>{$("#cy").value="MATCH (n) RETURN labels(n)[0] AS label, count(*) AS n\nORDER BY n DESC LIMIT 15";runCypher();};
+$("#exCy3").onclick=()=>{$("#cy").value="MATCH (n) RETURN n LIMIT 12";runCypher();};
+
+/* ---- KGR context ---- */
+let TOKEN=null,ANCHORS=new Set(),NODES=[];
+function applyLoaded(r){
+  if(r.error){$("#ctxOut").innerHTML='<div class="err">'+esc(r.error)+'</div>';return false;}
+  TOKEN=r.token;NODES=r.nodes;ANCHORS=new Set([r.anchor_id]);
+  renderNodeList();reorder();
+  if(LLM_OK){$("#askBox").style.display="block";suggestQuestions();}
+  return true;
+}
+function suggestQuestions(){
+  // adapt the default question to what's actually in this neighborhood
+  const yrs={};let anchorLbl="these entities";
+  const a=NODES.find(n=>n.id===[...ANCHORS][0]);
+  if(a&&a.labels&&a.labels[0])anchorLbl="this "+a.labels[0].toLowerCase();
+  NODES.forEach(n=>{const y=n.props&&n.props.year;if(y)yrs[y]=(yrs[y]||0)+1;});
+  const domYear=Object.keys(yrs).sort((x,y)=>yrs[y]-yrs[x])[0];
+  const ex=[];
+  if(domYear)ex.push(["events in "+domYear,
+    "According to the context, what events and observations occurred in "+domYear+
+    "? Group by event type and include node ids and confidence values."]);
+  ex.push(["summarise",
+    "Summarise the key events and observations in this context, grouped by type, citing node ids."]);
+  ex.push(["how connected",
+    "How is "+anchorLbl+" connected to the other entities in the context? Use the RELATIONS."]);
+  ex.push(["what type of place/period",
+    "Based on the context, what time period and kinds of activity does this neighborhood describe?"]);
+  $("#question").value=ex[0][1];
+  $("#exQ").innerHTML=ex.map((e,i)=>'<span class="chip" data-i="'+i+'">'+esc(e[0])+'</span>').join("");
+  $("#exQ").querySelectorAll(".chip").forEach(c=>c.onclick=()=>{
+    $("#question").value=ex[+c.dataset.i][1];});
+}
+async function loadNb(){
+  $("#ctxOut").innerHTML='<span class="spin"></span> sampling + embedding a live neighborhood (~20-40s)…';
+  $("#loadNb").disabled=true;
+  const r=await api("/api/load",{seed:+$("#seed").value,max_nodes:+$("#maxn").value});
+  $("#loadNb").disabled=false;applyLoaded(r);
+}
+/* ---- anchor search ---- */
+async function doSearch(){
+  const q=$("#qNode").value.trim();
+  if(q.length<2&&!/^\d+$/.test(q)){$("#searchResults").innerHTML=
+    '<div class="note">type at least 2 characters.</div>';return;}
+  $("#searchResults").innerHTML='<span class="spin"></span> searching…';
+  const r=await api("/api/search",{q});
+  if(r.error){$("#searchResults").innerHTML='<div class="err">'+esc(r.error)+'</div>';return;}
+  if(!r.results.length){$("#searchResults").innerHTML='<div class="note">no matches.</div>';return;}
+  $("#searchResults").innerHTML='<div class="node-list" style="max-height:150px">'+
+    r.results.map(n=>{const lab=(n.labels[0]||"?");
+      return '<span class="chip" data-id="'+n.id+'" title="'+esc(n.name)+'">'+
+        esc(lab)+':'+esc((n.name||"").slice(0,20))+' <span style="opacity:.6">#'+n.id+'</span></span>';
+    }).join('')+'</div><div class="note">click a result to centre the model on it.</div>';
+  $("#searchResults").querySelectorAll(".chip").forEach(c=>c.onclick=()=>loadAnchor(+c.dataset.id));
+}
+async function loadAnchor(id){
+  $("#ctxOut").innerHTML='<span class="spin"></span> centring a neighborhood on #'+id+
+    ' + embedding (first call builds the graph cache, ~10-30s)…';
+  const r=await api("/api/load_anchor",{node_id:id,max_nodes:+$("#maxn").value});
+  applyLoaded(r);
+}
+function chipHtml(n,isAnchor){
+  const lab=(n.labels&&n.labels[0])||"?";
+  const nm=(n.name||"").slice(0,16);
+  const propBits=Object.entries(n.props||{}).map(([k,v])=>k+"="+v).join(" · ");
+  return '<span class="chip'+(isAnchor?" anchor":"")+'" data-id="'+n.id+'" '+
+    'title="'+esc(lab+":"+n.name+"  #"+n.id+(propBits?"\n"+propBits:""))+'">'+
+    esc(lab)+':'+esc(nm)+' <span style="opacity:.6">#'+n.id+'</span></span>';
+}
+function bindChips(el){
+  el.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{
+    const id=+c.dataset.id;
+    if(ANCHORS.has(id)){if(ANCHORS.size>1)ANCHORS.delete(id);}else ANCHORS.add(id);
+    renderNodeList();reorder();
+  });
+}
+function renderNodeList(){
+  $("#anchorHint").style.display="block";
+  // pinned anchors row
+  const ar=$("#anchorRow");
+  ar.innerHTML=[...ANCHORS].map(id=>{
+    const n=NODES.find(x=>x.id===id)||{id,labels:[],name:String(id),props:{}};
+    return chipHtml(n,true);
+  }).join("");
+  bindChips(ar);
+  // filtered pool (non-anchors)
+  const q=($("#nodeFilter").value||"").toLowerCase();
+  const pool=NODES.filter(n=>!ANCHORS.has(n.id)).filter(n=>{
+    if(!q)return true;
+    const hay=((n.labels[0]||"")+" "+n.name+" #"+n.id).toLowerCase();
+    return hay.includes(q);
+  }).slice(0,120);
+  const el=$("#nodeList");el.style.display="flex";
+  el.innerHTML=pool.map(n=>chipHtml(n,false)).join("")||
+    '<span class="note" style="padding:6px">no match</span>';
+  bindChips(el);
+}
+async function reorder(){
+  if(!TOKEN)return;
+  const r=await api("/api/reorder",{token:TOKEN,anchors:[...ANCHORS],
+    top_k:+$("#topk").value});
+  if(r.error){$("#ctxOut").innerHTML='<div class="err">'+esc(r.error)+'</div>';return;}
+  const aNames=[...ANCHORS].map(id=>{const n=NODES.find(x=>x.id===id);
+    return n?((n.labels[0]||"?")+":"+(n.name||id)+" #"+id):("#"+id);}).join("  +  ");
+  let html='<div class="note">anchors: <b class="lbl">'+esc(aNames)+
+    '</b> · '+r.n_candidates+' candidates · score-spread '+r.spread+'</div>';
+  for(const it of r.items){
+    const props=Object.entries(it.props||{}).slice(0,3)
+      .map(([k,v])=>k+'='+esc(v)).join(' · ');
+    html+='<div class="rank-card"><div class="rk">'+it.rank+'</div>'+
+      '<div><div class="nm"><span class="lbl">'+esc((it.labels[0]||"?"))+'</span> '+
+      esc(it.name)+'</div><div class="meta">#'+it.id+' · '+esc(it.rationale)+
+      (props?' · '+props:'')+'</div></div>'+
+      '<div class="sc">'+it.score.toFixed(3)+'<small>score</small></div></div>';
+  }
+  $("#ctxOut").innerHTML=html;
+}
+$("#loadNb").onclick=loadNb;
+$("#doSearch").onclick=doSearch;
+$("#qNode").addEventListener("keydown",e=>{if(e.key==="Enter")doSearch();});
+document.addEventListener("input",e=>{if(e.target.id==="nodeFilter")renderNodeList();});
+
+/* ---- LLM Q&A ---- */
+let LLM_OK=false;
+(async()=>{
+  const l=await api("/api/llm");
+  LLM_OK=l.available;
+  $("#llmModel").textContent=l.available?("model: "+l.default):"(no local LLM found — start LM Studio :1234 or Ollama :11434)";
+  if(!l.available)$("#llmModel").style.color="var(--bad)";
+})();
+function ansCard(title,r){
+  if(r.error)return '<div class="panel" style="margin-top:12px"><div class="bar">'+esc(title)+
+    '</div><div class="body"><div class="err" style="margin:8px 12px">'+esc(r.error)+'</div></div></div>';
+  return '<div class="panel" style="margin-top:12px"><div class="bar"><span class="dot"></span> '+
+    esc(title)+' · '+r.n_context_nodes+' ctx nodes · '+esc(r.model)+'</div>'+
+    '<div class="body" style="padding:12px 14px;white-space:pre-wrap;font-family:var(--sans);'+
+    'font-size:13.5px;line-height:1.55">'+esc(r.answer.trim())+
+    '</div><details style="border-top:1px solid var(--line)"><summary style="cursor:pointer;'+
+    'padding:8px 14px;color:var(--muted);font-family:var(--mono);font-size:11.5px">context sent</summary>'+
+    '<pre style="margin:0;padding:10px 14px;overflow-x:auto;font-family:var(--mono);'+
+    'font-size:11px;color:var(--muted);white-space:pre">'+esc(r.context||"")+'</pre></details></div>';
+}
+async function ask(mode,label){
+  const q=$("#question").value.trim();if(!q||!TOKEN)return null;
+  return api("/api/ask",{token:TOKEN,anchors:[...ANCHORS],question:q,
+    mode:mode,top_k:+$("#askk").value});
+}
+$("#askBtn").onclick=async()=>{
+  $("#askOut").innerHTML='<span class="spin"></span> the LLM is reading the KGR-ranked context…';
+  const r=await ask("kgr");$("#askOut").innerHTML=ansCard("KGR-ranked context",r);
+};
+$("#cmpBtn").onclick=async()=>{
+  // SEQUENTIAL, not concurrent: a single-model local server can 5xx if
+  // hit with two generations at once. Show KGR first, then BFS.
+  $("#cmpBtn").disabled=true;$("#askBtn").disabled=true;
+  $("#askOut").innerHTML='<span class="spin"></span> KGR-ranked context…';
+  const k=await ask("kgr");
+  $("#askOut").innerHTML=ansCard("KGR-ranked context",k)+
+    '<div class="note" style="margin-top:12px"><span class="spin"></span> now the BFS-order baseline…</div>';
+  const b=await ask("bfs");
+  $("#askOut").innerHTML=ansCard("KGR-ranked context",k)+
+    ansCard("BFS-order context (baseline)",b);
+  $("#cmpBtn").disabled=false;$("#askBtn").disabled=false;
+};
+</script>
+</body>
+</html>

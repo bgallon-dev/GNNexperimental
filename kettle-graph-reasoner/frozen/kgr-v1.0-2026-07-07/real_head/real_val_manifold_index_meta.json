@@ -1,0 +1,20 @@
+{
+  "index_version": "kgr-v3.1",
+  "run_dir": "runs\\v3.1-real-head-hyp-h128-l4-seed0",
+  "corpus": "src/data/corpus/real_domain_eval_ft",
+  "split": "val",
+  "split_seed": 0,
+  "task": 2,
+  "n_nodes": 7705,
+  "n_graphs": 20,
+  "dim": 128,
+  "model": "hyperbolic",
+  "curvature": 1.0,
+  "query_head_arch": "qh1",
+  "encoder_sha256": "ed8139dc8209b52ce1ab6b19bd7066561b848308ab052f3ceafed4bcca8b7ff5",
+  "query_encoder_sha256": "a4173a5276cc40658ab8f557d26d8917c6a51aa9b96492f24f5fe9a52483a2ea",
+  "baseline_manifest_ref": "runs\\v3.1-baseline-hyp-h128-l4-seed1\\baseline_manifest.json",
+  "tau_frac": 0.0001,
+  "depth_divisor": 5,
+  "collapse_frac": 0.12316677482154445
+}

@@ -99,6 +99,14 @@ def _build_task_tensors(npz: np.lib.npyio.NpzFile, j: int) -> dict:
 
 
 def _split_files(files: list[Path], split: str, seed: int) -> list[Path]:
+    # "all" — every graph, in deterministic filename order. Additive and
+    # read-only: it never changes train/val/test selection. Intended for
+    # evaluating a frozen model on a dedicated eval corpus (e.g. the
+    # small real-domain corpora) where a 10% val slice is too few graphs
+    # to be statistically meaningful.
+    if split == "all":
+        return list(files)
+
     rng = np.random.default_rng(seed)
     idx = np.arange(len(files))
     rng.shuffle(idx)
@@ -123,6 +131,8 @@ class CorpusDataset(Dataset):
         split: str = "train",
         split_seed: int = 0,
         cache_in_memory: bool = True,
+        cache_tasks: bool = True,
+        include_tasks: Optional[set[int]] = None,
     ) -> None:
         corpus_dir = Path(corpus_dir)
         files = sorted(corpus_dir.glob("graph_*.npz"))
@@ -130,22 +140,43 @@ class CorpusDataset(Dataset):
             raise FileNotFoundError(f"no graph_*.npz under {corpus_dir}")
         self.files = _split_files(files, split, split_seed)
         self.cache_in_memory = cache_in_memory
+        self.cache_tasks = cache_tasks
         self._graph_cache: dict[int, dict] = {}
+        # Task cache mirrors _graph_cache. The synthetic tier-1 corpus has
+        # many task slots per graph; reopening the NPZ once per __getitem__
+        # in __getitem__ is measurable on cloud nodes where wallclock-per-
+        # step is the bottleneck. Memory cost is tiny: each task is one
+        # (N,) labels array + (18,) query + 1 int → a few KB. (Set
+        # cache_tasks=False to fall back to the original path.)
+        self._task_cache: dict[tuple[int, int], dict] = {}
 
         # Build flat index of (graph_idx, task_idx) pairs. n_tasks is a
-        # scalar in each NPZ — cheap to read up-front.
+        # scalar in each NPZ — cheap to read up-front. When include_tasks
+        # is set, only index tasks whose type is in the set — excluded
+        # tasks never enter the DataLoader, so they can't contaminate the
+        # scoring head or contribute gradient noise.
         self.index: list[tuple[int, int]] = []
         for gi, f in enumerate(self.files):
             with np.load(f) as npz:
                 n_tasks = int(npz["n_tasks"])
-            for j in range(n_tasks):
-                self.index.append((gi, j))
+                for j in range(n_tasks):
+                    if include_tasks is not None:
+                        tt = int(npz[f"task_{j}_type"])
+                        if tt not in include_tasks:
+                            continue
+                    self.index.append((gi, j))
 
-        # Expose dims for model construction.
-        self.node_feat_dim = 32
+        # Expose dims for model construction. node_feat_dim is read off
+        # the first graph so feature-extended corpora (e.g. +landmark
+        # dims, V2 MVP-1) train without code changes; 32 = tier1 default.
+        try:
+            with np.load(self.files[0]) as _z0:
+                self.node_feat_dim = int(_z0["x"].shape[1])
+        except Exception:
+            self.node_feat_dim = 32
         self.edge_feat_dim_schema = EDGE_DESC_DIM
         self.node_feat_dim_schema = NODE_DESC_DIM
-        self.query_dim = 9
+        self.query_dim = 18
         self.num_edge_types_max = MAX_EDGE_TYPES
 
     def __len__(self) -> int:
@@ -160,11 +191,21 @@ class CorpusDataset(Dataset):
             self._graph_cache[gi] = graph
         return graph
 
+    def _get_task(self, gi: int, j: int) -> dict:
+        if self.cache_tasks:
+            cached = self._task_cache.get((gi, j))
+            if cached is not None:
+                return cached
+        with np.load(self.files[gi]) as npz:
+            task = _build_task_tensors(npz, j)
+        if self.cache_tasks:
+            self._task_cache[(gi, j)] = task
+        return task
+
     def __getitem__(self, i: int) -> Sample:
         gi, j = self.index[i]
         graph = self._get_graph(gi)
-        with np.load(self.files[gi]) as npz:
-            task = _build_task_tensors(npz, j)
+        task = self._get_task(gi, j)
         return Sample(
             x=graph["x"],
             edge_index=graph["edge_index"],

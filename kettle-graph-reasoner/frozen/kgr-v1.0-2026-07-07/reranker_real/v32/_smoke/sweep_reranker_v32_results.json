@@ -1,0 +1,43 @@
+{
+  "config": "src\\modelsv3\\sweep_config_reranker_real_v32.json",
+  "ws3_bar": {},
+  "cells": {
+    "task2_seed0": {
+      "state": "complete",
+      "task": 2,
+      "seed": 0,
+      "v31_ndcg@10": 0.5575367182658688,
+      "hybrid_ndcg@10": 0.5744477911277772,
+      "oracle_ndcg@10": 0.8456486913200757,
+      "gap_closed_frac": 0.05869618219138247,
+      "regression_vs_retriever": false,
+      "residual_deployed": true,
+      "trained_gap_closed_frac": 0.05869618219138247,
+      "trained_regression": false,
+      "learned_scale": 0.5681349635124207,
+      "deployed_scale": 0.5681349635124207
+    }
+  },
+  "gate": {
+    "by_task": {
+      "2": {
+        "n_seeds": 1,
+        "v31_ndcg@10_mean": 0.5575367182658688,
+        "hybrid_ndcg@10_mean": 0.5744477911277772,
+        "hybrid_ndcg@10_std": 0.0,
+        "gap_closed_frac_mean": 0.05869618219138247,
+        "trained_gap_closed_frac_mean": 0.05869618219138247,
+        "n_residual_deployed": 1,
+        "ws3_pertask_gap_closed": null,
+        "beats_ws3": false,
+        "regression": false,
+        "is_geometry_sensitive": false
+      }
+    },
+    "geometry_tasks_beating_ws3": 0,
+    "geometry_tasks_total": 0,
+    "any_regression": false,
+    "acceptance_pass": false
+  },
+  "wall_seconds": 76.2
+}

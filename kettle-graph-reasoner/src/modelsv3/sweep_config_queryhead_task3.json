@@ -1,0 +1,26 @@
+{
+  "_comment": "Task-3 query-head sweep (the reframed lever from the task-3 escalation FINAL in PHASE1_FINDINGS.md). Phase-1 proved task-3 multi-hop relevance IS anchor-relative BFS-hop structure (label~hop r=+0.71) but the qh1 retriever is blind to it (model~hop r=+0.14) and cannot localise the anchor (retriever top-1 vs true-anchor hop spearman median 0.34) -- a RETRIEVAL/query-head problem, not a reranker one. qh1 was the only head ever tried for task 3 (WS2); it missed the WS2 cross-task bar by 0.145. This sweeps qh1 (in-sweep reference, same encoder SHA / seeds / eval -> apples-to-apples and harness self-check) vs qh2/qh3 (more expressive heads, never tried for task 3). FROZEN encoder = the locked v3.1 baseline (h128/l4), SHA-asserted, skip-stage-a (task-invariant frozen guarantee; the query-head sweep's cross-task intrinsic-edge-prec equality does NOT apply per-task -- see sweep_taskdiversity.py:21-24). The 0.52 ndcg@10 gate is the v3.1 cross-task bar, reported for continuity ONLY; task 3 is hard (oracle ~0.749, qh1 ~0.313) so the REAL success criterion is: does qh2 or qh3 beat the qh1 in-sweep incumbent by more than the combined 3-seed noise (floor 0.01)? That would raise the deployed task-3 retriever (absolute headroom 0.324 -> 0.749).",
+  "baseline_dir": "runs/v3.1-baseline-hyp-h128-l4-seed1",
+  "encoder_path": "runs/v3.1-baseline-hyp-h128-l4-seed1/encoder.pt",
+  "task": 3,
+  "corpus": "src/data/corpus/tier1",
+  "model": "hyperbolic",
+  "out_root": "runs/sweep_queryhead_task3",
+  "hidden_dim": 128,
+  "num_layers": 4,
+  "curvature": 1.0,
+  "query_epochs": 10,
+  "lr_query": 0.0003,
+  "stage_b_loss": "pairwise",
+  "log_every": 200,
+  "archs": ["qh1", "qh2", "qh3"],
+  "norms": ["layernorm", "rmsnorm"],
+  "norm_relevant_archs": ["qh2", "qh3"],
+  "seeds": [0, 1, 2],
+  "gate": {
+    "ndcg10_target": 0.52,
+    "metric": "ndcg@10",
+    "incumbent_arch": "qh1",
+    "noise_floor_min": 0.01
+  }
+}

@@ -72,6 +72,8 @@ class KettleGraphReasoner(nn.Module):
         log_depth: bool = False,
         concat_depth: bool = False,
         tangent_scale_init: float = 0.15,
+        hyp_dist_features: bool = False,
+        init_dist_features: bool = False,
     ) -> None:
         super().__init__()
         self.hidden_dim = hidden_dim
@@ -82,6 +84,8 @@ class KettleGraphReasoner(nn.Module):
         # logmap0(h_L). If this lifts multi-hop tasks, depth info is being
         # collapsed by the final-round-only head; justifies full AttnRes work.
         self.concat_depth = bool(concat_depth)
+        self.hyp_dist_features = bool(hyp_dist_features)
+        self.init_dist_features = bool(init_dist_features)
         # Depth concat needs per-round tensors, so force-enable logging.
         self.log_depth = bool(log_depth) or self.concat_depth
         # Subspace partitioning: when > 0, the first k tangent-at-origin
@@ -183,24 +187,31 @@ class KettleGraphReasoner(nn.Module):
         prox_dim = (hidden_dim - k if k > 0 else hidden_dim)
         hier_dim = k if k > 0 else hidden_dim
         depth_mul = num_layers if self.concat_depth else 1
+        # hyp_dist_features: +1 scalar (dist(h_i, h_q)) for node heads,
+        # +2 scalars (dist(h_s, h_q), dist(h_d, h_q)) for edge heads.
+        # Gives the loss a direct gradient pathway through ||h|| so the
+        # radial axis of the Poincaré ball is visible to the scoring
+        # function.  See: origin-collapse diagnostic (task 3 alone).
+        nd = (1 if self.hyp_dist_features else 0) + (1 if self.init_dist_features else 0)
+        ed = (2 if self.hyp_dist_features else 0) + (2 if self.init_dist_features else 0)
         self.node_score = nn.Sequential(
-            nn.Linear(prox_dim * depth_mul + hidden_dim, hidden_dim),
+            nn.Linear(prox_dim * depth_mul + hidden_dim + nd, hidden_dim),
             nn.ReLU(),
             nn.Linear(hidden_dim, 1),
         )
         self.edge_score = nn.Sequential(
-            nn.Linear(prox_dim * depth_mul * 2 + type_dim + hidden_dim, hidden_dim),
+            nn.Linear(prox_dim * depth_mul * 2 + type_dim + hidden_dim + ed, hidden_dim),
             nn.ReLU(),
             nn.Linear(hidden_dim, 1),
         )
         if k > 0:
             self.node_score_hier = nn.Sequential(
-                nn.Linear(hier_dim * depth_mul + hidden_dim, hidden_dim),
+                nn.Linear(hier_dim * depth_mul + hidden_dim + nd, hidden_dim),
                 nn.ReLU(),
                 nn.Linear(hidden_dim, 1),
             )
             self.edge_score_hier = nn.Sequential(
-                nn.Linear(hier_dim * depth_mul * 2 + type_dim + hidden_dim, hidden_dim),
+                nn.Linear(hier_dim * depth_mul * 2 + type_dim + hidden_dim + ed, hidden_dim),
                 nn.ReLU(),
                 nn.Linear(hidden_dim, 1),
             )
@@ -248,6 +259,7 @@ class KettleGraphReasoner(nn.Module):
         # Nodes: Euclidean → tangent-at-origin → ball.
         h_tan = self.node_in(node_features) * self.tangent_scale
         h = P.expmap0(h_tan, c)
+        h_init = h  # pre-MP embedding; differs per node (node_features vary)
 
         # Query → hidden; flatten to (hidden_dim,).
         q = (
@@ -279,6 +291,26 @@ class KettleGraphReasoner(nn.Module):
         N = h_flat.size(0)
         q_exp = q.unsqueeze(0).expand(N, -1)
 
+        # Hyperbolic distance features: project query onto the ball and
+        # compute dist(h_i, h_q).  This scalar directly reflects radial
+        # position and gives the MSE loss a gradient pathway through ||h||
+        # that logmap0-based tangent coordinates alone do not provide.
+        if self.hyp_dist_features:
+            h_q = P.expmap0(q * self.tangent_scale, c)  # (hidden_dim,) on ball
+            h_q_exp = h_q.unsqueeze(0).expand(N, -1)
+            node_dist = P.dist(h, h_q_exp, c, keepdim=True)  # (N, 1)
+        else:
+            node_dist = None
+
+        # Distance from initial (pre-MP) position.  h_init differs per node
+        # (because node_features differ), so the distances break symmetry and
+        # give the scoring heads a per-node radial signal showing how far
+        # message passing moved each embedding.
+        if self.init_dist_features:
+            init_dist = P.dist(h, h_init, c, keepdim=True)  # (N, 1)
+        else:
+            init_dist = None
+
         k = self.hierarchy_subspace_dim
         use_hier = k > 0 and task_type == 0
         if k > 0:
@@ -298,7 +330,12 @@ class KettleGraphReasoner(nn.Module):
         node_head = self.node_score_hier if use_hier else self.node_score
         edge_head = self.edge_score_hier if use_hier else self.edge_score
 
-        node_logits = node_head(torch.cat([h_slice, q_exp], dim=-1)).squeeze(-1)
+        node_feats = [h_slice, q_exp]
+        if node_dist is not None:
+            node_feats.append(node_dist)
+        if init_dist is not None:
+            node_feats.append(init_dist)
+        node_logits = node_head(torch.cat(node_feats, dim=-1)).squeeze(-1)
         node_scores = torch.sigmoid(node_logits)
 
         src, dst = edge_index[0], edge_index[1]
@@ -307,7 +344,14 @@ class KettleGraphReasoner(nn.Module):
         t_r = edge_type_emb.index_select(0, edge_type)
         E = edge_index.size(1)
         q_e = q.unsqueeze(0).expand(E, -1)
-        edge_logits = edge_head(torch.cat([h_s, h_d, t_r, q_e], dim=-1)).squeeze(-1)
+        edge_feats = [h_s, h_d, t_r, q_e]
+        if node_dist is not None:
+            edge_feats.append(node_dist.index_select(0, src))
+            edge_feats.append(node_dist.index_select(0, dst))
+        if init_dist is not None:
+            edge_feats.append(init_dist.index_select(0, src))
+            edge_feats.append(init_dist.index_select(0, dst))
+        edge_logits = edge_head(torch.cat(edge_feats, dim=-1)).squeeze(-1)
         edge_scores = torch.sigmoid(edge_logits)
 
         return KGROutput(

@@ -1,0 +1,12 @@
+[2.1] dataset split=all len_samples=818 (filtered to task=2)
+[2.1] unique graphs to evaluate: 500
+
+========================================================================
+Intrinsic metrics across 500 val graphs
+checkpoint: runs\v3.1-baseline-hyp-h128-l4-seed1\encoder.pt
+model: hyperbolic   task: 2
+========================================================================
+silhouette         mean=-0.2620 std=0.0693 median=-0.2869 p10=-0.3100 p90=-0.1757  (n=500, nan=0)
+edge_prec@5        mean=+0.0344 std=0.0339 median=+0.0125 p10=+0.0065 p90=+0.0890  (n=500, nan=0)
+label_purity@5     mean=+0.7895 std=0.1946 median=+0.9155 p10=+0.4795 p90=+0.9495  (n=500, nan=0)
+random baseline   edge_prec=0.0029  label_purity=0.6732

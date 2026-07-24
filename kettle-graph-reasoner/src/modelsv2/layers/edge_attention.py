@@ -139,14 +139,25 @@ class EdgeTypedAttention(nn.Module):
         t = self.W_t(t_emb)  # (E, head_dim)
 
         feat = torch.cat([q_dst, k_src, t], dim=-1)  # (E, 3*head_dim)
+        # NOTE: (feat * self.a).sum(-1) instead of feat @ self.a. The matvec
+        # form lowers to aten::addmv.out which torch-directml falls back to
+        # CPU on, breaking the backward pass via a mixed-device autograd
+        # graph. The elementwise-mul + sum form is bit-identical and runs
+        # natively on every backend.
         raw = torch.nn.functional.leaky_relu(
-            feat @ self.a, negative_slope=self.negative_slope
+            (feat * self.a).sum(-1), negative_slope=self.negative_slope
         )  # (E,)
 
-        # Numerically stable scatter-softmax over incoming edges per receiver.
+        # Numerically stable scatter-softmax over incoming edges per
+        # receiver. ``per_recv_max`` is .detach()'d because the max-shift
+        # is a constant in the softmax — backward through the max
+        # selector is identically zero, and detaching also keeps
+        # ``scatter_reduce`` off the autograd graph, which is required
+        # on torch-directml (its scatter_reduce.two_out backward is a
+        # CPU-fallback that breaks the mixed-device autograd path).
         per_recv_max = torch.full(
             (N,), float("-inf"), dtype=raw.dtype, device=raw.device
-        ).scatter_reduce(0, dst, raw, reduce="amax", include_self=False)
+        ).scatter_reduce(0, dst, raw.detach(), reduce="amax", include_self=False)
         per_recv_max = torch.where(
             torch.isfinite(per_recv_max), per_recv_max, torch.zeros_like(per_recv_max)
         )

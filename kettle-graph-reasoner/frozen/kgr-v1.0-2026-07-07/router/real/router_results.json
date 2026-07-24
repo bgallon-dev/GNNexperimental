@@ -1,0 +1,51 @@
+{
+  "v32_results": "runs/sweep_reranker_real_v32/sweep_reranker_v32_results.json",
+  "v33_results": "runs/sweep_reranker_real_v33/sweep_reranker_v32_results.json",
+  "recipe_map": {
+    "v3.2-damped": "reranker_v32 --combine-mode v32",
+    "v3.3-blend": "reranker_v32 --combine-mode blend"
+  },
+  "router": {
+    "by_task": {
+      "2": {
+        "is_geometry_sensitive": false,
+        "retriever_ndcg@10_mean": 0.5575367182658688,
+        "oracle_ndcg@10_mean": 0.8456486913200757,
+        "v32_deployed_mean": 0.7317952965977984,
+        "v33_deployed_mean": 0.7952694340179489,
+        "chosen_recipe": "v3.3-blend",
+        "routed_deployed_mean": 0.7952694340179489,
+        "routed_deployed_std": 0.0015475866479985163,
+        "routed_gap_closed_frac": 0.8251400080042904,
+        "ws3_pertask_gap_closed": null,
+        "beats_ws3": false,
+        "regression": false,
+        "heuristic_recipe": "v3.2-damped",
+        "data_matches_heuristic": false
+      }
+    },
+    "systems": {
+      "retriever_only": {
+        "all_tasks_mean": 0.5575367182658688,
+        "geom_tasks_mean": NaN
+      },
+      "v32_only": {
+        "all_tasks_mean": 0.7317952965977984,
+        "geom_tasks_mean": NaN
+      },
+      "v33_only": {
+        "all_tasks_mean": 0.7952694340179489,
+        "geom_tasks_mean": NaN
+      },
+      "router": {
+        "all_tasks_mean": 0.7952694340179489,
+        "geom_tasks_mean": NaN
+      }
+    },
+    "geom_tasks_beating_ws3": 0,
+    "geom_tasks_total": 0,
+    "any_regression": false,
+    "acceptance_pass": false,
+    "all_data_choices_match_heuristic": false
+  }
+}
