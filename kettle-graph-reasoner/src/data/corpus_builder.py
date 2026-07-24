@@ -20,7 +20,7 @@ import json
 import time
 import argparse
 import numpy as np
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 from dataclasses import asdict
 
 from schema_sampler import SchemaSampler, SchemaDescriptor, validate_schema
@@ -31,23 +31,51 @@ from feature_encoder import (
 )
 from task_generator import TaskGenerator, TaskExample
 
-# Tier configurations (from spec Section 3.4)
+# Tier configurations (from spec Section 3.4).
+# Duplicate-planting rates are curriculumized across tiers:
+#   Tier 1 — ER bootstrap. Mostly exact duplicates, a few near; no
+#            structural analogs so the model learns identity matching
+#            before being asked to generalize.
+#   Tier 2 — introduce structural analogs at low rate while keeping
+#            exact/near cases plentiful.
+#   Tier 3 — balanced full mix (matches BuilderConfig defaults).
 TIER_CONFIGS = {
-    1: {"n_graphs": 100, "node_range": (50, 500), "label": "Pipeline validation"},
-    2: {"n_graphs": 1000, "node_range": (100, 2000), "label": "Initial training"},
-    3: {"n_graphs": 10000, "node_range": (100, 5000), "label": "Full experimental run"},
+    1: {
+        "n_graphs": 100, "node_range": (50, 500),
+        "label": "Pipeline validation",
+        "dup_rates": {"exact": 0.15, "near": 0.05, "struct": 0.00},
+    },
+    2: {
+        "n_graphs": 1000, "node_range": (100, 2000),
+        "label": "Initial training",
+        "dup_rates": {"exact": 0.10, "near": 0.10, "struct": 0.03},
+    },
+    3: {
+        "n_graphs": 10000, "node_range": (100, 5000),
+        "label": "Full experimental run",
+        "dup_rates": {"exact": 0.10, "near": 0.08, "struct": 0.05},
+    },
 }
 
 
 def build_single_graph(schema: SchemaDescriptor, graph_seed: int,
-                        target_nodes: int, task_seed: int) -> Optional[Dict]:
+                        target_nodes: int, task_seed: int,
+                        dup_rates: Optional[Dict[str, float]] = None
+                        ) -> Optional[Dict]:
     """
     Build a single graph with all features and tasks.
-    
+
     Returns a dictionary ready for serialization, or None if validation fails.
     """
     # Build graph
-    config = BuilderConfig(target_nodes=target_nodes)
+    cfg_kwargs: Dict[str, Any] = {"target_nodes": target_nodes}
+    if dup_rates is not None:
+        cfg_kwargs.update({
+            "p_dup_exact": dup_rates.get("exact", BuilderConfig.p_dup_exact),
+            "p_dup_near": dup_rates.get("near", BuilderConfig.p_dup_near),
+            "p_dup_struct": dup_rates.get("struct", BuilderConfig.p_dup_struct),
+        })
+    config = BuilderConfig(**cfg_kwargs)
     builder = GraphBuilder(config)
     graph = builder.build(schema, seed=graph_seed)
     
@@ -75,12 +103,22 @@ def build_single_graph(schema: SchemaDescriptor, graph_seed: int,
         if t.er_pairs is not None:
             td["er_pairs"] = np.array(t.er_pairs, dtype=np.int64)
         
+        anchor_row = td["anchor_row"]
+        anchor_feats = (
+            node_features[anchor_row]
+            if 0 <= anchor_row < node_features.shape[0]
+            else None
+        )
         td["query_features"] = encode_query(
             task_type=t.task_type,
-            anchor_row=td["anchor_row"],
+            anchor_row=anchor_row,
             temporal_window=t.temporal_window,
             max_hops=t.max_hops,
+            anchor_features=anchor_feats,
+            component_tasks=t.component_tasks,
         )
+        if t.component_tasks:
+            td["component_tasks"] = np.array(t.component_tasks, dtype=np.int64)
         
         task_dicts.append(td)
     
@@ -123,6 +161,7 @@ def build_corpus(tier: int, output_dir: str, master_seed: int = 42,
     config = TIER_CONFIGS[tier]
     n_graphs = config["n_graphs"]
     node_lo, node_hi = config["node_range"]
+    dup_rates = config.get("dup_rates")
     
     tier_dir = os.path.join(output_dir, f"tier{tier}")
     os.makedirs(tier_dir, exist_ok=True)
@@ -171,6 +210,7 @@ def build_corpus(tier: int, output_dir: str, master_seed: int = 42,
                 graph_seed=graph_seeds[i],
                 target_nodes=target_sizes[i],
                 task_seed=task_seeds[i],
+                dup_rates=dup_rates,
             )
         except Exception as e:
             if verbose:

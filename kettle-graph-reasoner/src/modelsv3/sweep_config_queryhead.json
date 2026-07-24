@@ -1,0 +1,24 @@
+{
+  "_comment": "v3.1 Phase 2 query-head sweep. Encoder is FROZEN (loaded from the locked baseline, SHA-asserted) so every arm shares one encoder — no stage-A re-pretrain, no per-arm confound. Only the QueryToBall head is trained (stage B). Norm is only swept for archs that use it (qh2/qh3); qh0/qh1/qh4 ignore it so they get one cell each.",
+  "baseline_dir": "runs/v3.1-baseline-hyp-h128-l4-seed1",
+  "encoder_path": "runs/v3.1-baseline-hyp-h128-l4-seed1/encoder.pt",
+  "task": 2,
+  "corpus": "src/data/corpus/tier1",
+  "model": "hyperbolic",
+  "out_root": "runs/sweep_queryhead",
+  "hidden_dim": 128,
+  "num_layers": 4,
+  "curvature": 1.0,
+  "query_epochs": 10,
+  "lr_query": 0.0003,
+  "stage_b_loss": "pairwise",
+  "log_every": 200,
+  "archs": ["qh0", "qh1", "qh2", "qh3", "qh4"],
+  "norms": ["layernorm", "rmsnorm"],
+  "norm_relevant_archs": ["qh2", "qh3"],
+  "seeds": [0, 1, 2],
+  "gate": {
+    "ndcg10_target": 0.52,
+    "metric": "ndcg@10"
+  }
+}

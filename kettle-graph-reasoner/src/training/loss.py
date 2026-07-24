@@ -32,7 +32,7 @@ from torch import Tensor
 from ..models.hyperbolic_gnn import KGROutput
 
 
-BCE_TASKS = {0, 1, 4}
+BCE_TASKS = {0, 1, 4, 5}  # 5 = compound (binarized intersection mask)
 MSE_TASKS = {2, 3}
 
 
@@ -57,7 +57,25 @@ def relevance_loss(
 
     node_labels = node_labels.clamp(0.0, 1.0)
     node_pred = output.node_scores.clamp(eps, 1.0 - eps)
-    node_loss = loss_fn(node_pred, node_labels)
+
+    if task_type == 1:
+        # Entity-resolution labels are sparse; reweight positives by inverse
+        # frequency (capped at 20x) so the model can't minimize BCE by
+        # predicting all-negative.
+        n_pos = node_labels.sum().clamp_min(1.0)
+        n_neg = (node_labels < 0.5).float().sum().clamp_min(1.0)
+        # ER labels are now exactly one positive per task (N-1 : 1 ratio
+        # at N≈300 → ~299). The old cap of 20 severely under-weighted the
+        # positive. clamp_min(1.0) on both counts already guards against
+        # division by zero, so let the true ratio drive the weight.
+        pos_weight = (n_neg / n_pos).clamp_min(1.0)
+        node_loss = F.binary_cross_entropy(
+            node_pred,
+            node_labels,
+            weight=(node_labels * (pos_weight - 1.0) + 1.0),
+        )
+    else:
+        node_loss = loss_fn(node_pred, node_labels)
 
     src, dst = edge_index[0], edge_index[1]
     edge_labels = 0.5 * (node_labels.index_select(0, src) + node_labels.index_select(0, dst))

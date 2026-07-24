@@ -1,0 +1,9 @@
+[evalD] 818 samples, 500 unique graphs  model=hyperbolic
+
+================================================================================
+Eval D - geometry vs graph disagreement (500 graphs)
+checkpoint: runs\v3.1-baseline-hyp-h128-l4-seed1\encoder.pt  model: hyperbolic
+================================================================================
+  spearman(emb_dist, hop)  mean=+0.1699  std=0.1496   (geometry agrees with graph topology; + is good)
+  q=5%:  geom_near_graph_far=0.0383  graph_near_geom_far=0.0372  (indep ~ 0.0025)
+  q=10%:  geom_near_graph_far=0.0787  graph_near_geom_far=0.0766  (indep ~ 0.0100)

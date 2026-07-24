@@ -1,0 +1,235 @@
+{
+  "checkpoint": "runs\\v3.1-baseline-hyp-h128-l4-seed1\\encoder.pt",
+  "model_kind": "hyperbolic",
+  "split": "val",
+  "task": 2,
+  "q_values": [
+    5,
+    10
+  ],
+  "n_graphs": 10,
+  "guardrail_metric": "summary.q5.geom_near_graph_far_frac (Phase-4 Stage-C must not increase this)",
+  "per_graph": [
+    {
+      "n_nodes": 72,
+      "n_reachable_pairs": 2556,
+      "spearman_emb_hop": 0.3631168165168338,
+      "disagreement": {
+        "q5": {
+          "geom_near_graph_far_frac": 0.0,
+          "graph_near_geom_far_frac": 0.000782472613458529,
+          "expected_if_independent": 0.0025000000000000005
+        },
+        "q10": {
+          "geom_near_graph_far_frac": 0.001564945226917058,
+          "graph_near_geom_far_frac": 0.001564945226917058,
+          "expected_if_independent": 0.010000000000000002
+        }
+      },
+      "graph_idx": 0
+    },
+    {
+      "n_nodes": 71,
+      "n_reachable_pairs": 2211,
+      "spearman_emb_hop": 0.0757734877285809,
+      "disagreement": {
+        "q5": {
+          "geom_near_graph_far_frac": 0.003618272274988693,
+          "graph_near_geom_far_frac": 0.009497964721845319,
+          "expected_if_independent": 0.0025000000000000005
+        },
+        "q10": {
+          "geom_near_graph_far_frac": 0.016282225237449117,
+          "graph_near_geom_far_frac": 0.016282225237449117,
+          "expected_if_independent": 0.010000000000000002
+        }
+      },
+      "graph_idx": 1
+    },
+    {
+      "n_nodes": 92,
+      "n_reachable_pairs": 3828,
+      "spearman_emb_hop": 0.27702115786745996,
+      "disagreement": {
+        "q5": {
+          "geom_near_graph_far_frac": 0.0,
+          "graph_near_geom_far_frac": 0.001567398119122257,
+          "expected_if_independent": 0.0025000000000000005
+        },
+        "q10": {
+          "geom_near_graph_far_frac": 0.008620689655172414,
+          "graph_near_geom_far_frac": 0.003918495297805642,
+          "expected_if_independent": 0.010000000000000002
+        }
+      },
+      "graph_idx": 2
+    },
+    {
+      "n_nodes": 188,
+      "n_reachable_pairs": 17020,
+      "spearman_emb_hop": 0.22113760691921636,
+      "disagreement": {
+        "q5": {
+          "geom_near_graph_far_frac": 0.00041128084606345473,
+          "graph_near_geom_far_frac": 0.002408930669800235,
+          "expected_if_independent": 0.0025000000000000005
+        },
+        "q10": {
+          "geom_near_graph_far_frac": 0.010340775558166862,
+          "graph_near_geom_far_frac": 0.022150411280846063,
+          "expected_if_independent": 0.010000000000000002
+        }
+      },
+      "graph_idx": 3
+    },
+    {
+      "n_nodes": 424,
+      "n_reachable_pairs": 89676,
+      "spearman_emb_hop": 0.19398804033325273,
+      "disagreement": {
+        "q5": {
+          "geom_near_graph_far_frac": 0.0031335028324189305,
+          "graph_near_geom_far_frac": 0.0014273607208171641,
+          "expected_if_independent": 0.0025000000000000005
+        },
+        "q10": {
+          "geom_near_graph_far_frac": 0.006300459431732013,
+          "graph_near_geom_far_frac": 0.013336901735135376,
+          "expected_if_independent": 0.010000000000000002
+        }
+      },
+      "graph_idx": 4
+    },
+    {
+      "n_nodes": 56,
+      "n_reachable_pairs": 1540,
+      "spearman_emb_hop": 0.48993410613535365,
+      "disagreement": {
+        "q5": {
+          "geom_near_graph_far_frac": 0.0,
+          "graph_near_geom_far_frac": 0.0006493506493506494,
+          "expected_if_independent": 0.0025000000000000005
+        },
+        "q10": {
+          "geom_near_graph_far_frac": 0.001948051948051948,
+          "graph_near_geom_far_frac": 0.003896103896103896,
+          "expected_if_independent": 0.010000000000000002
+        }
+      },
+      "graph_idx": 5
+    },
+    {
+      "n_nodes": 371,
+      "n_reachable_pairs": 68635,
+      "spearman_emb_hop": 0.20116631590629466,
+      "disagreement": {
+        "q5": {
+          "geom_near_graph_far_frac": 0.00335105995483354,
+          "graph_near_geom_far_frac": 0.0031470823923654113,
+          "expected_if_independent": 0.0025000000000000005
+        },
+        "q10": {
+          "geom_near_graph_far_frac": 0.00861076710133314,
+          "graph_near_geom_far_frac": 0.007212063815837401,
+          "expected_if_independent": 0.010000000000000002
+        }
+      },
+      "graph_idx": 6
+    },
+    {
+      "n_nodes": 486,
+      "n_reachable_pairs": 114003,
+      "spearman_emb_hop": 0.3205534014576515,
+      "disagreement": {
+        "q5": {
+          "geom_near_graph_far_frac": 0.004885836337640237,
+          "graph_near_geom_far_frac": 0.0022104681455751164,
+          "expected_if_independent": 0.0025000000000000005
+        },
+        "q10": {
+          "geom_near_graph_far_frac": 0.010350604808645386,
+          "graph_near_geom_far_frac": 0.00494723823057288,
+          "expected_if_independent": 0.010000000000000002
+        }
+      },
+      "graph_idx": 7
+    },
+    {
+      "n_nodes": 63,
+      "n_reachable_pairs": 1891,
+      "spearman_emb_hop": 0.5168889741870989,
+      "disagreement": {
+        "q5": {
+          "geom_near_graph_far_frac": 0.0010576414595452142,
+          "graph_near_geom_far_frac": 0.0005288207297726071,
+          "expected_if_independent": 0.0025000000000000005
+        },
+        "q10": {
+          "geom_near_graph_far_frac": 0.0010576414595452142,
+          "graph_near_geom_far_frac": 0.0010576414595452142,
+          "expected_if_independent": 0.010000000000000002
+        }
+      },
+      "graph_idx": 8
+    },
+    {
+      "n_nodes": 185,
+      "n_reachable_pairs": 14401,
+      "spearman_emb_hop": -0.07916254766054116,
+      "disagreement": {
+        "q5": {
+          "geom_near_graph_far_frac": 0.0017359905562113742,
+          "graph_near_geom_far_frac": 0.0063884452468578575,
+          "expected_if_independent": 0.0025000000000000005
+        },
+        "q10": {
+          "geom_near_graph_far_frac": 0.01791542254010138,
+          "graph_near_geom_far_frac": 0.01256857162697035,
+          "expected_if_independent": 0.010000000000000002
+        }
+      },
+      "graph_idx": 9
+    }
+  ],
+  "summary": {
+    "spearman_emb_hop": {
+      "mean": 0.2580417359391201,
+      "std": 0.18003478388972421,
+      "min": -0.07916254766054116,
+      "max": 0.5168889741870989,
+      "n": 10
+    },
+    "q5": {
+      "geom_near_graph_far_frac": {
+        "mean": 0.0018193584261701444,
+        "std": 0.0018016197517667161,
+        "min": 0.0,
+        "max": 0.004885836337640237,
+        "n": 10
+      },
+      "graph_near_geom_far_frac": {
+        "mean": 0.0028608294008965144,
+        "std": 0.002897911669730548,
+        "min": 0.0005288207297726071,
+        "max": 0.009497964721845319,
+        "n": 10
+      }
+    },
+    "q10": {
+      "geom_near_graph_far_frac": {
+        "mean": 0.008299158296711453,
+        "std": 0.00583951627421497,
+        "min": 0.0010576414595452142,
+        "max": 0.01791542254010138,
+        "n": 10
+      },
+      "graph_near_geom_far_frac": {
+        "mean": 0.0086934597807183,
+        "std": 0.007042900367044542,
+        "min": 0.0010576414595452142,
+        "max": 0.022150411280846063,
+        "n": 10
+      }
+    }
+  }
+}

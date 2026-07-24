@@ -1,0 +1,19 @@
+{
+  "_comment": "Real-head reranker, v3.3 BLEND recipe. Identical to sweep_config_reranker_real_v32.json EXCEPT combine_mode=blend and out_root. Same real-head retriever (v31_baseline), same real corpus, same task=[2], same seeds/epochs/topc/lr/temperature/arch -> a fair A/B of recipe on real data, mirroring the synthetic v3.2-vs-v3.3 methodology. reranker_router consumes this + the real_v32 results to make the per-recipe deployed choice (do-no-harm validation-gated). No WS3 real bar (ws3_results path intentionally absent); what matters is deployed ndcg@10 vs the real-head retriever 0.558 and the oracle ceiling.",
+  "out_root": "runs/sweep_reranker_real_v33",
+  "ws2_root": "runs/sweep_taskdiversity",
+  "v31_baseline": "runs/v3.1-real-head-hyp-h128-l4-seed0",
+  "ws3_results": "runs/_no_real_ws3_bar_DOES_NOT_EXIST.json",
+  "corpus": "src/data/corpus/real_domain_eval_ft",
+  "tasks": [2],
+  "geometry_sensitive": [],
+  "seeds": [0, 1, 2],
+  "epochs": 25,
+  "topc": 50,
+  "lr": 0.001,
+  "temperature": 1.0,
+  "hidden_dim": 96,
+  "num_layers": 3,
+  "type_dim": 8,
+  "combine_mode": "blend"
+}

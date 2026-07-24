@@ -1,0 +1,10 @@
+[DEBUG init] tangent_scale        = 0.1000
+[DEBUG init] c (curvature)        = 1.0000  learnable=False
+[DEBUG init] hidden_dim           = 96
+[DEBUG init] num_layers           = 3
+[DEBUG init] type_dim             = 8
+[DEBUG init] hierarchy_subspace   = 0
+[DEBUG init] node_in.weight       mean=-3.0904e-05 std=6.3025e-03 max|w|=1.0814e-02
+[DEBUG init] sim tangent ||v||    mean=0.0346 max=0.0521  (target pre-expmap0: 0.05–0.3)
+[DEBUG init] query_in.weight      mean=+1.3635e-03 std=1.3431e-01
+[rr32] task2 seed0: retr=0.4597 trained=0.6334 deployed=0.6334 oracle=0.9279 deployed_gap=0.37110584357473403 residual_deployed=True trained_regress=False deployed_regress=False

@@ -128,9 +128,12 @@ class BuilderConfig:
     temporal_range: Tuple[float, float] = (0.0, 1.0)
     
     # Entity resolution planting rates
-    p_dup_exact: float = 0.03     # Tier 1: exact duplicates
-    p_dup_near: float = 0.03      # Tier 2: near-duplicates
-    p_dup_struct: float = 0.02    # Tier 3: structural analogs
+    # Earlier values (0.03/0.03/0.02) yielded ~zero exact/near duplicates
+    # per graph at audited sizes, so the ER task saw only hard Tier-3
+    # structural analogs and never the easy identity-match cases.
+    p_dup_exact: float = 0.10     # Tier 1: exact duplicates
+    p_dup_near: float = 0.08      # Tier 2: near-duplicates
+    p_dup_struct: float = 0.05    # Tier 3: structural analogs
     near_dup_sigma: Tuple[float, float] = (0.05, 0.3)  # noise range for Tier 2
     
     # Distribution parameters
@@ -378,7 +381,10 @@ class GraphBuilder:
         
         if auxiliary_types and temporal_struct_edges:
             # Create time period nodes
-            n_periods = max(3, min(20, cfg.target_nodes // 50))
+            # Prior formula (target_nodes // 50, floor 3) gave ~2% auxiliary
+            # nodes, leaving temporal reasoning with almost no structural
+            # scaffolding. Raise both floor and scaling factor.
+            n_periods = max(10, min(30, cfg.target_nodes // 20))
             period_ids = []
             for i in range(n_periods):
                 atype = auxiliary_types[int(rng.integers(0, len(auxiliary_types)))]

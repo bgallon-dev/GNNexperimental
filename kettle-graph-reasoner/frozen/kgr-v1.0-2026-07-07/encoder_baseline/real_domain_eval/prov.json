@@ -1,0 +1,21 @@
+{
+  "checkpoint": "runs\\v3.1-baseline-hyp-h128-l4-seed1\\encoder.pt",
+  "model_kind": "hyperbolic",
+  "split": "all",
+  "task": 2,
+  "depth_divisor": 5,
+  "depth_feature_index": 20,
+  "depth_feature_range_observed": [
+    1.0,
+    0.0
+  ],
+  "depth_feature_in_unit_range": true,
+  "n_eval_samples": 0,
+  "n_skipped": 0,
+  "K_values": [
+    5,
+    10,
+    20
+  ],
+  "summary": {}
+}

@@ -1,0 +1,36 @@
+{
+  "task": 3,
+  "seed": 0,
+  "retriever_run": "runs\\sweep_taskdiversity\\task3_seed0",
+  "retriever_query_head": "qh1",
+  "n_samples": 100,
+  "topc": 50,
+  "epochs": 25,
+  "combine_mode": "blend",
+  "learned_a": 0.0364345908164978,
+  "learned_b": 0.15251825749874115,
+  "deployed_a": 0.0364345908164978,
+  "deployed_b": 0.15251825749874115,
+  "residual_deployed": true,
+  "validation_gated": true,
+  "n_params_v2": 140868,
+  "summary": {
+    "v31_ndcg@10": 0.31220811155969214,
+    "v31_mrr@10": 0.12099206349206348,
+    "hybrid_ndcg@10": 0.3169383294867001,
+    "hybrid_mrr@10": 0.08626190476190476,
+    "oracle_ndcg@10": 0.7582484908110166
+  },
+  "hybrid_beats_retriever": true,
+  "gap_closed_frac": 0.01060490966075221,
+  "regression_vs_retriever": false,
+  "trained": {
+    "hybrid_ndcg@10": 0.3169383294867001,
+    "hybrid_mrr@10": 0.08626190476190476,
+    "gap_closed_frac": 0.01060490966075221,
+    "regression_vs_retriever": false,
+    "learned_a": 0.0364345908164978,
+    "learned_b": 0.15251825749874115
+  },
+  "ceiling_oracle_ndcg@10": 0.7582484908110166
+}

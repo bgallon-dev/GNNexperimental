@@ -1,0 +1,18 @@
+{
+  "_comment": "v3.2 reranker MVP combo sweep. Per (task, seed): retriever = the WS2 per-task qh1 cell (runs/sweep_taskdiversity/task{T}_seed{S}) for tasks 0/1/3/4/5; for temporal task 2 (no WS2 cell) the v3.1 baseline qh0 -- included specifically to verify the residual's no-regression guarantee on the locality-friendly task where WS3 regressed. Trains a fresh v2 (reused arch) as a learned residual on the retriever score (scale init 0 => regression-proof), candidate-restricted ListNet loss on the retriever's hard top-C. Gate: on geometry-sensitive tasks {0,3,4,5} v3.2 gap_closed_frac must EXCEED WS3's per-task v2 gap_closed_frac (from runs/sweep_v2reranker/sweep_v2reranker_results.json), AND regression_vs_retriever must be False on EVERY task (especially temporal).",
+  "out_root": "runs/sweep_reranker_v32",
+  "ws2_root": "runs/sweep_taskdiversity",
+  "v31_baseline": "runs/v3.1-baseline-hyp-h128-l4-seed1",
+  "ws3_results": "runs/sweep_v2reranker/sweep_v2reranker_results.json",
+  "corpus": "src/data/corpus/tier1",
+  "tasks": [0, 1, 3, 4, 5, 2],
+  "geometry_sensitive": [0, 3, 4, 5],
+  "seeds": [0, 1, 2],
+  "epochs": 25,
+  "topc": 50,
+  "lr": 0.001,
+  "temperature": 1.0,
+  "hidden_dim": 96,
+  "num_layers": 3,
+  "type_dim": 8
+}

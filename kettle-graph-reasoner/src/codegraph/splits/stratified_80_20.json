@@ -1,0 +1,153 @@
+{
+  "seed": 0,
+  "train": [
+    "aiohttp",
+    "attrs",
+    "click",
+    "django",
+    "fastapi",
+    "hypothesis",
+    "kivy",
+    "numpy",
+    "pandas",
+    "pydantic",
+    "pyramid",
+    "requests",
+    "scikit-learn",
+    "starlette",
+    "tornado",
+    "uvicorn",
+    "werkzeug"
+  ],
+  "test": [
+    "flask",
+    "httpx",
+    "jinja",
+    "scipy"
+  ],
+  "by_category": {
+    "attribute-management": {
+      "train": [
+        "attrs"
+      ],
+      "test": []
+    },
+    "cli-tooling": {
+      "train": [
+        "click"
+      ],
+      "test": []
+    },
+    "data-numeric": {
+      "train": [
+        "numpy",
+        "pandas",
+        "scikit-learn"
+      ],
+      "test": [
+        "scipy"
+      ]
+    },
+    "gui": {
+      "train": [
+        "kivy"
+      ],
+      "test": []
+    },
+    "http-legacy": {
+      "train": [
+        "requests"
+      ],
+      "test": []
+    },
+    "http-network": {
+      "train": [
+        "aiohttp",
+        "uvicorn"
+      ],
+      "test": [
+        "httpx"
+      ]
+    },
+    "property-testing": {
+      "train": [
+        "hypothesis"
+      ],
+      "test": []
+    },
+    "templating-wsgi": {
+      "train": [
+        "werkzeug"
+      ],
+      "test": [
+        "jinja"
+      ]
+    },
+    "validation": {
+      "train": [
+        "pydantic"
+      ],
+      "test": []
+    },
+    "web-framework": {
+      "train": [
+        "django",
+        "fastapi",
+        "pyramid",
+        "starlette",
+        "tornado"
+      ],
+      "test": [
+        "flask"
+      ]
+    }
+  },
+  "missing_from_corpus": [
+    "airflow",
+    "ansible",
+    "anyio",
+    "asyncpg",
+    "black",
+    "botocore",
+    "celery",
+    "certbot",
+    "coveragepy",
+    "dask",
+    "datasets",
+    "dbt-core",
+    "home-assistant-core",
+    "keras",
+    "kubernetes-python",
+    "marshmallow",
+    "matplotlib",
+    "mlflow",
+    "mypy",
+    "networkx",
+    "opentelemetry-python",
+    "paramiko",
+    "pillow",
+    "pip",
+    "plotly.py",
+    "poetry",
+    "pymongo",
+    "pytest",
+    "pytorch",
+    "ray",
+    "redis-py",
+    "salt",
+    "scrapy",
+    "spacy",
+    "sphinx",
+    "sqlalchemy",
+    "statsmodels",
+    "streamlit",
+    "sympy",
+    "tox",
+    "transformers",
+    "trio"
+  ],
+  "extra_in_corpus": [],
+  "n_train": 17,
+  "n_test": 4,
+  "n_categories_in_test": 4
+}

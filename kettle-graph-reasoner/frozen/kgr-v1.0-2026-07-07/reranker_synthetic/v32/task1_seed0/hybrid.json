@@ -1,0 +1,32 @@
+{
+  "task": 1,
+  "seed": 0,
+  "retriever_run": "runs\\sweep_taskdiversity\\task1_seed0",
+  "retriever_query_head": "qh1",
+  "n_samples": 188,
+  "topc": 50,
+  "epochs": 25,
+  "learned_scale": -1.1879854202270508,
+  "deployed_scale": 0.0,
+  "residual_deployed": false,
+  "validation_gated": true,
+  "n_params_v2": 140868,
+  "summary": {
+    "v31_ndcg@10": 0.020413380195485786,
+    "v31_mrr@10": 0.012514775413711585,
+    "hybrid_ndcg@10": 0.020413380195485786,
+    "hybrid_mrr@10": 0.012514775413711585,
+    "oracle_ndcg@10": 0.24468085106382978
+  },
+  "hybrid_beats_retriever": false,
+  "gap_closed_frac": 0.0,
+  "regression_vs_retriever": false,
+  "trained": {
+    "hybrid_ndcg@10": 0.01965832266401737,
+    "hybrid_mrr@10": 0.012810283687943262,
+    "gap_closed_frac": -0.0033667724014762273,
+    "regression_vs_retriever": true,
+    "learned_scale": -1.1879854202270508
+  },
+  "ceiling_oracle_ndcg@10": 0.24468085106382978
+}

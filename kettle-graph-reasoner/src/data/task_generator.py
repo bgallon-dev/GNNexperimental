@@ -33,6 +33,7 @@ TASK_ENTITY_RESOLUTION = 1
 TASK_TEMPORAL = 2
 TASK_MULTIHOP = 3
 TASK_SUBGRAPH = 4
+TASK_COMPOUND = 5  # intersection of two component task labels
 
 
 @dataclass
@@ -45,6 +46,10 @@ class TaskExample:
     max_hops: int = 4
     # Entity resolution specific
     er_pairs: Optional[List[Tuple[int, int, int, int]]] = None  # (n1, n2, label, tier)
+    # For compound tasks: one-hot bits over the component task types
+    # (provenance, ER, temporal, multi-hop, subgraph). Empty tuple for
+    # non-compound tasks.
+    component_tasks: Tuple[int, ...] = ()
 
 
 class TaskGenerator:
@@ -67,6 +72,71 @@ class TaskGenerator:
         tasks.extend(self.generate_temporal_tasks(graph, id_to_row))
         tasks.extend(self.generate_multihop_tasks(graph, id_to_row))
         tasks.extend(self.generate_subgraph_tasks(graph, id_to_row))
+        tasks.extend(self.generate_compound_tasks(graph, id_to_row, tasks))
+        return tasks
+
+    # ================================================================
+    # Compound tasks: intersection of two single-type labels
+    # ================================================================
+    def generate_compound_tasks(self, graph: SyntheticGraph,
+                                 id_to_row: Dict[int, int],
+                                 base_tasks: List[TaskExample],
+                                 target_fraction: float = 0.08
+                                 ) -> List[TaskExample]:
+        """
+        Construct compound tasks by element-wise intersecting two single-
+        type label vectors and binarizing the result. Gives the model a
+        training signal for multi-constraint queries (e.g. "sources of
+        this entity *that fall in this window*") without new architecture.
+
+        Pairs drawn from: (provenance, temporal), (multihop, temporal),
+        (provenance, multihop). ER and subgraph tasks are excluded — ER
+        labels are too sparse to intersect meaningfully, subgraph already
+        composes temporal + depth.
+        """
+        tasks: List[TaskExample] = []
+        by_type: Dict[int, List[TaskExample]] = defaultdict(list)
+        for t in base_tasks:
+            by_type[t.task_type].append(t)
+
+        pair_types = [
+            (TASK_PROVENANCE, TASK_TEMPORAL),
+            (TASK_MULTIHOP, TASK_TEMPORAL),
+            (TASK_PROVENANCE, TASK_MULTIHOP),
+        ]
+
+        n_target = max(1, int(round(len(base_tasks) * target_fraction)))
+        attempts = 0
+        while len(tasks) < n_target and attempts < n_target * 4:
+            attempts += 1
+            a_type, b_type = pair_types[int(self.rng.integers(0, len(pair_types)))]
+            if not by_type[a_type] or not by_type[b_type]:
+                continue
+            a = by_type[a_type][int(self.rng.integers(0, len(by_type[a_type])))]
+            b = by_type[b_type][int(self.rng.integers(0, len(by_type[b_type])))]
+
+            # Intersection: keep nodes that are relevant under *both*
+            # component labelings. Min preserves the weaker signal; binarize
+            # for a clean BCE target.
+            merged = np.minimum(a.labels, b.labels)
+            mask = (merged > 0.0).astype(np.float32)
+            if mask.sum() < 2:
+                continue
+
+            # Inherit temporal window / hop budget from whichever component
+            # supplies them.
+            temporal = a.temporal_window or b.temporal_window
+            max_hops = max(a.max_hops, b.max_hops)
+
+            tasks.append(TaskExample(
+                task_type=TASK_COMPOUND,
+                anchor_node=a.anchor_node,
+                labels=mask,
+                temporal_window=temporal,
+                max_hops=max_hops,
+                component_tasks=(a_type, b_type),
+            ))
+
         return tasks
     
     # ================================================================
@@ -130,7 +200,10 @@ class TaskGenerator:
                 if nd.layer == LAYER_SOURCE:
                     labels[row] = 1.0
                 elif dist > 0:
-                    labels[row] = 1.0 / max(dist, 1)
+                    # 1/(dist+1) so first-hop claims get 0.5, not 1.0 —
+                    # otherwise the graded signal collapses at shallow
+                    # depths and sources are indistinguishable from claims.
+                    labels[row] = 1.0 / (dist + 1)
                 
                 # Follow provenance edges upward
                 for parent_id in prov_parent.get(nid, set()):
@@ -155,7 +228,8 @@ class TaskGenerator:
     # Task 1: Entity Resolution
     # ================================================================
     def generate_er_tasks(self, graph: SyntheticGraph,
-                           id_to_row: Dict[int, int]) -> List[TaskExample]:
+                           id_to_row: Dict[int, int],
+                           max_tasks: int = 8) -> List[TaskExample]:
         """
         Generate entity resolution pairs from planted duplicates +
         negative samples. Labels are per-pair (not per-node).
@@ -164,11 +238,19 @@ class TaskGenerator:
         
         if not graph.duplicate_pairs:
             return tasks
-        
+
         entity_ids = [nid for nid, nd in graph.nodes.items()
                       if nd.layer == LAYER_ENTITY]
-        
-        for original_id, dup_id, tier in graph.duplicate_pairs:
+
+        # Shuffle + cap to prevent ER from dominating the task mix. With
+        # raised dup rates a 300-node graph can have 25+ pairs; letting
+        # all of them through means ~50% of per-graph gradient comes from
+        # a single task type.
+        dup_pairs = list(graph.duplicate_pairs)
+        self.rng.shuffle(dup_pairs)
+        dup_pairs = dup_pairs[:max_tasks]
+
+        for original_id, dup_id, tier in dup_pairs:
             if original_id not in graph.nodes or dup_id not in graph.nodes:
                 continue
             
@@ -202,18 +284,18 @@ class TaskGenerator:
                         break
             
             if pairs:
-                # Create a label vector: not per-node, but store pairs in er_pairs
+                # Per-node relevance = "which nodes are co-referent with the
+                # anchor". Only the planted duplicate of the anchor is a
+                # positive; negative-pair members and the anchor itself are 0.
+                # (Earlier revisions marked every node appearing in any pair
+                # as 1.0, which reduced the task to "appears in any pair" and
+                # leaked negatives as positives.)
                 N = graph.n_nodes
                 labels = np.zeros(N, dtype=np.float32)
-                # Mark both nodes involved
-                for n1, n2, label, t in pairs:
-                    r1 = id_to_row.get(n1)
-                    r2 = id_to_row.get(n2)
-                    if r1 is not None:
-                        labels[r1] = 1.0
-                    if r2 is not None:
-                        labels[r2] = 1.0
-                
+                dup_row = id_to_row.get(dup_id)
+                if dup_row is not None:
+                    labels[dup_row] = 1.0
+
                 tasks.append(TaskExample(
                     task_type=TASK_ENTITY_RESOLUTION,
                     anchor_node=original_id,
@@ -243,9 +325,13 @@ class TaskGenerator:
             return tasks
         
         for _ in range(n_tasks):
-            # Sample a random window
-            window_start = float(self.rng.uniform(0.0, 0.7))
-            window_end = float(self.rng.uniform(window_start + 0.1, 1.0))
+            # Narrow windows. Earlier sampling allowed widths up to 1.0,
+            # which made >60% of the graph positive on average and turned
+            # the task into "which nodes exist" rather than "which fall in
+            # this window."
+            window_start = float(self.rng.uniform(0.0, 0.75))
+            window_width = float(self.rng.uniform(0.05, 0.25))
+            window_end = min(1.0, window_start + window_width)
             window_duration = window_end - window_start
             margin = window_duration * 0.2  # adjacency margin
             
@@ -365,7 +451,13 @@ class TaskGenerator:
             # Normalize to [0, 1]
             if labels.max() > 0:
                 labels /= labels.max()
-            
+
+            # Hard cutoff: without this, every reachable node in a small
+            # dense graph gets a nonzero score (audit showed all 253 nodes
+            # labeled >= 0.15), collapsing the ranking task. Anything below
+            # the decay floor is treated as irrelevant.
+            labels[labels < 0.15] = 0.0
+
             if labels.sum() > 0:
                 tasks.append(TaskExample(
                     task_type=TASK_MULTIHOP,

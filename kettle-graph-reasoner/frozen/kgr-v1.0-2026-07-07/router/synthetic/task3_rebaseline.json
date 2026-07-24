@@ -1,0 +1,70 @@
+{
+  "task": 3,
+  "comparable_basis": {
+    "qh1_retriever_R": 0.3127920158737364,
+    "qh1_retriever_R_std": 0.006626037055378687,
+    "oracle_O": 0.7491716952873974
+  },
+  "rows": [
+    {
+      "system": "qh1_retriever",
+      "n_seeds": 3,
+      "abs_ndcg@10_mean": 0.3127920158737364,
+      "abs_ndcg@10_std": 0.006626037055378687,
+      "abs_gain_vs_qh1": 0.0,
+      "gap_same_qh1_basis": 0.0,
+      "comparable_basis": true,
+      "own_retriever_ndcg@10": null,
+      "own_oracle_ndcg@10": null
+    },
+    {
+      "system": "v3.2-damped",
+      "n_seeds": 3,
+      "abs_ndcg@10_mean": 0.31574178769557243,
+      "abs_ndcg@10_std": 0.004729500715299763,
+      "abs_gain_vs_qh1": 0.0029497718218360336,
+      "gap_same_qh1_basis": 0.006759645237833891,
+      "comparable_basis": true,
+      "own_retriever_ndcg@10": null,
+      "own_oracle_ndcg@10": null
+    },
+    {
+      "system": "v3.3-blend (best existing)",
+      "n_seeds": 3,
+      "abs_ndcg@10_mean": 0.32409358559077944,
+      "abs_ndcg@10_std": 0.014960234967382793,
+      "abs_gain_vs_qh1": 0.011301569717043047,
+      "gap_same_qh1_basis": 0.025898478435632786,
+      "comparable_basis": true,
+      "own_retriever_ndcg@10": null,
+      "own_oracle_ndcg@10": null
+    },
+    {
+      "system": "WS3 per-task v2",
+      "n_seeds": 3,
+      "abs_ndcg@10_mean": 0.2230006454735565,
+      "abs_ndcg@10_std": 0.03679081326681441,
+      "abs_gain_vs_qh1": -0.0897913704001799,
+      "gap_same_qh1_basis": -0.2057643255085286,
+      "comparable_basis": false,
+      "own_retriever_ndcg@10": 0.1942213825167204,
+      "own_oracle_ndcg@10": 0.7275619705961427
+    },
+    {
+      "system": "oracle (qh1 top-50)",
+      "n_seeds": 3,
+      "abs_ndcg@10_mean": 0.7491716952873974,
+      "abs_ndcg@10_std": 0.008727814096690824,
+      "abs_gain_vs_qh1": 0.43637967941366096,
+      "gap_same_qh1_basis": 1.0,
+      "comparable_basis": true,
+      "own_retriever_ndcg@10": null,
+      "own_oracle_ndcg@10": null
+    }
+  ],
+  "best_existing_abs_ndcg@10": 0.32409358559077944,
+  "best_existing_std": 0.014960234967382793,
+  "success_bar": "a NEW task-3 system clears iff mean(deployed) - 0.3241 > max(hypot(std_new, 0.0150), 0.01) AND regression_vs_retriever == False",
+  "new_system": null,
+  "note": "WS3 per-task v2 'gap_closed_frac' (0.096) is computed off its OWN weak 0.194 retriever and is NOT comparable to the qh1-basis numbers; WS3's ABSOLUTE ndcg@10 is comparable and is below even the qh1 retriever."
+}

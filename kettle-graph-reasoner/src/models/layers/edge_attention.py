@@ -139,14 +139,21 @@ class EdgeTypedAttention(nn.Module):
         t = self.W_t(t_emb)  # (E, head_dim)
 
         feat = torch.cat([q_dst, k_src, t], dim=-1)  # (E, 3*head_dim)
+        # See modelsv2/layers/edge_attention.py for rationale: matvec
+        # lowers to aten::addmv.out which torch-directml CPU-fallbacks,
+        # breaking backward via mixed-device autograd. Elementwise-mul +
+        # sum is bit-identical and native on every backend. Kept in sync.
         raw = torch.nn.functional.leaky_relu(
-            feat @ self.a, negative_slope=self.negative_slope
+            (feat * self.a).sum(-1), negative_slope=self.negative_slope
         )  # (E,)
 
-        # Numerically stable scatter-softmax over incoming edges per receiver.
+        # Numerically stable scatter-softmax over incoming edges per
+        # receiver. ``raw.detach()`` keeps scatter_reduce off the
+        # autograd graph (max-shift gradient is identically zero); kept
+        # in sync with modelsv2.
         per_recv_max = torch.full(
             (N,), float("-inf"), dtype=raw.dtype, device=raw.device
-        ).scatter_reduce(0, dst, raw, reduce="amax", include_self=False)
+        ).scatter_reduce(0, dst, raw.detach(), reduce="amax", include_self=False)
         per_recv_max = torch.where(
             torch.isfinite(per_recv_max), per_recv_max, torch.zeros_like(per_recv_max)
         )

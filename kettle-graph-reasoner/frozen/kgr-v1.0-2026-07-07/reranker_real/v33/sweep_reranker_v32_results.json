@@ -1,0 +1,73 @@
+{
+  "config": "src\\modelsv3\\sweep_config_reranker_real_v33.json",
+  "ws3_bar": {},
+  "cells": {
+    "task2_seed0": {
+      "state": "complete",
+      "task": 2,
+      "seed": 0,
+      "v31_ndcg@10": 0.5575367182658688,
+      "hybrid_ndcg@10": 0.7965673605970693,
+      "oracle_ndcg@10": 0.8456486913200757,
+      "gap_closed_frac": 0.829644946016277,
+      "regression_vs_retriever": false,
+      "residual_deployed": true,
+      "trained_gap_closed_frac": 0.829644946016277,
+      "trained_regression": false,
+      "learned_scale": null,
+      "deployed_scale": null
+    },
+    "task2_seed1": {
+      "state": "complete",
+      "task": 2,
+      "seed": 1,
+      "v31_ndcg@10": 0.5575367182658688,
+      "hybrid_ndcg@10": 0.7961466019796266,
+      "oracle_ndcg@10": 0.8456486913200757,
+      "gap_closed_frac": 0.8281845463911508,
+      "regression_vs_retriever": false,
+      "residual_deployed": true,
+      "trained_gap_closed_frac": 0.8281845463911508,
+      "trained_regression": false,
+      "learned_scale": null,
+      "deployed_scale": null
+    },
+    "task2_seed2": {
+      "state": "complete",
+      "task": 2,
+      "seed": 2,
+      "v31_ndcg@10": 0.5575367182658688,
+      "hybrid_ndcg@10": 0.793094339477151,
+      "oracle_ndcg@10": 0.8456486913200757,
+      "gap_closed_frac": 0.8175905316054435,
+      "regression_vs_retriever": false,
+      "residual_deployed": true,
+      "trained_gap_closed_frac": 0.8175905316054435,
+      "trained_regression": false,
+      "learned_scale": null,
+      "deployed_scale": null
+    }
+  },
+  "gate": {
+    "by_task": {
+      "2": {
+        "n_seeds": 3,
+        "v31_ndcg@10_mean": 0.5575367182658688,
+        "hybrid_ndcg@10_mean": 0.7952694340179489,
+        "hybrid_ndcg@10_std": 0.001895398810170283,
+        "gap_closed_frac_mean": 0.8251400080042904,
+        "trained_gap_closed_frac_mean": 0.8251400080042904,
+        "n_residual_deployed": 3,
+        "ws3_pertask_gap_closed": null,
+        "beats_ws3": false,
+        "regression": false,
+        "is_geometry_sensitive": false
+      }
+    },
+    "geometry_tasks_beating_ws3": 0,
+    "geometry_tasks_total": 0,
+    "any_regression": false,
+    "acceptance_pass": false
+  },
+  "wall_seconds": 3462.0
+}
